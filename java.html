@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/idea.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .CodeMirror {
+            height: auto;
+            font-size: 16px;
+            border-radius: 0.375rem;
+        }
+        
+        .dark .CodeMirror.cm-s-idea {
+            display: none;
+        }
+        
+        .CodeMirror.cm-s-material {
+            display: none;
+        }
+        
+        .dark .CodeMirror.cm-s-material {
+            display: block;
+        }
+        
+        /* Transition animations */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="mb-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-primary">JavaScript Learning Platform</h1>
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700" title="Toggle theme">
+                    <svg id="light-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg id="dark-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Learn JavaScript from beginner to advanced</p>
+        </header>
+        
+        <nav class="mb-8">
+            <div class="flex flex-wrap gap-2">
+                <button class="level-btn px-4 py-2 rounded-lg bg-primary text-white font-medium active" data-level="beginner">Beginner</button>
+                <button class="level-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium" data-level="intermediate">Intermediate</button>
+                <button class="level-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium" data-level="advanced">Advanced</button>
+            </div>
+        </nav>
+        
+        <div id="topics-container" class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Topic buttons will be populated here -->
+        </div>
+        
+        <div id="tutorial-container" class="mb-8 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="tutorial-title" class="text-2xl font-bold text-primary"></h2>
+                <button id="back-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium">Back to Topics</button>
+            </div>
+            
+            <div id="tutorial-content" class="prose dark:prose-invert max-w-none mb-6"></div>
+            
+            <div id="code-section" class="mb-6">
+                <h3 class="text-xl font-bold mb-2">Try it yourself:</h3>
+                <div id="code-editor" class="mb-4"></div>
+                <div class="flex gap-4">
+                    <button id="run-btn" class="px-4 py-2 rounded-lg bg-primary text-white font-medium">Run Code</button>
+                    <button id="reset-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium">Reset Code</button>
+                </div>
+            </div>
+            
+            <div id="output-section" class="mb-6">
+                <h3 class="text-xl font-bold mb-2">Output:</h3>
+                <div id="output" class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 min-h-[100px] whitespace-pre-wrap font-mono"></div>
+            </div>
+        </div>
+        
+        <div id="loading" class="hidden">
+            <div class="flex justify-center items-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+            <p class="text-center text-gray-600 dark:text-gray-400">Loading content...</p>
+        </div>
+    </div>
+
+    <script>
+        // Setup dark mode detection and toggle
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+        
+        // Tutorial data
+        const tutorials = {
+            beginner: [
+                {
+                    id: 'variables',
+                    title: 'Variables and Data Types',
+                    content: `
+# Variables and Data Types
+
+In JavaScript, you can declare variables using three keywords:
+
+- \`var\`: Function-scoped variable (old way)
+- \`let\`: Block-scoped variable (modern way)
+- \`const\`: Block-scoped constant (cannot be reassigned)
+
+## Basic Data Types
+
+- **String**: Text wrapped in quotes \`"Hello"\` or \`'Hello'\`
+- **Number**: Any number including integers and decimals \`42\`, \`3.14\`
+- **Boolean**: \`true\` or \`false\`
+- **Null**: Represents the intentional absence of any value \`null\`
+- **Undefined**: Represents a variable that has been declared but not defined \`undefined\`
+- **Object**: Collection of key-value pairs \`{ name: "John", age: 30 }\`
+- **Array**: Ordered list of values \`[1, 2, 3, 4]\`
+
+## Examples:
+                    `,
+                    code: `// Variable declarations
+let name = "John";
+const age = 30;
+let isEmployed = true;
+
+// You can change the value of a variable declared with let
+name = "John Doe";
+
+// But you cannot reassign a const variable
+// age = 31; // This would cause an error
+
+// Different data types
+let str = "Hello, World!";  // String
+let num = 42;               // Number
+let decimal = 3.14;         // Number (decimal)
+let bool = false;           // Boolean
+let nothing = null;         // Null
+let undef;                  // Undefined
+let person = {              // Object
+  firstName: "Jane",
+  lastName: "Doe"
+};
+let numbers = [1, 2, 3, 4]; // Array
+
+// Output to console
+console.log("String:", str);
+console.log("Number:", num);
+console.log("Decimal:", decimal);
+console.log("Boolean:", bool);
+console.log("Null:", nothing);
+console.log("Undefined:", undef);
+console.log("Object:", JSON.stringify(person));
+console.log("Array:", numbers);
+
+// Using variables
+console.log(name + " is " + age + " years old.");
+// Modern way with template literals
+console.log(\`\${name} is \${age} years old.\`);`
+                },
+                {
+                    id: 'operators',
+                    title: 'Operators and Expressions',
+                    content: `
+# Operators and Expressions
+
+JavaScript has various types of operators that allow you to perform operations on values.
+
+## Arithmetic Operators
+- Addition: \`+\`
+- Subtraction: \`-\`
+- Multiplication: \`*\`
+- Division: \`/\`
+- Remainder (modulo): \`%\`
+- Exponentiation: \`**\`
+- Increment: \`++\`
+- Decrement: \`--\`
+
+## Comparison Operators
+- Equal to: \`==\` (checks value only)
+- Strictly equal to: \`===\` (checks value and type)
+- Not equal to: \`!=\`
+- Strictly not equal to: \`!==\`
+- Greater than: \`>\`
+- Less than: \`<\`
+- Greater than or equal to: \`>=\`
+- Less than or equal to: \`<=\`
+
+## Logical Operators
+- AND: \`&&\`
+- OR: \`||\`
+- NOT: \`!\`
+
+## Examples:
+                    `,
+                    code: `// Arithmetic operators
+let a = 10;
+let b = 5;
+
+console.log("Addition:", a + b);       // 15
+console.log("Subtraction:", a - b);    // 5
+console.log("Multiplication:", a * b); // 50
+console.log("Division:", a / b);       // 2
+console.log("Modulo:", a % b);         // 0
+console.log("Exponentiation:", a ** b);// 100000
+
+// Increment and decrement
+let count = 0;
+count++; // Increment
+console.log("After increment:", count); // 1
+count--; // Decrement
+console.log("After decrement:", count); // 0
+
+// Comparison operators
+let x = 5;
+let y = "5";
+
+console.log("x == y:", x == y);   // true (values are equal)
+console.log("x === y:", x === y); // false (values are equal but types are different)
+console.log("x != y:", x != y);   // false
+console.log("x !== y:", x !== y); // true
+
+// More comparisons
+console.log("10 > 5:", 10 > 5);   // true
+console.log("10 < 5:", 10 < 5);   // false
+console.log("5 >= 5:", 5 >= 5);   // true
+console.log("10 <= 5:", 10 <= 5); // false
+
+// Logical operators
+let sunny = true;
+let warm = false;
+
+console.log("sunny AND warm:", sunny && warm); // false
+console.log("sunny OR warm:", sunny || warm);  // true
+console.log("NOT sunny:", !sunny);            // false
+
+// Combined operators
+let result = (a + b) * (a - b);
+console.log("(a + b) * (a - b):", result); // 75`
+                },
+                {
+                    id: 'conditionals',
+                    title: 'Conditional Statements',
+                    content: `
+# Conditional Statements
+
+Conditional statements allow you to execute different code based on different conditions.
+
+## if Statement
+The \`if\` statement executes a block of code if a specified condition is true.
+
+## if...else Statement
+The \`if...else\` statement executes one block of code if a condition is true and another if it is false.
+
+## if...else if...else Statement
+The \`if...else if...else\` statement tests multiple conditions and executes different blocks accordingly.
+
+## switch Statement
+The \`switch\` statement evaluates an expression and executes code based on matching cases.
+
+## Examples:
+                    `,
+                    code: `// Simple if statement
+let age = 18;
+
+if (age >= 18) {
+  console.log("You are an adult.");
+}
+
+// if...else statement
+let temperature = 15;
+
+if (temperature > 25) {
+  console.log("It's a hot day!");
+} else {
+  console.log("It's not very hot today.");
+}
+
+// if...else if...else statement
+let score = 85;
+
+if (score >= 90) {
+  console.log("Grade: A");
+} else if (score >= 80) {
+  console.log("Grade: B");
+} else if (score >= 70) {
+  console.log("Grade: C");
+} else if (score >= 60) {
+  console.log("Grade: D");
+} else {
+  console.log("Grade: F");
+}
+
+// switch statement
+let day = new Date().getDay(); // 0-6 representing Sunday-Saturday
+let dayName;
+
+switch (day) {
+  case 0:
+    dayName = "Sunday";
+    break;
+  case 1:
+    dayName = "Monday";
+    break;
+  case 2:
+    dayName = "Tuesday";
+    break;
+  case 3:
+    dayName = "Wednesday";
+    break;
+  case 4:
+    dayName = "Thursday";
+    break;
+  case 5:
+    dayName = "Friday";
+    break;
+  case 6:
+    dayName = "Saturday";
+    break;
+  default:
+    dayName = "Unknown";
+}
+
+console.log("Today is:", dayName);
+
+// Ternary operator (shorthand for if...else)
+let time = 14;
+let greeting = time < 12 ? "Good morning!" : "Good day!";
+console.log(greeting);
+
+// Nested conditions
+let isWeekend = (day === 0 || day === 6);
+let isAfternoon = time >= 12;
+
+if (isWeekend) {
+  if (isAfternoon) {
+    console.log("It's weekend afternoon!");
+  } else {
+    console.log("It's weekend morning!");
+  }
+} else {
+  console.log("It's a weekday.");
+}`
+                }
+            ],
+            intermediate: [
+                {
+                    id: 'functions',
+                    title: 'Functions',
+                    content: `
+# Functions
+
+Functions are blocks of reusable code designed to perform a particular task. They help organize code, make it reusable, and easier to maintain.
+
+## Function Declaration
+The traditional way to define a function.
+
+## Function Expression
+Assigning a function to a variable.
+
+## Arrow Functions
+A shorter syntax for writing functions, introduced in ES6.
+
+## Parameters and Return Values
+Functions can take inputs (parameters) and provide outputs (return values).
+
+## Examples:
+                    `,
+                    code: `// Function declaration
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+// Function expression
+const sayGoodbye = function(name) {
+  return "Goodbye, " + name + "!";
+};
+
+// Arrow function
+const welcome = (name) => {
+  return "Welcome, " + name + "!";
+};
+
+// Shorter arrow function (implicit return)
+const multiply = (a, b) => a * b;
+
+// Calling functions
+console.log(greet("John"));       // Hello, John!
+console.log(sayGoodbye("Maria")); // Goodbye, Maria!
+console.log(welcome("Alex"));     // Welcome, Alex!
+console.log(multiply(5, 3));      // 15
+
+// Functions with default parameters
+function createMessage(name, message = "No message provided") {
+  return \`\${name} says: \${message}\`;
+}
+
+console.log(createMessage("Sam", "Hi there!"));  // Sam says: Hi there!
+console.log(createMessage("Sam"));              // Sam says: No message provided
+
+// Rest parameters
+function sum(...numbers) {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3, 4, 5)); // 15
+
+// Immediately Invoked Function Expression (IIFE)
+(function() {
+  let privateVar = "This is private";
+  console.log(privateVar);
+})();
+
+// Higher-order functions (functions that work with other functions)
+function applyOperation(a, b, operation) {
+  return operation(a, b);
+}
+
+const add = (x, y) => x + y;
+const subtract = (x, y) => x - y;
+
+console.log(applyOperation(10, 5, add));      // 15
+console.log(applyOperation(10, 5, subtract)); // 5`
+                },
+                {
+                    id: 'arrays',
+                    title: 'Arrays and Array Methods',
+                    content: `
+# Arrays and Array Methods
+
+Arrays are used to store multiple values in a single variable. JavaScript provides many built-in methods to work with arrays.
+
+## Creating Arrays
+Arrays can be created using array literals or the Array constructor.
+
+## Basic Array Operations
+- Accessing elements
+- Adding/removing elements
+- Finding array length
+
+## Common Array Methods
+- \`map()\`: Creates a new array by performing a function on each element
+- \`filter()\`: Creates a new array with elements that pass a test
+- \`reduce()\`: Reduces the array to a single value
+- \`forEach()\`: Executes a function for each element
+- \`find()\`: Returns the first element that passes a test
+- \`some()\`: Tests if at least one element passes a test
+- \`every()\`: Tests if all elements pass a test
+- \`sort()\`: Sorts the elements of an array
+
+## Examples:
+                    `,
+                    code: `// Creating arrays
+let fruits = ["Apple", "Banana", "Orange", "Mango"];
+let numbers = [1, 2, 3, 4, 5];
+let mixed = [1, "Hello", true, null, {name: "John"}];
+
+// Accessing elements
+console.log("First fruit:", fruits[0]); // Apple
+console.log("Second number:", numbers[1]); // 2
+
+// Array length
+console.log("Number of fruits:", fruits.length); // 4
+
+// Adding/removing elements
+fruits.push("Strawberry");  // Add to end
+console.log("After push:", fruits);
+
+fruits.pop();  // Remove from end
+console.log("After pop:", fruits);
+
+fruits.unshift("Pineapple");  // Add to beginning
+console.log("After unshift:", fruits);
+
+fruits.shift();  // Remove from beginning
+console.log("After shift:", fruits);
+
+// Looping through an array
+console.log("Looping through fruits:");
+for (let i = 0; i < fruits.length; i++) {
+  console.log(i, fruits[i]);
+}
+
+// forEach method
+console.log("Using forEach:");
+fruits.forEach((fruit, index) => {
+  console.log(index, fruit);
+});
+
+// map method - create a new array
+let uppercaseFruits = fruits.map(fruit => fruit.toUpperCase());
+console.log("Uppercase fruits:", uppercaseFruits);
+
+// filter method - create a filtered array
+let longFruits = fruits.filter(fruit => fruit.length > 5);
+console.log("Fruits with more than 5 letters:", longFruits);
+
+// find method - find a specific element
+let foundFruit = fruits.find(fruit => fruit.startsWith("O"));
+console.log("Fruit starting with O:", foundFruit);
+
+// some method - check if at least one element passes a test
+let hasBanana = fruits.some(fruit => fruit === "Banana");
+console.log("Has Banana:", hasBanana);
+
+// every method - check if all elements pass a test
+let allFruitsHaveA = fruits.every(fruit => fruit.includes("a"));
+console.log("All fruits contain 'a':", allFruitsHaveA);
+
+// reduce method - reduce array to a single value
+let sum = numbers.reduce((total, num) => total + num, 0);
+console.log("Sum of numbers:", sum);
+
+// sort method - sort array elements
+let sortedFruits = [...fruits].sort();
+console.log("Sorted fruits:", sortedFruits);
+
+// sort numbers (ascending)
+let sortedNumbers = [...numbers].sort((a, b) => a - b);
+console.log("Sorted numbers:", sortedNumbers);
+
+// Array destructuring
+let [first, second, ...rest] = fruits;
+console.log("First:", first);
+console.log("Second:", second);
+console.log("Rest:", rest);`
+                },
+                {
+                    id: 'objects',
+                    title: 'Objects and Object Methods',
+                    content: `
+# Objects and Object Methods
+
+Objects are collections of key-value pairs that store data and functionality together. They are one of the most important data types in JavaScript.
+
+## Creating Objects
+- Object literals
+- Constructor functions
+- ES6 Classes
+
+## Working with Objects
+- Accessing properties
+- Adding and modifying properties
+- Deleting properties
+- Object methods
+
+## Object Methods
+- \`Object.keys()\`: Returns an array of an object's keys
+- \`Object.values()\`: Returns an array of an object's values
+- \`Object.entries()\`: Returns an array of key-value pairs
+- \`Object.assign()\`: Copies properties from one object to another
+
+## Examples:
+                    `,
+                    code: `// Creating objects using object literal
+let person = {
+  firstName: "John",
+  lastName: "Doe",
+  age: 30,
+  email: "john.doe@example.com",
+  address: {
+    street: "123 Main St",
+    city: "New York",
+    country: "USA"
+  },
+  hobbies: ["reading", "swimming", "coding"],
+  // Method in an object
+  getFullName: function() {
+    return this.firstName + " " + this.lastName;
+  },
+  // Shorter method syntax (ES6)
+  greet() {
+    return \`Hello, my name is \${this.firstName}!\`;
+  }
+};
+
+// Accessing object properties
+console.log("First name:", person.firstName);  // Dot notation
+console.log("Last name:", person["lastName"]); // Bracket notation
+console.log("City:", person.address.city);     // Nested property
+
+// Calling object methods
+console.log("Full name:", person.getFullName());
+console.log("Greeting:", person.greet());
+
+// Adding and modifying properties
+person.phone = "555-1234";  // Add new property
+person.age = 31;            // Modify existing property
+
+// Delete property
+delete person.email;
+console.log("After modifications:", JSON.stringify(person, null, 2));
+
+// Object.keys(), Object.values(), Object.entries()
+console.log("Keys:", Object.keys(person));
+console.log("Values:", Object.values(person));
+console.log("Entries:", Object.entries(person));
+
+// Object.assign() - Merging objects
+let basicInfo = { firstName: "Jane", lastName: "Smith" };
+let contactInfo = { email: "jane@example.com", phone: "555-5678" };
+let jane = Object.assign({}, basicInfo, contactInfo);
+console.log("Merged object:", jane);
+
+// Spread operator for merging (ES6)
+let janeSpread = { ...basicInfo, ...contactInfo };
+console.log("Merged with spread:", janeSpread);
+
+// Destructuring objects
+let { firstName, lastName, age: personAge, address: { city } } = person;
+console.log(\`Extracted data: \${firstName} \${lastName}, \${personAge}, \${city}\`);
+
+// Constructor function
+function Car(make, model, year) {
+  this.make = make;
+  this.model = model;
+  this.year = year;
+  this.getInfo = function() {
+    return \`\${this.year} \${this.make} \${this.model}\`;
+  };
+}
+
+let myCar = new Car("Toyota", "Corolla", 2020);
+console.log("Car info:", myCar.getInfo());
+
+// ES6 Class
+class Book {
+  constructor(title, author, year) {
+    this.title = title;
+    this.author = author;
+    this.year = year;
+  }
+  
+  getSummary() {
+    return \`\${this.title} was written by \${this.author} in \${this.year}\`;
+  }
+}
+
+let myBook = new Book("1984", "George Orwell", 1949);
+console.log("Book summary:", myBook.getSummary());`
+                }
+            ],
+            advanced: [
+                {
+                    id: 'async',
+                    title: 'Asynchronous JavaScript',
+                    content: `
+# Asynchronous JavaScript
+
+Asynchronous programming in JavaScript allows code to run without blocking the main thread, making it possible to handle operations like API calls efficiently.
+
+## Callbacks
+The original way to handle asynchronous operations by passing a function as an argument.
+
+## Promises
+An object representing the eventual completion or failure of an asynchronous operation, introduced in ES6.
+
+## Async/Await
+Syntactic sugar on top of Promises that makes asynchronous code look synchronous, introduced in ES2017.
+
+## Examples:
+                    `,
+                    code: `// Simulating asynchronous operations with setTimeout
+
+// 1. Callbacks
+console.log("Starting callback example...");
+
+function fetchDataWithCallback(callback) {
+  setTimeout(() => {
+    const data = { id: 1, name: "User 1" };
+    callback(null, data); // null means no error
+  }, 2000);
+}
+
+function handleData(error, data) {
+  if (error) {
+    console.error("Error:", error);
+  } else {
+    console.log("Data received (callback):", data);
+  }
+}
+
+fetchDataWithCallback(handleData);
+
+// Callback hell (nested callbacks)
+setTimeout(() => {
+  console.log("Step 1 completed");
+  setTimeout(() => {
+    console.log("Step 2 completed");
+    setTimeout(() => {
+      console.log("Step 3 completed");
+    }, 500);
+  }, 500);
+}, 500);
+
+// 2. Promises
+console.log("Starting promise example...");
+
+function fetchDataWithPromise() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const success = true;
+      if (success) {
+        const data = { id: 2, name: "User 2" };
+        resolve(data);
+      } else {
+        reject("Failed to fetch data");
+      }
+    }, 2000);
+  });
+}
+
+fetchDataWithPromise()
+  .then(data => {
+    console.log("Data received (promise):", data);
+    return "Processed data"; // This return becomes a new promise
+  })
+  .then(result => {
+    console.log("Result:", result);
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  })
+  .finally(() => {
+    console.log("Promise operation completed");
+  });
+
+// Promise chaining - each .then receives the result of the previous one
+new Promise((resolve) => {
+  setTimeout(() => resolve(1), 1000);
+})
+  .then(result => {
+    console.log(result); // 1
+    return result * 2;
+  })
+  .then(result => {
+    console.log(result); // 2
+    return result * 2;
+  })
+  .then(result => {
+    console.log(result); // 4
+  });
+
+// Promise.all - wait for all promises to resolve
+const promise1 = Promise.resolve("Promise 1");
+const promise2 = new Promise((resolve) => setTimeout(() => resolve("Promise 2"), 500));
+const promise3 = new Promise((resolve) => setTimeout(() => resolve("Promise 3"), 800));
+
+Promise.all([promise1, promise2, promise3])
+  .then(values => {
+    console.log("All promises resolved:", values);
+  });
+
+// 3. Async/Await
+console.log("Starting async/await example...");
+
+async function fetchDataWithAsyncAwait() {
+  try {
+    // Simulate API call
+    const response = await new Promise(resolve => {
+      setTimeout(() => {
+        resolve({ json: () => Promise.resolve({ id: 3, name: "User 3" }) });
+      }, 2000);
+    });
+    
+    const data = await response.json();
+    console.log("Data received (async/await):", data);
+    
+    // You can use multiple await calls that look synchronous
+    const processedData = await new Promise(resolve => {
+      setTimeout(() => resolve("Processed: " + data.name), 500);
+    });
+    
+    console.log(processedData);
+    return data;
+  } catch (error) {
+    console.error("Error in async function:", error);
+  }
+}
+
+// Calling the async function
+fetchDataWithAsyncAwait().then(result => {
+  console.log("Async function completed with result:", result);
+});
+
+console.log("This will execute before the async operations complete!");`
+                },
+                {
+                    id: 'closures',
+                    title: 'Closures and Scope',
+                    content: `
+# Closures and Scope
+
+Closures are one of the most powerful features of JavaScript. A closure gives you access to an outer function's scope from an inner function, even after the outer function has closed.
+
+## Lexical Scope
+Lexical scope means that the accessibility of variables is determined by their position in the source code.
+
+## Closures
+A closure is created when a function is defined within another function, allowing the inner function to access variables from the outer function.
+
+## Applications of Closures
+- Data privacy
+- Function factories
+- Module pattern
+
+## Examples:
+                    `,
+                    code: `// Lexical scope
+let globalVar = "I'm global!";
+
+function outerFunction() {
+  let outerVar = "I'm from outer function!";
+  
+  function innerFunction() {
+    let innerVar = "I'm from inner function!";
+    
+    console.log(innerVar);   // Accessible
+    console.log(outerVar);   // Accessible (from parent scope)
+    console.log(globalVar);  // Accessible (from global scope)
+  }
+  
+  innerFunction();
+  
+  // console.log(innerVar); // Error: innerVar is not defined
+}
+
+outerFunction();
+
+// Closures
+function createCounter() {
+  let count = 0;  // This variable is "closed over"
+  
+  return function() {
+    count++;      // Can access and modify count
+    return count;
+  };
+}
+
+const counter = createCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+console.log(counter()); // 3
+
+// Another counter is independent
+const counter2 = createCounter();
+console.log(counter2()); // 1
+
+// Data privacy with closures
+function createBankAccount(initialBalance) {
+  let balance = initialBalance; // Private variable
+  
+  // Return an object with methods that form closures
+  return {
+    deposit: function(amount) {
+      if (amount > 0) {
+        balance += amount;
+        return \`Deposited \${amount}. New balance: \${balance}\`;
+      }
+      return "Invalid deposit amount";
+    },
+    withdraw: function(amount) {
+      if (amount > 0 && amount <= balance) {
+        balance -= amount;
+        return \`Withdrew \${amount}. New balance: \${balance}\`;
+      }
+      return "Invalid withdrawal or insufficient funds";
+    },
+    getBalance: function() {
+      return \`Current balance: \${balance}\`;
+    }
+  };
+}
+
+const account = createBankAccount(100);
+console.log(account.getBalance()); // Current balance: 100
+console.log(account.deposit(50));  // Deposited 50. New balance: 150
+console.log(account.withdraw(30)); // Withdrew 30. New balance: 120
+console.log(account.withdraw(200)); // Invalid withdrawal or insufficient funds
+
+// balance is not directly accessible
+// console.log(account.balance); // undefined
+
+// Function factories with closures
+function createMultiplier(factor) {
+  return function(number) {
+    return number * factor;
+  };
+}
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+
+console.log(double(5)); // 10
+console.log(triple(5)); // 15
+
+// Closures in loops (common gotcha)
+console.log("Loop without closure:");
+for (var i = 1; i <= 3; i++) {
+  setTimeout(function() {
+    console.log("Value of i:", i);
+  }, i * 100);
+}
+// Outputs "Value of i: 4" three times because of 'var' and closure
+
+// Solution with let (block scope)
+console.log("Loop with let:");
+for (let j = 1; j <= 3; j++) {
+  setTimeout(function() {
+    console.log("Value of j:", j);
+  }, j * 100);
+}
+// Outputs 1, 2, 3 as expected
+
+// Alternate solution with IIFE (Immediately Invoked Function Expression)
+console.log("Loop with IIFE:");
+for (var k = 1; k <= 3; k++) {
+  (function(value) {
+    setTimeout(function() {
+      console.log("Value of k:", value);
+    }, value * 100);
+  })(k);
+}
+// Outputs 1, 2, 3 as expected`
+                },
+                {
+                    id: 'prototypes',
+                    title: 'Prototypes and Inheritance',
+                    content: `
+# Prototypes and Inheritance
+
+JavaScript is a prototype-based language, which means objects can inherit properties and methods from other objects through prototypes.
+
+## Prototype Chain
+Every JavaScript object has a prototype property, which makes inheritance possible in JavaScript.
+
+## Prototype Inheritance
+Objects in JavaScript inherit properties and methods from their prototype.
+
+## ES6 Classes vs. Prototypes
+ES6 introduced class syntax, but it's mostly syntactic sugar over the prototype-based inheritance.
+
+## Examples:
+                    `,
+                    code: `// Constructor function
+function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+// Adding a method to the prototype
+Person.prototype.getFullName = function() {
+  return this.firstName + " " + this.lastName;
+};
+
+// Creating instances
+const person1 = new Person("John", "Doe");
+const person2 = new Person("Jane", "Smith");
+
+console.log(person1.getFullName()); // John Doe
+console.log(person2.getFullName()); // Jane Smith
+
+// All instances share the same method
+console.log(person1.getFullName === person2.getFullName); // true
+
+// Prototype chain
+console.log(person1.__proto__ === Person.prototype); // true
+console.log(Person.prototype.__proto__ === Object.prototype); // true
+console.log(Object.prototype.__proto__); // null
+
+// Inheritance with prototypes
+function Employee(firstName, lastName, position) {
+  // Call the parent constructor
+  Person.call(this, firstName, lastName);
+  this.position = position;
+}
+
+// Inherit the Person prototype
+Employee.prototype = Object.create(Person.prototype);
+// Fix the constructor property
+Employee.prototype.constructor = Employee;
+
+// Add a method specific to Employee
+Employee.prototype.getJobInfo = function() {
+  return \`\${this.getFullName()} works as a \${this.position}\`;
+};
+
+const employee1 = new Employee("Bob", "Johnson", "Developer");
+console.log(employee1.getFullName()); // Bob Johnson (inherited method)
+console.log(employee1.getJobInfo()); // Bob Johnson works as a Developer
+
+// Check inheritance chain
+console.log(employee1 instanceof Employee); // true
+console.log(employee1 instanceof Person); // true
+console.log(employee1 instanceof Object); // true
+
+// ES6 Classes (syntactic sugar over prototypes)
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  
+  speak() {
+    return \`\${this.name} makes a noise.\`;
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+  
+  speak() {
+    return \`\${this.name} barks!\`;
+  }
+  
+  getInfo() {
+    return \`\${this.name} is a \${this.breed}\`;
+  }
+}
+
+const dog = new Dog("Rex", "German Shepherd");
+console.log(dog.speak()); // Rex barks!
+console.log(dog.getInfo()); // Rex is a German Shepherd
+
+// Classes are functions under the hood
+console.log(typeof Animal); // function
+console.log(dog.__proto__ === Dog.prototype); // true
+console.log(Dog.prototype.__proto__ === Animal.prototype); // true
+
+// Object.create for clean prototypal inheritance
+const personProto = {
+  greet() {
+    return \`Hello, my name is \${this.name}\`;
+  }
+};
+
+const ada = Object.create(personProto);
+ada.name = "Ada";
+console.log(ada.greet()); // Hello, my name is Ada
+
+// Modern approach: Object.setPrototypeOf
+const mammal = {
+  warmBlooded: true
+};
+
+const cat = {
+  legs: 4,
+  hasFur: true
+};
+
+Object.setPrototypeOf(cat, mammal);
+console.log(cat.legs); // 4
+console.log(cat.warmBlooded); // true (inherited)
+
+// hasOwnProperty vs inherited properties
+console.log(cat.hasOwnProperty('legs')); // true
+console.log(cat.hasOwnProperty('warmBlooded')); // false`
+                }
+            ]
+        };
+        
+        // Initialize CodeMirror editor
+        let codeEditor;
+        let currentCode = "";
+        let originalCode = "";
+        
+        function initCodeEditor(code) {
+            if (codeEditor) {
+                codeEditor.toTextArea(); // Destroy old instance
+            }
+            
+            originalCode = code;
+            currentCode = code;
+            
+            const editorElement = document.getElementById('code-editor');
+            const textArea = document.createElement('textarea');
+            editorElement.innerHTML = '';
+            editorElement.appendChild(textArea);
+            textArea.value = code;
+            
+            codeEditor = CodeMirror.fromTextArea(textArea, {
+                mode: "javascript",
+                theme: document.documentElement.classList.contains('dark') ? "material" : "idea",
+                lineNumbers: true,
+                tabSize: 2,
+                indentWithTabs: false,
+                autoCloseBrackets: true,
+                matchBrackets: true
+            });
+            
+            // Create duplicate editors for light/dark mode
+            const lightEditor = codeEditor.getWrapperElement().cloneNode(true);
+            lightEditor.classList.add('cm-s-idea');
+            lightEditor.classList.remove('cm-s-material');
+            editorElement.appendChild(lightEditor);
+            
+            // Make sure light/dark editors stay in sync
+            codeEditor.on('change', (cm) => {
+                currentCode = cm.getValue();
+                const otherEditor = editorElement.querySelector('.CodeMirror:not(.cm-s-' + cm.getOption('theme') + ')');
+                if (otherEditor) {
+                    const otherCM = otherEditor.CodeMirror;
+                    if (otherCM && otherCM.getValue() !== currentCode) {
+                        otherCM.setValue(currentCode);
+                    }
+                }
+            });
+        }
+        
+        // Run the code in the editor
+        function runCode() {
+            const outputElement = document.getElementById('output');
+            outputElement.textContent = ""; // Clear previous output
+            
+            // Create a new Function to execute the code
+            try {
+                // Redirect console.log to our output element
+                const originalConsoleLog = console.log;
+                const originalConsoleError = console.error;
+                const originalConsoleWarn = console.warn;
+                
+                console.log = function() {
+                    const args = Array.from(arguments);
+                    let output = args.map(arg => {
+                        if (typeof arg === 'object' && arg !== null) {
+                            try {
+                                return JSON.stringify(arg);
+                            } catch (e) {
+                                return arg.toString();
+                            }
+                        }
+                        return arg;
+                    }).join(' ');
+                    outputElement.textContent += output + '\n';
+                    originalConsoleLog.apply(console, arguments);
+                };
+                
+                console.error = function() {
+                    const args = Array.from(arguments);
+                    let output = args.join(' ');
+                    outputElement.textContent += 'Error: ' + output + '\n';
+                    originalConsoleError.apply(console, arguments);
+                };
+                
+                console.warn = function() {
+                    const args = Array.from(arguments);
+                    let output = args.join(' ');
+                    outputElement.textContent += 'Warning: ' + output + '\n';
+                    originalConsoleWarn.apply(console, arguments);
+                };
+                
+                // Execute the code
+                const executeFunction = new Function(currentCode);
+                executeFunction();
+                
+                // Restore original console methods
+                console.log = originalConsoleLog;
+                console.error = originalConsoleError;
+                console.warn = originalConsoleWarn;
+                
+            } catch (error) {
+                outputElement.textContent = "Error: " + error.message;
+            }
+        }
+        
+        // Reset the code editor to original code
+        function resetCode() {
+            if (codeEditor) {
+                codeEditor.setValue(originalCode);
+                document.getElementById('output').textContent = "";
+            }
+        }
+        
+        // Show topics for a specific level
+        function showTopics(level) {
+            const topicsContainer = document.getElementById('topics-container');
+            topicsContainer.innerHTML = ''; // Clear previous topics
+            
+            // Show topics container, hide tutorial container
+            topicsContainer.classList.remove('hidden');
+            document.getElementById('tutorial-container').classList.add('hidden');
+            document.getElementById('loading').classList.add('hidden');
+            
+            // Update active level button
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                if (btn.dataset.level === level) {
+                    btn.classList.add('bg-primary', 'text-white');
+                    btn.classList.remove('bg-gray-200', 'text-gray-800', 'dark:bg-gray-700', 'dark:text-gray-200');
+                } else {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-800', 'dark:bg-gray-700', 'dark:text-gray-200');
+                }
+            });
+            
+            // Create topic buttons
+            tutorials[level].forEach(topic => {
+                const topicButton = document.createElement('button');
+                topicButton.className = 'topic-btn p-4 rounded-lg bg-white dark:bg-gray-800 shadow hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700 text-left';
+                topicButton.innerHTML = `
+                    <h3 class="text-xl font-bold text-primary mb-2">${topic.title}</h3>
+                    <p class="text-gray-600 dark:text-gray-300">${topic.content.split('\n')[0].replace('#', '').trim()}</p>
+                `;
+                topicButton.addEventListener('click', () => showTutorial(level, topic.id));
+                topicsContainer.appendChild(topicButton);
+                
+                // Add fade-in animation
+                setTimeout(() => {
+                    topicButton.classList.add('fade-enter-active');
+                }, 100);
+            });
+        }
+        
+        // Show a specific tutorial
+        function showTutorial(level, topicId) {
+            const topic = tutorials[level].find(t => t.id === topicId);
+            if (!topic) return;
+            
+            // Show loading state
+            document.getElementById('topics-container').classList.add('hidden');
+            document.getElementById('tutorial-container').classList.add('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+            
+            // Delay to simulate loading and show the transition
+            setTimeout(() => {
+                document.getElementById('tutorial-title').textContent = topic.title;
+                document.getElementById('tutorial-content').innerHTML = marked.parse(topic.content);
+                
+                // Initialize code editor with the topic's code
+                initCodeEditor(topic.code);
+                
+                // Show tutorial container, hide topics and loading
+                document.getElementById('tutorial-container').classList.remove('hidden');
+                document.getElementById('topics-container').classList.add('hidden');
+                document.getElementById('loading').classList.add('hidden');
+                
+                // Clear output
+                document.getElementById('output').textContent = "";
+            }, 500);
+        }
+        
+        // Initialize the application
+        function initApp() {
+            // Event listeners for level buttons
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', () => showTopics(btn.dataset.level));
+            });
+            
+            // Back button event listener
+            document.getElementById('back-btn').addEventListener('click', () => {
+                const activeLevel = document.querySelector('.level-btn.active').dataset.level;
+                showTopics(activeLevel);
+            });
+            
+            // Run and Reset buttons
+            document.getElementById('run-btn').addEventListener('click', runCode);
+            document.getElementById('reset-btn').addEventListener('click', resetCode);
+            
+            // Show beginner topics by default
+            showTopics('beginner');
+            
+            // Update active class when clicking level buttons
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+        
+        // Start the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML ຄຳສັ່ງພື້ນຖານ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+           @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+        body{
+            font-family: 'Noto Sans Lao', 'Poppins', sans-serif;
+
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
+    
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <h1 class="text-3xl font-bold mb-6 text-primary">HTML ຄຳສັ່ງພື້ນຖານ</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- ສ່ວນລາຍການຄຳສັ່ງ -->
+            <div class="md:col-span-1 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">ລາຍການຄຳສັ່ງ HTML</h2>
+                <div class="space-y-2" id="tag-list">
+                    <!-- ຄຳສັ່ງຈະຖືກເພີ່ມໃນນີ້ -->
+                </div>
+            </div>
+            
+            <!-- ສ່ວນສະແດງຄຳອະທິບາຍແລະຕົວຢ່າງ -->
+            <div class="md:col-span-2 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                <div id="tag-details">
+                    <h2 class="text-xl font-semibold mb-4">ເລືອກຄຳສັ່ງເພື່ອເບິ່ງລາຍລະອຽດ</h2>
+                    <p class="text-gray-600 dark:text-gray-400">ກະລຸນາເລືອກຄຳສັ່ງຈາກລາຍການທາງຊ້າຍເພື່ອເບິ່ງຕົວຢ່າງແລະຄຳອະທິບາຍ.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ກວດສອບ dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // ຂໍ້ມູນຄຳສັ່ງ HTML
+        const htmlTags = [
+            {
+                name: '<!DOCTYPE html>',
+                description: 'ປະກາດປະເພດເອກະສານເປັນ HTML5',
+                example: '<!DOCTYPE html>\n<html>\n  <head>\n    <title>ຕົວຢ່າງ</title>\n  </head>\n  <body>\n    <h1>ສະບາຍດີ</h1>\n  </body>\n</html>',
+                result: '<h1>ສະບາຍດີ</h1>'
+            },
+            {
+                name: '<html>',
+                description: 'ແທັກຫຼັກຂອງເອກະສານ HTML',
+                example: '<html>\n  <head>\n    <title>ຕົວຢ່າງ</title>\n  </head>\n  <body>\n    <p>ເນື້ອຫາ</p>\n  </body>\n</html>',
+                result: '<p>ເນື້ອຫາ</p>'
+            },
+            {
+                name: '<head>',
+                description: 'ບັນຈຸຂໍ້ມູນ meta, title, ແລະການເຊື່ອມຕໍ່ CSS ແລະ JavaScript',
+                example: '<head>\n  <title>ຊື່ໜ້າເວັບ</title>\n  <meta charset="UTF-8">\n</head>',
+                result: 'ບໍ່ມີຜົນສະແດງໂດຍກົງ - ມັນກຳນົດຂໍ້ມູນສຳລັບບຣາວເຊີ'
+            },
+            {
+                name: '<title>',
+                description: 'ກຳນົດຊື່ຂອງໜ້າເວັບໄຊ (ສະແດງໃນແທັບບຣາວເຊີ)',
+                example: '<title>ຕົວຢ່າງຊື່ໜ້າເວັບ</title>',
+                result: 'ສະແດງເປັນຊື່ແທັບໃນບຣາວເຊີ'
+            },
+            {
+                name: '<body>',
+                description: 'ບັນຈຸເນື້ອຫາທັງໝົດທີ່ສະແດງໃນໜ້າເວັບ',
+                example: '<body>\n  <h1>ຫົວຂໍ້</h1>\n  <p>ຂໍ້ຄວາມ</p>\n</body>',
+                result: '<h1>ຫົວຂໍ້</h1><p>ຂໍ້ຄວາມ</p>'
+            },
+            {
+                name: '<h1> - <h6>',
+                description: 'ຫົວຂໍ້ແຕ່ລະລະດັບ (h1 ໃຫຍ່ສຸດ, h6 ນ້ອຍສຸດ)',
+                example: '<h1>ຫົວຂໍ້ລະດັບ 1</h1>\n<h2>ຫົວຂໍ້ລະດັບ 2</h2>\n<h3>ຫົວຂໍ້ລະດັບ 3</h3>',
+                result: '<h1>ຫົວຂໍ້ລະດັບ 1</h1><h2>ຫົວຂໍ້ລະດັບ 2</h2><h3>ຫົວຂໍ້ລະດັບ 3</h3>'
+            },
+            {
+                name: '<p>',
+                description: 'ກຳນົດຂໍ້ຄວາມເປັນຍ່ໍໜ້າ',
+                example: '<p>ນີ້ແມ່ນຕົວຢ່າງຂອງຍໍ່ໜ້າ. ຍໍ່ໜ້ານີ້ມີຄວາມຍາວພໍສົມຄວນເພື່ອສະແດງຜົນ.</p>',
+                result: '<p>ນີ້ແມ່ນຕົວຢ່າງຂອງຍໍ່ໜ້າ. ຍໍ່ໜ້ານີ້ມີຄວາມຍາວພໍສົມຄວນເພື່ອສະແດງຜົນ.</p>'
+            },
+            {
+                name: '<a>',
+                description: 'ສ້າງລິ້ງເຊື່ອມຕໍ່ໄປຫາໜ້າອື່ນ',
+                example: '<a href="https://www.example.com">ກົດເພື່ອເຂົ້າເບິ່ງເວັບໄຊ</a>',
+                result: '<a href="https://www.example.com" target="_blank">ກົດເພື່ອເຂົ້າເບິ່ງເວັບໄຊ</a>'
+            },
+            {
+                name: '<img>',
+                description: 'ສະແດງຮູບພາບ',
+                example: '<img src="https://picsum.photos/200/100" alt="ຮູບພາບຕົວຢ່າງ">',
+                result: '<img src="https://picsum.photos/200/100" alt="ຮູບພາບຕົວຢ່າງ" class="mt-2">'
+            },
+            {
+                name: '<ul>, <ol>, <li>',
+                description: 'ສ້າງລາຍການແບບມີຫຼືບໍ່ມີລຳດັບ',
+                example: '<ul>\n  <li>ລາຍການທີ 1</li>\n  <li>ລາຍການທີ 2</li>\n</ul>\n\n<ol>\n  <li>ລາຍການທີ 1</li>\n  <li>ລາຍການທີ 2</li>\n</ol>',
+                result: '<ul><li>ລາຍການທີ 1</li><li>ລາຍການທີ 2</li></ul><ol><li>ລາຍການທີ 1</li><li>ລາຍການທີ 2</li></ol>'
+            },
+            {
+                name: '<div>',
+                description: 'ຄອນເທນເນີສຳລັບຈັດກຸ່ມອົງປະກອບ',
+                example: '<div style="background-color: #f0f0f0; padding: 10px;">\n  <h3>ຫົວຂໍ້ພາຍໃນກ່ອງ</h3>\n  <p>ເນື້ອຫາພາຍໃນກ່ອງ</p>\n</div>',
+                result: '<div style="background-color: #f0f0f0; padding: 10px;"><h3>ຫົວຂໍ້ພາຍໃນກ່ອງ</h3><p>ເນື້ອຫາພາຍໃນກ່ອງ</p></div>'
+            },
+            {
+                name: '<span>',
+                description: 'ຄອນເທນເນີໃນລາຍການສຳລັບຕົກແຕ່ງຂໍ້ຄວາມ',
+                example: '<p>ຂໍ້ຄວາມທຳມະດາ <span style="color: red;">ຂໍ້ຄວາມສີແດງ</span> ຂໍ້ຄວາມທຳມະດາ</p>',
+                result: '<p>ຂໍ້ຄວາມທຳມະດາ <span style="color: red;">ຂໍ້ຄວາມສີແດງ</span> ຂໍ້ຄວາມທຳມະດາ</p>'
+            },
+            {
+                name: '<br>',
+                description: 'ຂຶ້ນບັນທັດໃໝ່',
+                example: 'ຂໍ້ຄວາມບັນທັດທີໜຶ່ງ<br>ຂໍ້ຄວາມບັນທັດທີສອງ',
+                result: 'ຂໍ້ຄວາມບັນທັດທີໜຶ່ງ<br>ຂໍ້ຄວາມບັນທັດທີສອງ'
+            },
+            {
+                name: '<hr>',
+                description: 'ສ້າງເສັ້ນຂີດແບ່ງໃນແນວນອນ',
+                example: '<p>ຂໍ້ຄວາມດ້ານເທິງ</p>\n<hr>\n<p>ຂໍ້ຄວາມດ້ານລຸ່ມ</p>',
+                result: '<p>ຂໍ້ຄວາມດ້ານເທິງ</p><hr><p>ຂໍ້ຄວາມດ້ານລຸ່ມ</p>'
+            },
+            {
+                name: '<table>, <tr>, <th>, <td>',
+                description: 'ສ້າງຕາຕະລາງ',
+                example: '<table border="1">\n  <tr>\n    <th>ຫົວຂໍ້ 1</th>\n    <th>ຫົວຂໍ້ 2</th>\n  </tr>\n  <tr>\n    <td>ຂໍ້ມູນ 1</td>\n    <td>ຂໍ້ມູນ 2</td>\n  </tr>\n</table>',
+                result: '<table border="1"><tr><th>ຫົວຂໍ້ 1</th><th>ຫົວຂໍ້ 2</th></tr><tr><td>ຂໍ້ມູນ 1</td><td>ຂໍ້ມູນ 2</td></tr></table>'
+            },
+            {
+                name: '<form>',
+                description: 'ສ້າງຟອມສຳລັບປ້ອນຂໍ້ມູນ',
+                example: '<form>\n  <label for="name">ຊື່:</label>\n  <input type="text" id="name"><br><br>\n  <label for="email">ອີເມວ:</label>\n  <input type="email" id="email"><br><br>\n  <input type="submit" value="ສົ່ງຂໍ້ມູນ">\n</form>',
+                result: '<form><label for="name">ຊື່:</label><input type="text" id="name"><br><br><label for="email">ອີເມວ:</label><input type="email" id="email"><br><br><input type="submit" value="ສົ່ງຂໍ້ມູນ"></form>'
+            },
+            {
+                name: '<input>',
+                description: 'ສ້າງຊ່ອງປ້ອນຂໍ້ມູນຫຼາຍຮູບແບບ',
+                example: '<input type="text" placeholder="ປ້ອນຂໍ້ຄວາມ"><br>\n<input type="checkbox"> ກວດກາ<br>\n<input type="radio" name="option"> ຕົວເລືອກ<br>\n<input type="button" value="ປຸ່ມ">',
+                result: '<input type="text" placeholder="ປ້ອນຂໍ້ຄວາມ"><br><input type="checkbox"> ກວດກາ<br><input type="radio" name="option"> ຕົວເລືອກ<br><input type="button" value="ປຸ່ມ">'
+            },
+            {
+                name: '<button>',
+                description: 'ສ້າງປຸ່ມ',
+                example: '<button type="button">ຄລິກທີ່ນີ້</button>',
+                result: '<button type="button">ຄລິກທີ່ນີ້</button>'
+            },
+            {
+                name: '<textarea>',
+                description: 'ສ້າງຊ່ອງປ້ອນຂໍ້ຄວາມຫຼາຍບັນທັດ',
+                example: '<textarea rows="4" cols="30" placeholder="ປ້ອນຂໍ້ຄວາມຫຼາຍບັນທັດທີ່ນີ້..."></textarea>',
+                result: '<textarea rows="4" cols="30" placeholder="ປ້ອນຂໍ້ຄວາມຫຼາຍບັນທັດທີ່ນີ້..."></textarea>'
+            },
+            {
+                name: '<select>, <option>',
+                description: 'ສ້າງເມນູຕົວເລືອກແບບດຶງລົງ',
+                example: '<select>\n  <option value="1">ຕົວເລືອກທີ 1</option>\n  <option value="2">ຕົວເລືອກທີ 2</option>\n  <option value="3">ຕົວເລືອກທີ 3</option>\n</select>',
+                result: '<select><option value="1">ຕົວເລືອກທີ 1</option><option value="2">ຕົວເລືອກທີ 2</option><option value="3">ຕົວເລືອກທີ 3</option></select>'
+            }
+        ];
+
+        // ເພີ່ມລາຍການຄຳສັ່ງເຂົ້າໃນລາຍການ
+        const tagList = document.getElementById('tag-list');
+        htmlTags.forEach(tag => {
+            const tagButton = document.createElement('button');
+            tagButton.className = 'w-full text-left px-3 py-2 rounded-md hover:bg-primary hover:bg-opacity-20 hover:text-primary transition-colors';
+            tagButton.textContent = tag.name;
+            tagButton.addEventListener('click', () => showTagDetails(tag));
+            tagList.appendChild(tagButton);
+        });
+
+        // ສະແດງລາຍລະອຽດຂອງຄຳສັ່ງ
+        function showTagDetails(tag) {
+            const tagDetails = document.getElementById('tag-details');
+            
+            tagDetails.innerHTML = `
+                <h2 class="text-xl font-semibold mb-2 text-primary">${tag.name}</h2>
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">ຄຳອະທິບາຍ:</h3>
+                    <p class="bg-white dark:bg-gray-700 p-3 rounded-md mb-4">${tag.description}</p>
+                    
+                    <h3 class="font-medium mb-2">ຕົວຢ່າງ HTML:</h3>
+                    <pre class="bg-white dark:bg-gray-700 p-3 rounded-md overflow-x-auto mb-4"><code>${escapeHtml(tag.example)}</code></pre>
+                    
+                    <h3 class="font-medium mb-2">ຜົນລັພທ໌:</h3>
+                    <div class="bg-white dark:bg-gray-700 p-3 rounded-md mb-4">
+                        ${tag.result}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ປ້ອງກັນຄວາມປອດໄພສຳລັບ HTML
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // ສະແດງຄຳສັ່ງທຳອິດເມື່ອໂຫຼດໜ້າ
+        if (htmlTags.length > 0) {
+            showTagDetails(htmlTags[0]);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,3424 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ບົດຮຽນພາສາ C++ ຈາກຂັ້ນເລີ່ມຕົ້ນຈົນເຖິງຂັ້ນສູງ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/theme-monokai.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-c_cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Phetsarath OT', 'Noto Sans Lao', 'Saysettha OT', Arial, sans-serif;
+        }
+
+        .dark body {
+            background-color: #181818;
+            color: #e0e0e0;
+        }
+
+        #editor {
+            height: 300px;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-content h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .lesson-content h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lesson-content h3 {
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            margin-bottom: 0.375rem;
+        }
+
+        .lesson-content ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .lesson-content ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .lesson-content p {
+            margin-bottom: 0.75rem;
+        }
+
+        .lesson-content pre {
+            background-color: #f0f0f0;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            overflow-x: auto;
+            margin-bottom: 0.75rem;
+        }
+
+        .dark .lesson-content pre {
+            background-color: #2d2d2d;
+        }
+
+        .lesson-content code {
+            font-family: monospace;
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+
+        .dark .lesson-content code {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Tab styles */
+        .tab-active {
+            background-color: #5D5CDE;
+            color: white;
+        }
+
+        .dark .tab-active {
+            background-color: #5D5CDE;
+            color: white;
+        }
+
+        .tab {
+            transition: all 0.3s;
+        }
+
+        .tab:hover:not(.tab-active) {
+            background-color: rgba(93, 92, 222, 0.1);
+        }
+
+        .dark .tab:hover:not(.tab-active) {
+            background-color: rgba(93, 92, 222, 0.2);
+        }
+
+        /* Quiz styles */
+        .quiz-option {
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            border-color: #5D5CDE;
+        }
+
+        .quiz-option.selected {
+            border-color: #5D5CDE;
+            background-color: rgba(93, 92, 222, 0.1);
+        }
+
+        .dark .quiz-option.selected {
+            background-color: rgba(93, 92, 222, 0.2);
+        }
+
+        .quiz-option.correct {
+            border-color: #10B981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .dark .quiz-option.correct {
+            background-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .quiz-option.incorrect {
+            border-color: #EF4444;
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .dark .quiz-option.incorrect {
+            background-color: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Code sample output */
+        #code-output {
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .dark #code-output {
+            background-color: #2d2d2d;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <h1 class="text-3xl font-bold text-center mb-8">ບົດຮຽນພາສາ C++ ຈາກຂັ້ນເລີ່ມຕົ້ນຈົນເຖິງຂັ້ນສູງ</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Sidebar with course outline -->
+            <div class="lg:col-span-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 h-min shadow-md">
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold mb-2">ແຜນຫຼັກສູດ</h2>
+                    <div class="flex space-x-1 mb-4">
+                        <button id="outline-tab" class="tab tab-active px-3 py-1 rounded-md text-sm font-medium flex-1">ບົດຮຽນ</button>
+                        <button id="search-tab" class="tab px-3 py-1 rounded-md text-sm font-medium flex-1">ຄົ້ນຫາ</button>
+                    </div>
+                    
+                    <div id="outline-content">
+                        <div class="mb-4">
+                            <input type="text" id="lesson-filter" placeholder="ຄົ້ນຫາບົດຮຽນ..." class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                        </div>
+                        
+                        <div class="max-h-[calc(100vh-240px)] overflow-y-auto pr-1" id="course-outline">
+                            <!-- Course outline will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div id="search-content" class="hidden">
+                        <div class="mb-4">
+                            <input type="text" id="search-input" placeholder="ຄົ້ນຫາເນື້ອໃນ..." class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                        </div>
+                        <div id="search-results" class="max-h-[calc(100vh-240px)] overflow-y-auto">
+                            <!-- Search results will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main content area -->
+            <div class="lg:col-span-3">
+                <!-- Lesson tabs -->
+                <div class="flex mb-4 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+                    <button id="content-btn" class="tab tab-active flex-1 py-3 px-4 text-center font-medium">ເນື້ອໃນ</button>
+                    <button id="code-btn" class="tab flex-1 py-3 px-4 text-center font-medium">ໂຄດຕົວຢ່າງ</button>
+                    <button id="quiz-btn" class="tab flex-1 py-3 px-4 text-center font-medium">ແບບທົດສອບ</button>
+                </div>
+                
+                <!-- Tab content -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                    <!-- Lesson content -->
+                    <div id="content-tab" class="lesson-content">
+                        <div class="animate-pulse text-center py-16">
+                            <div class="text-xl font-medium text-gray-400 dark:text-gray-500">ກຳລັງໂຫຼດເນື້ອໃນ...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Code example -->
+                    <div id="code-tab" class="hidden">
+                        <h2 class="text-xl font-bold mb-4">ໂຄດຕົວຢ່າງ</h2>
+                        <div id="editor"></div>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <button id="run-code" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition">ຮັນໂຄດ</button>
+                            <button id="reset-code" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md font-medium transition">ຣີເຊັດໂຄດ</button>
+                            <button id="ask-assistant" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition">ຖາມຜູ້ຊ່ວຍກ່ຽວກັບໂຄດນີ້</button>
+                        </div>
+                        <div class="mb-4">
+                            <h3 class="font-bold mb-2">ຜົນລັບ:</h3>
+                            <div id="code-output" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md min-h-[100px] max-h-[200px] overflow-y-auto"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz -->
+                    <div id="quiz-tab" class="hidden">
+                        <h2 class="text-xl font-bold mb-4">ແບບທົດສອບ</h2>
+                        <div id="quiz-container">
+                            <div class="animate-pulse">
+                                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-6"></div>
+                                <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                                <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                                <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                                <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                            </div>
+                        </div>
+                        <div class="mt-6 hidden" id="quiz-results"></div>
+                        <button id="check-answers" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md font-medium transition hidden">ກວດຄຳຕອບ</button>
+                        <button id="next-quiz" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md font-medium transition hidden">ຄຳຖາມຕໍ່ໄປ</button>
+                    </div>
+                </div>
+                
+                <!-- Navigation buttons -->
+                <div class="flex justify-between">
+                    <button id="prev-lesson" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-4 py-2 rounded-md font-medium transition flex items-center">
+                        <span class="mr-2">←</span> ບົດກ່ອນໜ້າ
+                    </button>
+                    <button id="next-lesson" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium transition flex items-center">
+                        ບົດຕໍ່ໄປ <span class="ml-2">→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // Course data structure
+        const courseData = [
+            {
+                title: "ພາກທີ 1: ພື້ນຖານພາສາ C++",
+                lessons: [
+                    {
+                        id: "lesson1",
+                        title: "ບົດທີ 1: ພາບລວມຂອງ C++",
+                        content: `
+# ພາບລວມຂອງ C++
+
+C++ ແມ່ນພາສາການໂປຣແກຣມທີ່ມີປະສິດທິພາບສູງ ແລະໄດ້ຮັບການນິຍົມຢ່າງກວ້າງຂວາງ. ຮຽນຮູ້ພື້ນຖານການຂຽນໂປຣແກຣມ C++ ໃນບົດນີ້.
+
+## C++ ແມ່ນຫຍັງ?
+
+- C++ ແມ່ນພາສາການໂປຣແກຣມແບບ **general-purpose** ທີ່ສ້າງຕໍ່ຈາກພາສາ C
+- ສ້າງໂດຍ **Bjarne Stroustrup** ໃນປີ 1979 ທີ່ Bell Labs
+- ເປັນພາສາແບບ **compiled** ທີ່ມີປະສິດທິພາບສູງ
+- ມີຄຸນສົມບັດການໂປຣແກຣມແບບ object-oriented, procedural ແລະ generic
+
+## ຈຸດເດັ່ນຂອງ C++
+
+C++ ມີຂໍ້ດີຫຼາຍຢ່າງທີ່ເຮັດໃຫ້ມັນເປັນໜຶ່ງໃນພາສາການໂປຣແກຣມທີ່ໄດ້ຮັບຄວາມນິຍົມຫຼາຍທີ່ສຸດໃນໂລກ:
+
+- **ປະສິດທິພາບສູງ:** C++ ໃຫ້ປະສິດທິພາບລະດັບສູງ ແລະ ຄວາມໄວໃນການປະມວນຜົນ
+- **ການໃຊ້ງານຢ່າງກວ້າງຂວາງ:** ໃຊ້ສຳລັບການພັດທະນາເກມ, ລະບົບປະຕິບັດການ, ອຸປະກອນຝັງຕົວ ແລະອື່ນໆ
+- **ຄວາມເຂົ້າກັນໄດ້ກັບພາສາ C:** ໂຄດພາສາ C ສ່ວນໃຫຍ່ສາມາດເຮັດວຽກຢູ່ໃນ C++ ໄດ້
+- **ຄວບຄຸມການຈັດການໜ່ວຍຄວາມຈຳ:** ຜູ້ໂປຣແກຣມສາມາດຄວບຄຸມການຈັດສັນໜ່ວຍຄວາມຈຳໂດຍກົງ
+- **ການສະໜັບສະໜູນທາງດ້ານ OOP:** ຄວາມສາມາດໃນການໂປຣແກຣມແບບ object-oriented ຢ່າງສົມບູນ
+
+## ການນຳໃຊ້ໃນໂລກຕົວຈິງ
+
+C++ ຖືກນຳໃຊ້ຢ່າງກວ້າງຂວາງໃນ:
+
+- **ການພັດທະນາເກມ:** ເຄື່ອງມືສ້າງເກມຫຼາຍໆໂຕ ເຊັ່ນ Unreal Engine ແມ່ນສ້າງດ້ວຍ C++
+- **ລະບົບປະຕິບັດການ:** ສ່ວນຫຼາຍຂອງ Windows, Linux ແລະ macOS ແມ່ນຂຽນດ້ວຍ C++
+- **ລະບົບຝັງຕົວ:** ໃຊ້ໃນລະບົບອັດສະລິຍະຕ່າງໆ, IoT ແລະ ອຸປະກອນ embedded
+- **ຊອຟແວການເງິນ:** ລະບົບການຄ້າແລະວິເຄາະທາງການເງິນທີ່ຕ້ອງການຄວາມໄວສູງ
+- **ການຄິດໄລ່ວິທະຍາສາດ:** ການສ້າງແບບຈຳລອງທາງວິທະຍາສາດແລະການວິເຄາະຂໍ້ມູນ
+
+## ໂປຣແກຣມ C++ ງ່າຍໆ
+
+ນີ້ແມ່ນຕົວຢ່າງຂອງໂປຣແກຣມ "Hello World" ໃນພາສາ C++:
+
+\`\`\`cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}
+\`\`\`
+
+ໃນບົດຕໍ່ໄປ, ພວກເຮົາຈະຮຽນຮູ້ກ່ຽວກັບການຕິດຕັ້ງສະພາບແວດລ້ອມການພັດທະນາ C++ ແລະ ເລີ່ມຕົ້ນຂຽນໂປຣແກຣມ.
+                        `,
+                        codeExample: `#include <iostream>
+
+int main() {
+    // ນີ້ແມ່ນໂປຣແກຣມ C++ ທຳອິດຂອງທ່ານ
+    std::cout << "ສະບາຍດີຊາວໂລກ! ຍິນດີຕ້ອນຮັບສູ່ C++!" << std::endl;
+    
+    // ແສດງຂໍ້ຄວາມຕ້ອນຮັບ
+    std::cout << "ຍິນດີຕ້ອນຮັບສູ່ບົດຮຽນພາສາ C++" << std::endl;
+    std::cout << "ໂດຍໂປຣແກຣມນີ້ສ້າງໂດຍ: <ຊື່ຂອງທ່ານ>" << std::endl;
+    
+    return 0;
+}`,
+                        quiz: [
+                            {
+                                question: "ພາສາ C++ ຖືກສ້າງໂດຍໃຜ?",
+                                options: [
+                                    "Dennis Ritchie",
+                                    "Bjarne Stroustrup",
+                                    "James Gosling",
+                                    "Guido van Rossum"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "C++ ແມ່ນພາສາປະເພດໃດ?",
+                                options: [
+                                    "Interpreted language",
+                                    "Scripting language",
+                                    "Compiled language",
+                                    "Markup language"
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                question: "ສັນຍາລັກໃດທີ່ໃຊ້ສຳລັບການສົ່ງຂໍ້ມູນອອກໃນ C++?",
+                                options: [
+                                    ">>",
+                                    "<<",
+                                    "-->",
+                                    "print"
+                                ],
+                                correctAnswer: 1
+                            }
+                        ]
+                    },
+                    {
+                        id: "lesson2",
+                        title: "ບົດທີ 2: ການຕິດຕັ້ງສະພາບແວດລ້ອມ",
+                        content: `
+# ການຕິດຕັ້ງສະພາບແວດລ້ອມ C++
+
+ເພື່ອເລີ່ມຕົ້ນຂຽນໂປຣແກຣມ C++, ທ່ານຕ້ອງໄດ້ຕິດຕັ້ງເຄື່ອງມືທີ່ຈຳເປັນ. ບົດນີ້ຈະແນະນຳວິທີການຕິດຕັ້ງແລະກຽມສະພາບແວດລ້ອມການພັດທະນາ.
+
+## ການຕິດຕັ້ງ Compiler
+
+Compiler ແມ່ນໂປຣແກຣມທີ່ແປງລະຫັດ C++ ໄປເປັນໂປຣແກຣມທີ່ຄອມພິວເຕີສາມາດຮັນໄດ້. ຕົວເລືອກ compiler ຂຶ້ນກັບລະບົບປະຕິບັດການຂອງທ່ານ:
+
+### Windows
+- **Visual Studio:** IDE ລວມກັບ MSVC compiler - ດາວໂຫລດຈາກ [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/)
+- **MinGW-w64:** ສະບັບ Windows ຂອງ GCC compiler - ດາວໂຫລດຈາກ [MinGW-w64](https://www.mingw-w64.org/downloads/)
+- **Cygwin:** ສະພາບແວດລ້ອມທີ່ຄ້າຍຄື Linux ສຳລັບ Windows - ດາວໂຫລດຈາກ [Cygwin](https://www.cygwin.com/)
+
+### macOS
+- **Xcode:** ມາພ້ອມກັບ Clang compiler - ດາວໂຫລດຈາກ [App Store](https://apps.apple.com/us/app/xcode/id497799835)
+- **Homebrew:** ຕິດຕັ້ງໂດຍໃຊ້ຄຳສັ່ງ \`brew install gcc\`
+
+### Linux
+- **GCC:** ຕິດຕັ້ງໂດຍໃຊ້ package manager ຂອງທ່ານ
+  - Ubuntu/Debian: \`sudo apt install build-essential\`
+  - Fedora: \`sudo dnf install gcc-c++\`
+  - Arch: \`sudo pacman -S gcc\`
+
+## ການຕິດຕັ້ງ IDE (Integrated Development Environment)
+
+IDE ຊ່ວຍໃຫ້ການຂຽນໂຄດມີປະສິດທິພາບຫຼາຍຂຶ້ນ ໂດຍການລວມເຄື່ອງມືຕ່າງໆເຂົ້າກັນ. ຕົວເລືອກທີ່ດີ:
+
+- **Visual Studio:** IDE ສຳລັບ Windows ທີ່ມີຄຸນສົມບັດຄົບຖ້ວນ
+- **Visual Studio Code:** ເບົາແລະຍືດຫຍຸ່ນສຳລັບທຸກລະບົບປະຕິບັດການ - ຕ້ອງການຕິດຕັ້ງ C++ extension
+- **CLion:** IDE ຈາກ JetBrains (ຕ້ອງມີ license)
+- **Code::Blocks:** IDE ທີ່ໃຊ້ງານງ່າຍແລະຟຣີສຳລັບຜູ້ເລີ່ມຕົ້ນ
+- **Eclipse:** IDE ຫຼາຍໜ້າທີ່ດ້ວຍປລັກອິນ CDT (C/C++ Development Tooling)
+
+## ການທົດສອບການຕິດຕັ້ງ
+
+ຫຼັງຈາກທີ່ທ່ານຕິດຕັ້ງເຄື່ອງມືຕ່າງໆແລ້ວ, ກວດສອບການຕິດຕັ້ງຂອງທ່ານໂດຍການສ້າງໂປຣແກຣມ "Hello World":
+
+1. ສ້າງໄຟລ໌ໃໝ່ຊື່ \`hello.cpp\`
+2. ພິມໂຄດນີ້:
+
+\`\`\`cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}
+\`\`\`
+
+3. ປະຕິບັດການ compile ແລະ run ໂປຣແກຣມ:
+
+**ສຳລັບ GCC/MinGW:**
+\`\`\`
+g++ hello.cpp -o hello
+./hello     # ສຳລັບ Linux/macOS
+hello.exe   # ສຳລັບ Windows
+\`\`\`
+
+**ສຳລັບ Visual Studio:**
+ກົດປຸ່ມ F5 ຫຼື ເລືອກ "Local Windows Debugger"
+
+ຖ້າທ່ານເຫັນຂໍ້ຄວາມ "Hello, World!" ສະແດງອອກມາ, ນັ້ນໝາຍຄວາມວ່າທ່ານໄດ້ຕິດຕັ້ງສະພາບແວດລ້ອມ C++ ຂອງທ່ານຢ່າງຖືກຕ້ອງແລ້ວ!
+
+ໃນບົດຕໍ່ໄປ, ພວກເຮົາຈະຮຽນຮູ້ກ່ຽວກັບໄວຍາກອນພື້ນຖານຂອງພາສາ C++.
+                        `,
+                        codeExample: `#include <iostream>
+
+// ໂປຣແກຣມທົດສອບສຳລັບຜູ້ເລີ່ມຕົ້ນ C++
+int main() {
+    std::cout << "ການທົດສອບສະພາບແວດລ້ອມ C++" << std::endl;
+    
+    // ສະແດງຂໍ້ມູນກ່ຽວກັບ compiler
+    std::cout << "Compiler ທີ່ໃຊ້: " << __cplusplus << std::endl;
+    
+    // ສະແດງຂໍ້ມູນລະບົບປະຕິບັດການ (ຂຶ້ນກັບຄວາມສາມາດຂອງ compiler)
+    #ifdef _WIN32
+        std::cout << "ລະບົບປະຕິບັດການ: Windows" << std::endl;
+    #elif __APPLE__
+        std::cout << "ລະບົບປະຕິບັດການ: macOS" << std::endl;
+    #elif __linux__
+        std::cout << "ລະບົບປະຕິບັດການ: Linux" << std::endl;
+    #else
+        std::cout << "ລະບົບປະຕິບັດການ: ບໍ່ຮູ້ຈັກ" << std::endl;
+    #endif
+    
+    std::cout << "ຖ້າທ່ານເຫັນຂໍ້ຄວາມນີ້, ໝາຍຄວາມວ່າທ່ານໄດ້ຕິດຕັ້ງສະພາບແວດລ້ອມ C++ ສຳເລັດແລ້ວ!" << std::endl;
+    
+    return 0;
+}`,
+                        quiz: [
+                            {
+                                question: "ໂຕຄອມໄພເລີ C++ ທີ່ໃຊ້ໄດ້ກັບລະບົບ Windows ແມ່ນໂຕໃດ?",
+                                options: [
+                                    "Xcode",
+                                    "GCC ເທົ່ານັ້ນ",
+                                    "MinGW-w64",
+                                    "Solaris Compiler"
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                question: "ຄຳສັ່ງໃດທີ່ໃຊ້ສຳລັບການ compile ໂປຣແກຣມ C++ ດ້ວຍ GCC?",
+                                options: [
+                                    "cpp hello.cpp",
+                                    "g++ hello.cpp -o hello",
+                                    "compile hello.cpp",
+                                    "cc hello.cpp"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "ໜ້າທີ່ຫຼັກຂອງ IDE ແມ່ນຫຍັງ?",
+                                options: [
+                                    "ເພື່ອຮັນໂປຣແກຣມເທົ່ານັ້ນ",
+                                    "ເພື່ອຕິດຕັ້ງຄອມໄພເລີ",
+                                    "ເພື່ອລວມເຄື່ອງມືການພັດທະນາເຂົ້າດ້ວຍກັນແລະເພີ່ມປະສິດທິພາບໃນການຂຽນໂຄດ",
+                                    "ເພື່ອດາວໂຫລດໄລບຣາຣີ C++"
+                                ],
+                                correctAnswer: 2
+                            }
+                        ]
+                    },
+                    {
+                        id: "lesson3",
+                        title: "ບົດທີ 3: ໄວຍາກອນພື້ນຖານ",
+                        content: `
+# ໄວຍາກອນພື້ນຖານຂອງພາສາ C++
+
+ໃນບົດນີ້, ພວກເຮົາຈະຮຽນຮູ້ກ່ຽວກັບໂຄງສ້າງພື້ນຖານຂອງໂປຣແກຣມ C++ ແລະ ໄວຍາກອນທີ່ຈຳເປັນ.
+
+## ໂຄງສ້າງໂປຣແກຣມ C++
+
+ໂປຣແກຣມ C++ ປະກອບດ້ວຍສ່ວນຕ່າງໆທີ່ທຳງານຮ່ວມກັນ:
+
+### ໄຟລ໌ source ແລະ header
+
+- **ໄຟລ໌ source (.cpp)** ປະກອບມີລະຫັດການປະຕິບັດ
+- **ໄຟລ໌ header (.h ຫຼື .hpp)** ປະກອບມີຄຳປະກາດ ແລະ ນິຍາມຕ່າງໆ
+- ໄຟລ໌ຈະຖືກ compile ແລະ link ເຂົ້າກັນເພື່ອສ້າງໂປຣແກຣມທີ່ຮັນໄດ້
+
+### ການໃຊ້ #include
+
+\`#include\` ແມ່ນ directive ຂອງ preprocessor ທີ່ໃຊ້ເພື່ອລວມໄຟລ໌ຕ່າງໆເຂົ້າໃນໂປຣແກຣມຂອງທ່ານ:
+
+\`\`\`cpp
+// ລວມໄລບຣາຣີມາດຕະຖານ
+#include <iostream>
+
+// ລວມໄຟລ໌ຂອງທ່ານເອງ
+#include "myfile.h"
+\`\`\`
+
+- `<>` ໃຊ້ສຳລັບໄລບຣາຣີມາດຕະຖານ
+- `""` ໃຊ້ສຳລັບໄຟລ໌ທີ່ທ່ານສ້າງເອງ
+
+### ຟັງຊັ່ນ main()
+
+ທຸກໂປຣແກຣມ C++ ຕ້ອງມີຟັງຊັ່ນ \`main()\` ຢ່າງໜ້ອຍໜຶ່ງອັນ, ເຊິ່ງເປັນຈຸດເລີ່ມຕົ້ນຂອງການປະຕິບັດ:
+
+\`\`\`cpp
+int main() {
+    // code goes here
+    return 0;  // return ຄ່າ 0 ເມື່ອໂປຣແກຣມສຳເລັດດ້ວຍດີ
+}
+\`\`\`
+
+### ສັນຍາລັກຂອງ C++
+
+- **`;` (semicolon)** ໃຊ້ເພື່ອຈົບປະໂຫຍກຄຳສັ່ງ
+- **`{}` (braces)** ໃຊ້ເພື່ອກຳນົດ blocks ຂອງໂຄດ
+- **`//` ແລະ `/* */`** ໃຊ້ສຳລັບຄວາມຄິດເຫັນ
+- **`<<` ແລະ `>>`** ໃຊ້ສຳລັບການສົ່ງຂໍ້ມູນເຂົ້າ/ອອກ
+
+## ການສະແດງຜົນ ແລະ ການຮັບຂໍ້ມູນ
+
+### ການສະແດງຜົນດ້ວຍ cout
+
+\`cout\` ເປັນວັດຖຸຂອງ standard output stream, ໃຊ້ສຳລັບການສະແດງຂໍ້ມູນ:
+
+\`\`\`cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;  // ສະແດງຂໍ້ຄວາມ
+    std::cout << 42 << std::endl;               // ສະແດງຕົວເລກ
+    std::cout << "Sum: " << 5 + 3 << std::endl; // ສະແດງ text + ຄ່າ
+    return 0;
+}
+\`\`\`
+
+`std::endl` ໃຊ້ສຳລັບຂຶ້ນບັນທັດໃໝ່ ແລະ flush ຂໍ້ມູນອອກໄປ.
+
+### ການຮັບຂໍ້ມູນດ້ວຍ cin
+
+\`cin\` ໃຊ້ສຳລັບການຮັບຂໍ້ມູນຈາກຜູ້ໃຊ້:
+
+\`\`\`cpp
+#include <iostream>
+
+int main() {
+    int age;
+    std::string name;
+    
+    std::cout << "ກະລຸນາປ້ອນຊື່ຂອງທ່ານ: ";
+    std::cin >> name;
+    
+    std::cout << "ກະລຸນາປ້ອນອາຍຸຂອງທ່ານ: ";
+    std::cin >> age;
+    
+    std::cout << "ສະບາຍດີ, " << name << "! ທ່ານອາຍຸ " << age << " ປີ." << std::endl;
+    return 0;
+}
+\`\`\`
+
+### ການຈັດຮູບແບບ output
+
+ທ່ານສາມາດຈັດຮູບແບບຂອງ output ໂດຍໃຊ້ \`<iomanip>\` header:
+
+\`\`\`cpp
+#include <iostream>
+#include <iomanip>
+
+int main() {
+    double pi = 3.14159265358979;
+    
+    std::cout << "Pi ໃນຮູບແບບຕ່າງໆ:" << std::endl;
+    std::cout << "Default: " << pi << std::endl;
+    std::cout << "Fixed, 2 decimals: " << std::fixed << std::setprecision(2) << pi << std::endl;
+    std::cout << "Scientific: " << std::scientific << pi << std::endl;
+    
+    return 0;
+}
+\`\`\`
+
+## ຄວາມຄິດເຫັນ (Comments)
+
+ຄວາມຄິດເຫັນໃຊ້ເພື່ອອະທິບາຍໂຄດແລະບໍ່ມີຜົນກະທົບຕໍ່ການທຳງານຂອງໂປຣແກຣມ:
+
+\`\`\`cpp
+// ນີ້ແມ່ນຄວາມຄິດເຫັນແບບບັນທັດດຽວ
+
+/* 
+  ນີ້ແມ່ນຄວາມຄິດເຫັນ
+  ແບບຫຼາຍບັນທັດ
+*/
+
+int main() {
+    int x = 10;  // ຄວາມຄິດເຫັນຢູ່ທ້າຍຄຳສັ່ງ
+    return 0;
+}
+\`\`\`
+
+ໃນບົດຕໍ່ໄປ, ພວກເຮົາຈະຮຽນຮູ້ກ່ຽວກັບຕົວແປແລະຊະນິດຂໍ້ມູນໃນພາສາ C++.
+                        `,
+                        codeExample: `#include <iostream>
+#include <string>
+
+int main() {
+    // ຕົວແປສຳລັບເກັບຂໍ້ມູນຜູ້ໃຊ້
+    std::string name;
+    int age;
+    
+    // ຮັບຂໍ້ມູນຈາກຜູ້ໃຊ້
+    std::cout << "ກະລຸນາປ້ອນຊື່ຂອງທ່ານ: ";
+    std::getline(std::cin, name);  // ໃຊ້ getline ເພື່ອໃຫ້ສາມາດຮັບຊື່ທີ່ມີຊ່ອງວ່າງ
+    
+    std::cout << "ກະລຸນາປ້ອນອາຍຸຂອງທ່ານ: ";
+    std::cin >> age;
+    
+    // ສະແດງຂໍ້ມູນ
+    std::cout << "\n--- ຂໍ້ມູນຂອງທ່ານ ---" << std::endl;
+    std::cout << "ຊື່: " << name << std::endl;
+    std::cout << "ອາຍຸ: " << age << " ປີ" << std::endl;
+    
+    // ສະແດງຂໍ້ຄວາມເພີ່ມເຕີມຕາມເງື່ອນໄຂ
+    if (age < 18) {
+        std::cout << "ທ່ານຍັງເປັນເຍົາວະຊົນ!" << std::endl;
+    } else if (age >= 18 && age < 60) {
+        std::cout << "ທ່ານເປັນຜູ້ໃຫຍ່!" << std::endl;
+    } else {
+        std::cout << "ທ່ານເປັນຜູ້ອາວຸໂສ!" << std::endl;
+    }
+    
+    return 0;
+}`,
+                        quiz: [
+                            {
+                                question: "ຄວາມແຕກຕ່າງລະຫວ່າງ #include <...> ແລະ #include \"...\" ແມ່ນຫຍັງ?",
+                                options: [
+                                    "<...> ໃຊ້ກັບໄຟລ໌ທຳມະດາ, \"...\" ໃຊ້ກັບໄລບຣາຣີມາດຕະຖານ",
+                                    "<...> ໃຊ້ກັບໄລບຣາຣີມາດຕະຖານ, \"...\" ໃຊ້ກັບໄຟລ໌ຂອງຜູ້ໃຊ້",
+                                    "ບໍ່ມີຄວາມແຕກຕ່າງ, ໃຊ້ແທນກັນໄດ້",
+                                    "<...> ໃຊ້ກັບ C++, \"...\" ໃຊ້ກັບ C"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "ສັນຍາລັກໃດທີ່ໃຊ້ເພື່ອຮັບຂໍ້ມູນໃນ C++?",
+                                options: [
+                                    "<<",
+                                    ">>",
+                                    "->",
+                                    "=="
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "ຟັງຊັ່ນທີ່ຈຳເປັນຕ້ອງມີໃນທຸກໂປຣແກຣມ C++ ຄືຫຍັງ?",
+                                options: [
+                                    "start()",
+                                    "begin()",
+                                    "run()",
+                                    "main()"
+                                ],
+                                correctAnswer: 3
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "ພາກທີ 2: C++ ຂັ້ນກາງ",
+                lessons: [
+                    {
+                        id: "lesson11",
+                        title: "ບົດທີ 11: ພື້ນຖານ OOP ໃນ C++",
+                        content: `
+# ພື້ນຖານ OOP ໃນ C++
+
+Object-Oriented Programming (OOP) ແມ່ນວິທີການເຂົ້າຫາການເຂົ້າລະຫັດທີ່ສຳຄັນໃນ C++. ບົດນີ້ຈະແນະນຳຫຼັກການພື້ນຖານຂອງ OOP ແລະວິທີການນຳໃຊ້ໃນພາສາ C++.
+
+## ຄວາມເຂົ້າໃຈກ່ຽວກັບ OOP
+
+OOP ແມ່ນວິທີການຂຽນໂປຣແກຣມທີ່ຈັດລະບຽບໂຄດເປັນວັດຖຸທີ່ມີປະຕິສຳພັນເຊິ່ງກັນແລະກັນ, ແທນທີ່ຈະເປັນຊຸດຄຳສັ່ງແລະຟັງຊັ່ນຕໍ່ເນື່ອງກັນ.
+
+### ຫຼັກການຫຼັກຂອງ OOP:
+
+1. **Encapsulation (ການຫໍ່ຫຸ້ມ)**: ການເຊື່ອງຂໍ້ມູນພາຍໃນ ແລະ ເປີດເຜີຍສະເພາະອິນເຕີເຟສທີ່ຈຳເປັນ
+2. **Inheritance (ການສືບທອດ)**: ການສ້າງຄຼາສໃໝ່ຈາກຄຼາສທີ່ມີຢູ່ແລ້ວ
+3. **Polymorphism (ລັກສະນະຫຼາຍຮູບແບບ)**: ການໂຕ້ຕອບກັບວັດຖຸຂອງຄຼາສທີ່ແຕກຕ່າງກັນໃນວິທີດຽວກັນ
+4. **Abstraction (ການລວມສະຫຼຸບ)**: ການສະແດງສະເພາະລັກສະນະທີ່ສຳຄັນແລະເຊື່ອງລາຍລະອຽດ
+
+### ຄວາມແຕກຕ່າງຈາກ Procedural Programming:
+
+- Procedural: ເນັ້ນໃສ່ຂັ້ນຕອນແລະຟັງຊັ່ນທີ່ປະຕິບັດກັບຂໍ້ມູນແຍກກັນ
+- OOP: ເນັ້ນໃສ່ການສ້າງວັດຖຸທີ່ລວມທັງຂໍ້ມູນແລະຟັງຊັ່ນທີ່ປະຕິບັດກັບຂໍ້ມູນນັ້ນ
+
+## ການສ້າງຄຼາສ (Class)
+
+ຄຼາສແມ່ນຕົວກຳນົດຮູບແບບສຳລັບປະເພດຂໍ້ມູນທີ່ກຳນົດໂດຍຜູ້ໃຊ້, ເຊິ່ງລວມມີຂໍ້ມູນແລະວິທີການຈັດການກັບຂໍ້ມູນນັ້ນ.
+
+### ໂຄງສ້າງພື້ນຖານຂອງຄຼາສ:
+
+\`\`\`cpp
+class ClassName {
+private:
+    // ສະມາຊິກຂໍ້ມູນສ່ວນຕົວ (attributes)
+    int privateData;
+    
+public:
+    // Constructor
+    ClassName() {
+        // initialization code
+    }
+    
+    // Member functions (methods)
+    void setData(int value) {
+        privateData = value;
+    }
+    
+    int getData() {
+        return privateData;
+    }
+};
+\`\`\`
+
+### ຄຼາສ vs ອັອບເຈັກ:
+
+- **ຄຼາສ**: ແມ່ນຕົວກຳນົດຮູບແບບຫຼືແບບພິມ (blueprint)
+- **ອັອບເຈັກ**: ແມ່ນອິນສະແຕນຊ໌ຂອງຄຼາສ, ຄືຕົວແປທີ່ມີຊະນິດທີ່ກຳນົດໂດຍຄຼາສ
+
+### Access Specifiers:
+
+1. **public**: ສາມາດເຂົ້າເຖິງໄດ້ຈາກພາຍນອກຄຼາສ
+2. **private**: ສາມາດເຂົ້າເຖິງໄດ້ສະເພາະພາຍໃນຄຼາສ
+3. **protected**: ສາມາດເຂົ້າເຖິງໄດ້ພາຍໃນຄຼາສແລະຄຼາສທີ່ສືບທອດ
+
+## ຕົວຢ່າງລະອຽດ
+
+ຕົວຢ່າງອັນນີ້ສະແດງຄຼາສ \`Person\` ທີ່ມີຄຸນລັກສະນະແລະພຶດຕິກຳຕ່າງໆ:
+
+\`\`\`cpp
+#include <iostream>
+#include <string>
+
+class Person {
+private:
+    // ຄຸນສົມບັດ (attributes)
+    std::string name;
+    int age;
+    
+public:
+    // Constructor
+    Person(std::string personName, int personAge) {
+        name = personName;
+        age = personAge;
+    }
+    
+    // Member functions (methods)
+    void introduce() {
+        std::cout << "ສະບາຍດີ, ຂ້ອຍຊື່ " << name << " ແລະ ຂ້ອຍອາຍຸ " << age << " ປີ." << std::endl;
+    }
+    
+    void celebrateBirthday() {
+        age++;
+        std::cout << name << " ໄດ້ສະເຫຼີມສະຫຼອງວັນເກີດ! ຕອນນີ້ອາຍຸ " << age << " ປີ." << std::endl;
+    }
+    
+    // Getters and Setters
+    std::string getName() {
+        return name;
+    }
+    
+    void setName(std::string newName) {
+        name = newName;
+    }
+    
+    int getAge() {
+        return age;
+    }
+    
+    void setAge(int newAge) {
+        if (newAge >= 0) { // Validation example
+            age = newAge;
+        }
+    }
+};
+
+int main() {
+    // ການສ້າງວັດຖຸ Person
+    Person person1("ສົມຈິດ", 25);
+    Person person2("ນາງນ້ອຍ", 30);
+    
+    // ການເອີ້ນໃຊ້ວິທີການ
+    person1.introduce();
+    person2.introduce();
+    
+    // ການເຂົ້າເຖິງແລະການປ່ຽນແປງຂໍ້ມູນໂດຍໃຊ້ getters ແລະ setters
+    std::cout << person1.getName() << " ມີອາຍຸ " << person1.getAge() << " ປີ." << std::endl;
+    
+    person1.setName("ສົມສະຫວັນ");
+    person1.introduce();
+    
+    // ການເອີ້ນໃຊ້ວິທີການອື່ນ
+    person1.celebrateBirthday();
+    
+    return 0;
+}
+\`\`\`
+
+## ປະໂຫຍດຂອງການໃຊ້ OOP
+
+1. **ການນຳກັບມາໃຊ້ໃໝ່ (Reusability)**: ຄຼາສສາມາດນຳກັບມາໃຊ້ໃໝ່ໃນຫຼາຍສ່ວນຂອງໂປຣແກຣມ
+2. **ການບຳລຸງຮັກສາ (Maintainability)**: ການປ່ຽນແປງຈະສົ່ງຜົນກະທົບຕໍ່ສະເພາະຄຼາສທີ່ກ່ຽວຂ້ອງ
+3. **ຄວາມປອດໄພຂອງຂໍ້ມູນ (Data security)**: ການຄວບຄຸມການເຂົ້າເຖິງຂໍ້ມູນຜ່ານ access specifiers
+4. **ການສະຫຼຸບຂໍ້ມູນ (Abstraction)**: ຜູ້ໃຊ້ຈຳເປັນຕ້ອງຮູ້ພຽງແຕ່ວິທີໃຊ້ອອບເຈັກ, ບໍ່ຈຳເປັນຕ້ອງຮູ້ວິທີການເຮັດວຽກພາຍໃນ
+
+ໃນບົດຕໍ່ໄປ, ພວກເຮົາຈະຮຽນຮູ້ກ່ຽວກັບຄອນສະຕຣັກເຕີ (Constructors) ແລະ ເດສະຕຣັກເຕີ (Destructors) ໃນພາສາ C++.
+                        `,
+                        codeExample: `#include <iostream>
+#include <string>
+#include <vector>
+
+// ຄຼາສສຳລັບລາຍການສິນຄ້າ
+class Product {
+private:
+    std::string name;
+    double price;
+    int quantity;
+
+public:
+    // Constructor
+    Product(std::string prodName, double prodPrice, int prodQuantity) {
+        name = prodName;
+        price = prodPrice;
+        quantity = prodQuantity;
+    }
+    
+    // Getters
+    std::string getName() const {
+        return name;
+    }
+    
+    double getPrice() const {
+        return price;
+    }
+    
+    int getQuantity() const {
+        return quantity;
+    }
+    
+    // Setters
+    void setQuantity(int newQuantity) {
+        if (newQuantity >= 0) {
+            quantity = newQuantity;
+        }
+    }
+    
+    // Member function to calculate total value
+    double getTotalValue() const {
+        return price * quantity;
+    }
+    
+    // Display product information
+    void displayInfo() const {
+        std::cout << "ສິນຄ້າ: " << name << ", ລາຄາ: $" << price 
+                  << ", ຈຳນວນ: " << quantity 
+                  << ", ມູນຄ່າລວມ: $" << getTotalValue() << std::endl;
+    }
+};
+
+// ຄຼາສສຳລັບລະບົບຈັດການສາງສິນຄ້າ
+class Inventory {
+private:
+    std::string storeName;
+    std::vector<Product> products;
+
+public:
+    // Constructor
+    Inventory(std::string name) {
+        storeName = name;
+    }
+    
+    // Add a product to inventory
+    void addProduct(const Product& product) {
+        products.push_back(product);
+    }
+    
+    // Display all products
+    void displayAllProducts() const {
+        std::cout << "\n===== ລາຍການສິນຄ້າຂອງ " << storeName << " =====\n" << std::endl;
+        
+        if (products.empty()) {
+            std::cout << "ບໍ່ມີສິນຄ້າໃນສາງ." << std::endl;
+            return;
+        }
+        
+        for (const Product& prod : products) {
+            prod.displayInfo();
+        }
+        
+        std::cout << "\nມູນຄ່າສິນຄ້າທັງໝົດ: $" << getTotalInventoryValue() << std::endl;
+    }
+    
+    // Calculate total inventory value
+    double getTotalInventoryValue() const {
+        double total = 0.0;
+        for (const Product& prod : products) {
+            total += prod.getTotalValue();
+        }
+        return total;
+    }
+};
+
+int main() {
+    // ສ້າງຕົວຈັດການສາງສິນຄ້າໃໝ່
+    Inventory store("ຮ້ານຂອງຂວັນນາງນ້ອຍ");
+    
+    // ເພີ່ມສິນຄ້າຫຼາຍລາຍການ
+    Product item1("ຈອກກາເຟ", 8.99, 25);
+    Product item2("ກ່ອງອາຫານທ່ຽງ", 12.50, 15);
+    Product item3("ເສື້ອຍືດ", 19.99, 10);
+    
+    store.addProduct(item1);
+    store.addProduct(item2);
+    store.addProduct(item3);
+    
+    // ສະແດງລາຍການສິນຄ້າທັງໝົດ
+    store.displayAllProducts();
+    
+    // ທົດລອງເພີ່ມສິນຄ້າໃໝ່
+    std::string name;
+    double price;
+    int quantity;
+    
+    std::cout << "\n\nເພີ່ມສິນຄ້າໃໝ່:" << std::endl;
+    
+    std::cout << "ຊື່ສິນຄ້າ: ";
+    std::getline(std::cin, name);
+    
+    std::cout << "ລາຄາ: $";
+    std::cin >> price;
+    
+    std::cout << "ຈຳນວນ: ";
+    std::cin >> quantity;
+    
+    Product newItem(name, price, quantity);
+    store.addProduct(newItem);
+    
+    // ສະແດງລາຍການອັບເດດ
+    store.displayAllProducts();
+    
+    return 0;
+}`,
+                        quiz: [
+                            {
+                                question: "ຄວາມໝາຍຂອງ 'Encapsulation' ໃນ OOP ແມ່ນຫຍັງ?",
+                                options: [
+                                    "ການຄອບຄຼາສໃສ່ກັນໄວ້ໃນໄຟລ໌ດຽວ",
+                                    "ການເຊື່ອງຂໍ້ມູນພາຍໃນ ແລະ ເປີດເຜີຍສະເພາະອິນເຕີເຟສທີ່ຈຳເປັນ",
+                                    "ການສືບທອດຄຼາສຈາກຄຼາສແມ່ຫຼາຍຄຼາສ",
+                                    "ການສ້າງຟັງຊັ່ນຫຼາຍເວີຊັ່ນໃນຄຼາສດຽວ"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "Access specifier ໃດທີ່ອະນຸຍາດໃຫ້ເຂົ້າເຖິງໄດ້ສະເພາະພາຍໃນຄຼາສເທົ່ານັ້ນ?",
+                                options: [
+                                    "public",
+                                    "private",
+                                    "protected",
+                                    "internal"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "ຄວາມແຕກຕ່າງລະຫວ່າງຄຼາສແລະອັອບເຈັກແມ່ນຫຍັງ?",
+                                options: [
+                                    "ຄຼາສແມ່ນຟັງຊັ່ນພິເສດ, ອັອບເຈັກແມ່ນຕົວແປພິເສດ",
+                                    "ຄຼາສແມ່ນຕົວແບບ (blueprint), ອັອບເຈັກແມ່ນອິນສະແຕນຊ໌ຂອງຄຼາສ",
+                                    "ຄຼາສແມ່ນຕົວແປທີ່ສ້າງຂຶ້ນ, ອັອບເຈັກແມ່ນຄ່າທີ່ເກັບໄວ້",
+                                    "ຄຼາສແລະອັອບເຈັກແມ່ນຄຳສັບທີ່ໃຊ້ແທນກັນໄດ້"
+                                ],
+                                correctAnswer: 1
+                            }
+                        ]
+                    },
+                    {
+                        id: "lesson12",
+                        title: "ບົດທີ 12: ຄອນສະຕຣັກເຕີ (Constructors) ແລະ ເດສະຕຣັກເຕີ (Destructors)",
+                        content: `
+# ຄອນສະຕຣັກເຕີ (Constructors) ແລະ ເດສະຕຣັກເຕີ (Destructors)
+
+ຄອນສະຕຣັກເຕີແລະເດສະຕຣັກເຕີແມ່ນຟັງຊັ່ນພິເສດໃນຄຼາສຂອງ C++ ທີ່ຈັດການກັບການສ້າງແລະການທຳລາຍວັດຖຸ.
+
+## ຄອນສະຕຣັກເຕີ (Constructors)
+
+ຄອນສະຕຣັກເຕີແມ່ນຟັງຊັ່ນສະມາຊິກພິເສດທີ່ຖືກເອີ້ນໃຊ້ໂດຍອັດຕະໂນມັດເມື່ອວັດຖຸຂອງຄຼາສຖືກສ້າງຂຶ້ນ. ມັນໃຊ້ເພື່ອກຳນົດຄ່າເລີ່ມຕົ້ນໃຫ້ກັບຕົວແປສະມາຊິກແລະຈັດສັນຊັບພະຍາກອນທີ່ຈຳເປັນ.
+
+### ຄຸນລັກສະນະຂອງຄອນສະຕຣັກເຕີ:
+- ມີຊື່ຄືກັບຄຼາສ
+- ບໍ່ມີປະເພດຂໍ້ມູນຂາອອກ (ເຊັ່ນ ບໍ່ແມ່ນ void, int, ແລະອື່ນໆ)
+- ສາມາດມີພາລາມິເຕີຫຼືບໍ່ມີກໍໄດ້
+- ສາມາດ overload ໄດ້ (ມີຫຼາຍເວີຊັ່ນພ້ອມພາລາມິເຕີຕ່າງກັນ)
+
+### ປະເພດຂອງຄອນສະຕຣັກເຕີ:
+
+#### 1. ຄອນສະຕຣັກເຕີແບບບໍ່ມີພາລາມິເຕີ (Default Constructor)
+
+ຄອນສະຕຣັກເຕີທີ່ບໍ່ມີພາລາມິເຕີຫຼືມີພາລາມິເຕີທີ່ມີຄ່າເລີ່ມຕົ້ນສຳລັບທຸກພາລາມິເຕີ:
+
+\`\`\`cpp
+class Rectangle {
+    int width, height;
+public:
+    // Default constructor
+    Rectangle() {
+        width = 0;
+        height = 0;
+    }
+};
+\`\`\`
+
+#### 2. ຄອນສະຕຣັກເຕີແບບມີພາລາມິເຕີ (Parameterized Constructor)
+
+ຄອນສະຕຣັກເຕີທີ່ຮັບພາລາມິເຕີເພື່ອກຳນົດຄ່າສະມາຊິກ:
+
+\`\`\`cpp
+class Rectangle {
+    int width, height;
+public:
+    // Parameterized constructor
+    Rectangle(int w, int h) {
+        width = w;
+        height = h;
+    }
+};
+\`\`\`
+
+#### 3. ຄອນສະຕຣັກເຕີແບບ Copy (Copy Constructor)
+
+ຄອນສະຕຣັກເຕີທີ່ສ້າງວັດຖຸໂດຍການສຳເນົາວັດຖຸທີ່ມີຢູ່ແລ້ວຂອງຄຼາສດຽວກັນ:
+
+\`\`\`cpp
+class Rectangle {
+    int width, height;
+public:
+    // Normal constructor
+    Rectangle(int w, int h) {
+        width = w;
+        height = h;
+    }
+    
+    // Copy constructor
+    Rectangle(const Rectangle &r) {
+        width = r.width;
+        height = r.height;
+    }
+};
+\`\`\`
+
+#### 4. ຄອນສະຕຣັກເຕີແບບ Delegating (C++11 ຂຶ້ນໄປ)
+
+ຄອນສະຕຣັກເຕີທີ່ເອີ້ນໃຊ້ຄອນສະຕຣັກເຕີອື່ນຂອງຄຼາສດຽວກັນ:
+
+\`\`\`cpp
+class Rectangle {
+    int width, height;
+public:
+    // Main constructor
+    Rectangle(int w, int h) {
+        width = w;
+        height = h;
+    }
+    
+    // Delegating constructor
+    Rectangle() : Rectangle(0, 0) {
+        // ໃຊ້ຄອນສະຕຣັກເຕີທີ່ມີພາລາມິເຕີ
+    }
+};
+\`\`\`
+
+#### 5. ຄອນສະຕຣັກເຕີແບບ Init List (Constructor Initialization List)
+
+ວິທີການປະສິດທິພາບສູງກວ່າໃນການກຳນົດຄ່າເລີ່ມຕົ້ນ:
+
+\`\`\`cpp
+class Rectangle {
+    int width, height;
+public:
+    // Constructor with initialization list
+    Rectangle(int w, int h) : width(w), height(h) {
+        // body can be empty or have additional code
+    }
+};
+\`\`\`
+
+## ເດສະຕຣັກເຕີ (Destructors)
+
+ເດສະຕຣັກເຕີແມ່ນຟັງຊັ່ນສະມາຊິກພິເສດທີ່ຖືກເອີ້ນໃຊ້ໂດຍອັດຕະໂນມັດເມື່ອວັດຖຸຖືກທຳລາຍ. ມັນໃຊ້ເພື່ອປ່ອຍຊັບພະຍາກອນທີ່ວັດຖຸອາດຈະໄດ້ຈັດສັນໄວ້.
+
+### ຄຸນລັກສະນະຂອງເດສະຕຣັກເຕີ:
+- ມີຊື່ຄຼາສທີ່ມີເຄື່ອງໝາຍ ~ ນຳໜ້າ (ເຊັ່ນ ~ClassName)
+- ບໍ່ມີປະເພດຂໍ້ມູນຂາອອກ
+- ບໍ່ມີພາລາມິເຕີ
+- ບໍ່ສາມາດ overload ໄດ້ (ມີພຽງໜຶ່ງເດສະຕຣັກເຕີຕໍ່ຄຼາສ)
+
+### ຕົວຢ່າງຂອງເດສະຕຣັກເຕີ:
+
+\`\`\`cpp
+class DynamicArray {
+    int* data;
+    int size;
+public:
+    // Constructor
+    DynamicArray(int sz) {
+        size = sz;
+        data = new int[size]; // allocate memory
+        std::cout << "ຈັດສັນໜ່ວຍຄວາມຈຳສຳລັບອາເຣຂະໜາດ " << size << std::endl;
+    }
+    
+    // Destructor
+    ~DynamicArray() {
+        delete[] data; // free memory
+        std::cout << "ປ່ອຍໜ່ວຍຄວາມຈຳສຳລັບອາເຣຂະໜາດ " << size << std::endl;
+    }
+};
+\`\`\`
+
+### ສະຖານະການທີ່ເດສະຕຣັກເຕີຖືກເອີ້ນໃຊ້:
+
+1. ເມື່ອວັດຖຸອອກຈາກຂອບເຂດ:
+\`\`\`cpp
+void someFunction() {
+    DynamicArray arr(10); // Constructor called
+    // Use arr...
+} // Destructor called when function ends
+\`\`\`
+
+2. ເມື່ອໂປຣແກຣມສິ້ນສຸດ (ສຳລັບວັດຖຸ global scope)
+
+3. ເມື່ອຄຳສັ່ງ `delete` ຖືກໃຊ້ກັບຕົວຊີ້ຫາວັດຖຸ:
+\`\`\`cpp
+DynamicArray* pArr = new DynamicArray(20); // Constructor called
+// Use pArr...
+delete pArr; // Destructor called
+\`\`\`
+
+4. ເມື່ອວັດຖຸຊົ່ວຄາວຖືກສ້າງແລະໝົດອາຍຸການໃຊ້ງານ
+
+## ຕົວຢ່າງທີ່ຄົບຖ້ວນ
+
+ຕົວຢ່າງນີ້ສະແດງການໃຊ້ຄອນສະຕຣັກເຕີແລະເດສະຕຣັກເຕີຕ່າງໆ:
+
+\`\`\`cpp
+#include <iostream>
+#include <string>
+
+class Resource {
+private:
+    std::string name;
+    int* data;
+    int size;
+    
+public:
+    // Default constructor
+    Resource() : name("Unnamed"), size(0), data(nullptr) {
+        std::cout << "Default constructor: Creating " << name << " resource" << std::endl;
+    }
+    
+    // Parameterized constructor
+    Resource(const std::string& n, int s) : name(n), size(s) {
+        std::cout << "Parameterized constructor: Creating " << name << " resource with size " << size << std::endl;
+        data = new int[size];
+        for (int i = 0; i < size; i++) {
+            data[i] = i;
+        }
+    }
+    
+    // Copy constructor
+    Resource(const Resource& other) : name(other.name + " (copy)"), size(other.size) {
+        std::cout << "Copy constructor: Copying " << other.name << " to " << name << std::endl;
+        data = new int[size];
+        for (int i = 0; i < size; i++) {
+            data[i] = other.data[i];
+        }
+    }
+    
+    // Destructor
+    ~Resource() {
+        std::cout << "Destructor: Cleaning up " << name << " resource" << std::endl;
+        if (data != nullptr) {
+            delete[] data;
+        }
+    }
+    
+    // Display resource info
+    void display() const {
+        std::cout << "Resource: " << name << ", Size: " << size << std::endl;
+        if (data != nullptr) {
+            std::cout << "Data: ";
+            for (int i = 0; i < size && i < 5; i++) { // Show up to 5 elements
+                std::cout << data[i] << " ";
+            }
+            if (size > 5) std::cout << "...";
+            std::cout << std::endl;
+        }
+    }
+};
+
+int main() {
+    std::cout << "=== Constructors and Destructors Demo ===" << std::endl;
+    
+    // Using default constructor
+    std::cout << "\n1. Creating resource with default constructor:" << std::endl;
+    Resource r1;
+    r1.display();
+    
+    // Using parameterized constructor
+    std::cout << "\n2. Creating resource with parameterized constructor:" << std::endl;
+    Resource r2("DatabaseConnection", 10);
+    r2.display();
+    
+    // Using copy constructor
+    std::cout << "\n3. Creating resource with copy constructor:" << std::endl;
+    Resource r3 = r2; // Copy constructor called
+    r3.display();
+    
+    // Demonstrating scope-based destruction
+    std::cout << "\n4. Demonstrating scope-based destruction:" << std::endl;
+    {
+        std::cout << "Entering new scope..." << std::endl;
+        Resource temp("TempResource", 3);
+        temp.display();
+        std::cout << "Exiting scope..." << std::endl;
+    } // Destructor for temp called here
+    
+    // Demonstrating heap allocation and manual destruction
+    std::cout << "\n5. Demonstrating heap allocation and manual destruction:" << std::endl;
+    Resource* pResource = new Resource("HeapResource", 5);
+    pResource->display();
+    std::cout << "Deleting heap resource..." << std::endl;
+    delete pResource; // Destructor called
+    
+    std::cout << "\nReturning from main..." << std::endl;
+    return 0;
+} // Destructors for r1, r2, and r3 called here
+\`\`\`
+
+## ຄວາມສຳຄັນຂອງການຈັດການຊັບພະຍາກອນ
+
+ເດສະຕຣັກເຕີມີບົດບາດສຳຄັນໃນການຫຼີກລ້ຽງການຮົ່ວຂອງໜ່ວຍຄວາມຈໍາ (memory leaks). ບັນຫາດັ່ງກ່າວເກີດຂຶ້ນເມື່ອໂປຣແກຣມຈັດສັນໜ່ວຍຄວາມຈຳແຕ່ບໍ່ປ່ອຍມັນຄືນ, ເຮັດໃຫ້ໂປຣແກຣມໃຊ້ໜ່ວຍຄວາມຈຳເພີ່ມຂຶ້ນເລື້ອຍໆ.
+
+### ຫຼັກການ RAII (Resource Acquisition Is Initialization)
+
+RAII ເປັນແນວຄິດທີ່ສຳຄັນໃນ C++ ທີ່ພົວພັນກັບຄອນສະຕຣັກເຕີແລະເດສະຕຣັກເຕີ:
+- ຊັບພະຍາກອນຖືກຈັດສັນໃນຄອນສະຕຣັກເຕີ
+- ຊັບພະຍາກອນຖືກປ່ອຍໃນເດສະຕຣັກເຕີ
+- ວົງຈອນຊີວິດຂອງຊັບພະຍາກອນຖືກຜູກມັດກັບວົງຈອນຊີວິດຂອງວັດຖຸ
+
+ນີ້ເຮັດໃຫ້ການຈັດການຊັບພະຍາກອນມີຄວາມປອດໄພແລະນ່າເຊື່ອຖື, ແມ້ແຕ່ໃນກໍລະນີທີ່ມີຂໍ້ຜິດພາດ.
+
+ໃນບົດຕໍ່ໄປ, ພວກເຮົາຈະຮຽນຮູ້ກ່ຽວກັບການສືບທອດ (Inheritance) ໃນພາສາ C++.
+                        `,
+                        codeExample: `#include <iostream>
+#include <string>
+
+// ຄຼາສຈັດການຮູບເລຂາຄະນິດ
+class Shape {
+private:
+    std::string color;
+    
+public:
+    // Default constructor
+    Shape() : color("ບໍ່ມີສີ") {
+        std::cout << "Shape default constructor: ສ້າງຮູບທີ່ບໍ່ມີສີ" << std::endl;
+    }
+    
+    // Parameterized constructor
+    Shape(const std::string& c) : color(c) {
+        std::cout << "Shape parameterized constructor: ສ້າງຮູບສີ " << color << std::endl;
+    }
+    
+    // Copy constructor
+    Shape(const Shape& other) : color(other.color + " (ສຳເນົາ)") {
+        std::cout << "Shape copy constructor: ສຳເນົາຮູບສີ " << other.color << std::endl;
+    }
+    
+    // Destructor
+    ~Shape() {
+        std::cout << "Shape destructor: ທຳລາຍຮູບສີ " << color << std::endl;
+    }
+    
+    // Getters/Setters
+    std::string getColor() const { return color; }
+    
+    void setColor(const std::string& c) { 
+        color = c; 
+        std::cout << "ປ່ຽນສີເປັນ " << color << std::endl;
+    }
+    
+    // Virtual function that derived classes will override
+    virtual void draw() const {
+        std::cout << "ກຳລັງແຕ້ມຮູບທົ່ວໄປສີ " << color << std::endl;
+    }
+    
+    // Calculate area - will be overridden
+    virtual double getArea() const {
+        return 0.0;
+    }
+};
+
+// ຄຼາສ Circle ທີ່ສືບທອດຈາກ Shape
+class Circle : public Shape {
+private:
+    double radius;
+    double* calculations; // ສົມມຸດວ່າເປັນຕົວແປທີ່ຕ້ອງຈັດສັນໜ່ວຍຄວາມຈຳ
+    
+public:
+    // Default constructor
+    Circle() : Shape("ຂາວ"), radius(1.0) {
+        std::cout << "Circle default constructor: ສ້າງວົງມົນລັດສະໝີ " << radius << std::endl;
+        calculations = new double[5]; // ຈັດສັນໜ່ວຍຄວາມຈຳ
+        calculations[0] = 3.14159 * radius * radius; // ເກັບຄ່າພື້ນທີ່
+    }
+    
+    // Parameterized constructor
+    Circle(double r, const std::string& c) : Shape(c), radius(r) {
+        std::cout << "Circle parameterized constructor: ສ້າງວົງມົນລັດສະໝີ " << radius << " ສີ " << c << std::endl;
+        calculations = new double[5];
+        calculations[0] = 3.14159 * radius * radius;
+    }
+    
+    // Copy constructor
+    Circle(const Circle& other) : Shape(other), radius(other.radius) {
+        std::cout << "Circle copy constructor: ສຳເນົາວົງມົນລັດສະໝີ " << radius << std::endl;
+        calculations = new double[5];
+        for(int i = 0; i < 5; i++) {
+            calculations[i] = other.calculations[i];
+        }
+    }
+    
+    // Destructor
+    ~Circle() {
+        std::cout << "Circle destructor: ທຳລາຍວົງມົນລັດສະໝີ " << radius << std::endl;
+        delete[] calculations; // ປ່ອຍໜ່ວຍຄວາມຈຳ
+    }
+    
+    // Override draw method
+    void draw() const override {
+        std::cout << "ກຳລັງແຕ້ມວົງມົນສີ " << getColor() << " ລັດສະໝີ " << radius << std::endl;
+    }
+    
+    // Override getArea method
+    double getArea() const override {
+        return calculations[0]; // return pre-calculated area
+    }
+    
+    // Getter/Setter for radius
+    double getRadius() const { return radius; }
+    
+    void setRadius(double r) {
+        radius = r;
+        calculations[0] = 3.14159 * radius * radius; // update area
+        std::cout << "ປ່ຽນລັດສະໝີເປັນ " << radius << std::endl;
+    }
+};
+
+// ຄຼາສທີ່ໃຊ້ສຳລັບສາທິດການຈັດການຊີວິດຂອງວັດຖຸ
+class ShapeManager {
+private:
+    Shape** shapes; // ອາເຣຂອງຕົວຊີ້ຫາ Shape
+    int capacity;
+    int count;
+    
+public:
+    // Constructor
+    ShapeManager(int initialCapacity) : capacity(initialCapacity), count(0) {
+        std::cout << "ShapeManager: ສ້າງຕົວຈັດການຮູບເລຂາຄະນິດ ຄວາມຈຸ " << capacity << std::endl;
+        shapes = new Shape*[capacity];
+    }
+    
+    // Destructor
+    ~ShapeManager() {
+        std::cout << "ShapeManager: ທຳລາຍຕົວຈັດການຮູບເລຂາຄະນິດ" << std::endl;
+        for(int i = 0; i < count; i++) {
+            delete shapes[i]; // ທຳລາຍທຸກຮູບເລຂາຄະນິດ
+        }
+        delete[] shapes; // ທຳລາຍອາເຣ
+    }
+    
+    // Add a shape
+    void addShape(Shape* shape) {
+        if(count < capacity) {
+            shapes[count++] = shape;
+            std::cout << "ShapeManager: ເພີ່ມຮູບເລຂາຄະນິດໃໝ່ (" << count << "/" << capacity << ")" << std::endl;
+        } else {
+            std::cout << "ShapeManager: ບໍ່ສາມາດເພີ່ມຮູບໄດ້, ຄວາມຈຸເຕັມ!" << std::endl;
+        }
+    }
+    
+    // Draw all shapes
+    void drawAllShapes() const {
+        std::cout << "\n=== ແຕ້ມຮູບທັງໝົດ ===" << std::endl;
+        for(int i = 0; i < count; i++) {
+            std::cout << "ຮູບທີ " << (i+1) << ": ";
+            shapes[i]->draw();
+        }
+    }
+    
+    // Calculate total area
+    double getTotalArea() const {
+        double total = 0.0;
+        for(int i = 0; i < count; i++) {
+            total += shapes[i]->getArea();
+        }
+        return total;
+    }
+};
+
+int main() {
+    std::cout << "===== ການສາທິດການໃຊ້ຄອນສະຕຣັກເຕີແລະເດສະຕຣັກເຕີ =====" << std::endl;
+    
+    // ສ້າງຕົວຈັດການຮູບເລຂາຄະນິດ
+    ShapeManager manager(5);
+    
+    // ສາທິດຂອບເຂດ
+    {
+        std::cout << "\n----- ເລີ່ມຂອບເຂດໃໝ່ -----" << std::endl;
+        
+        // ສ້າງຮູບແລະເພີ່ມເຂົ້າໃນຕົວຈັດການ
+        Circle* circle1 = new Circle(5.0, "ແດງ");
+        manager.addShape(circle1);
+        
+        // ສ້າງຮູບດ້ວຍ default constructor
+        Circle* circle2 = new Circle();
+        manager.addShape(circle2);
+        
+        // ສ້າງແລະໃຊ້ວັດຖຸໃນຂອບເຂດນີ້ (ຈະຖືກທຳລາຍເມື່ອອອກຈາກຂອບເຂດ)
+        Circle localCircle(3.0, "ເຫຼືອງ");
+        localCircle.draw();
+        
+        // ສຳເນົາວັດຖຸແລະເພີ່ມເຂົ້າໃນຕົວຈັດການ
+        Circle* circleCopy = new Circle(localCircle);
+        manager.addShape(circleCopy);
+        
+        std::cout << "----- ຈົບຂອບເຂດ -----" << std::endl;
+    } // localCircle ຖືກທຳລາຍບ່ອນນີ້
+    
+    // ແຕ້ມຮູບທັງໝົດຫຼັງຈາກອອກຈາກຂອບເຂດ
+    manager.drawAllShapes();
+    
+    // ສະແດງພື້ນທີ່ທັງໝົດ
+    std::cout << "\nພື້ນທີ່ລວມຂອງຮູບທັງໝົດ: " << manager.getTotalArea() << " ຫົວໜ່ວຍ²" << std::endl;
+    
+    // ສາທິດການໃຊ້ຕົວປັບປ່ຽນສະຖານະ
+    std::cout << "\n----- ສາທິດການແກ້ໄຂຄຸນສົມບັດ -----" << std::endl;
+    Circle* newCircle = new Circle(2.0, "ຟ້າ");
+    manager.addShape(newCircle);
+    
+    newCircle->draw();
+    newCircle->setColor("ມ່ວງ");
+    newCircle->setRadius(4.0);
+    newCircle->draw();
+    
+    std::cout << "\n===== ສິ້ນສຸດການສາທິດ =====" << std::endl;
+    return 0;
+} // manager ຖືກທຳລາຍບ່ອນນີ້, ເຊິ່ງຈະທຳລາຍທຸກຮູບທີ່ມັນຄຸ້ມຄອງ`,
+                        quiz: [
+                            {
+                                question: "ຄອນສະຕຣັກເຕີໃນ C++ ຖືກເອີ້ນໃຊ້ເມື່ອໃດ?",
+                                options: [
+                                    "ເມື່ອວັດຖຸຖືກທຳລາຍ",
+                                    "ເມື່ອຟັງຊັ່ນສະມາຊິກຖືກເອີ້ນໃຊ້",
+                                    "ເມື່ອວັດຖຸຖືກສ້າງ",
+                                    "ເມື່ອໃຊ້ຄຳສັ່ງ delete"
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                question: "ຄອນສະຕຣັກເຕີປະເພດໃດທີ່ເອີ້ນເມື່ອວັດຖຸຖືກສ້າງໂດຍການສຳເນົາວັດຖຸອື່ນ?",
+                                options: [
+                                    "Default constructor",
+                                    "Parameterized constructor",
+                                    "Copy constructor",
+                                    "Destructor"
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                question: "ເດສະຕຣັກເຕີໃນ C++ ມີຄຸນລັກສະນະໃດ?",
+                                options: [
+                                    "ມີຊື່ຄຼາສທີ່ມີເຄື່ອງໝາຍ # ນຳໜ້າ",
+                                    "ມີພາລາມິເຕີແລະຂໍ້ມູນຂາອອກເປັນ void",
+                                    "ມີຊື່ຄຼາສທີ່ມີເຄື່ອງໝາຍ ~ ນຳໜ້າ ແລະບໍ່ມີພາລາມິເຕີ",
+                                    "ສາມາດມີຫຼາຍຢ່າງໃນຄຼາສດຽວ"
+                                ],
+                                correctAnswer: 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "ພາກທີ 3: C++ ຂັ້ນສູງ",
+                lessons: [
+                    {
+                        id: "lesson21",
+                        title: "ບົດທີ 21: Namespaces ແລະ Advanced Preprocessor",
+                        content: `
+# Namespaces ແລະ Advanced Preprocessor
+
+ໃນບົດນີ້, ພວກເຮົາຈະສຳຫຼວດເຄື່ອງມືຂັ້ນສູງຂອງພາສາ C++ ສຳລັບການຈັດລະບຽບແລະຄວບຄຸມໂຄດຂອງທ່ານ: namespaces ແລະ preprocessor directives.
+
+## Namespaces
+
+Namespaces ເປັນຄຸນສົມບັດຂອງ C++ ທີ່ຊ່ວຍຫຼີກລ້ຽງຂໍ້ຂັດແຍ່ງຊື່ແລະຈັດລະບຽບຊື່ໃຫ້ເປັນກຸ່ມທີ່ມີຄວາມໝາຍ.
+
+### ຈຸດປະສົງຂອງ Namespaces
+
+1. **ຫຼີກລ້ຽງການຂັດແຍ່ງຊື່**: ປ້ອງກັນການຂັດແຍ່ງກັນຂອງຊື່ເມື່ອໃຊ້ຫຼາຍໄລບຣາຣີຫຼືໂມດູນພ້ອມກັນ
+2. **ຈັດລະບຽບໂຄດ**: ຈັດກຸ່ມຄຼາສ, ຟັງຊັ່ນ, ແລະຕົວແປທີ່ກ່ຽວຂ້ອງກັນໃຫ້ເປັນໜ່ວຍເດີຍວກັນ
+3. **ສ້າງນາມມະຍົດ**: ສາມາດສ້າງຊື່ທີ່ສັ້ນກວ່າສຳລັບຊື່ທີ່ຍາວ (ໂດຍໃຊ້ namespace alias)
+
+### ການປະກາດແລະການໃຊ້ Namespaces
+
+#### ການປະກາດ namespace:
+
+\`\`\`cpp
+namespace MyNamespace {
+    // ປະກາດຕົວແປ, ຟັງຊັ່ນ, ຄຼາສ, ແລະອື່ນໆ ບ່ອນນີ້
+    int myVariable = 42;
+    
+    void myFunction() {
+        // implementation
+    }
+    
+    class MyClass {
+        // class definition
+    };
+}
+\`\`\`
+
+#### ການເຂົ້າເຖິງສະມາຊິກຂອງ namespace:
+
+**ວິທີການ 1**: ໃຊ້ scope resolution operator (::)
+
+\`\`\`cpp
+MyNamespace::myVariable = 100;
+MyNamespace::myFunction();
+MyNamespace::MyClass obj;
+\`\`\`
+
+**ວິທີການ 2**: ໃຊ້ `using` directive (ນຳເຂົ້າທັງໝົດ)
+
+\`\`\`cpp
+using namespace MyNamespace;
+myVariable = 100;  // ເຂົ້າເຖິງໂດຍກົງໂດຍບໍ່ຕ້ອງມີ prefix
+myFunction();
+MyClass obj;
+\`\`\`
+
+**ວິທີການ 3**: ໃຊ້ `using` declaration (ນຳເຂົ້າສະເພາະທີ່ຕ້ອງການ)
+
+\`\`\`cpp
+using MyNamespace::myVariable;
+myVariable = 100;  // ໃຊ້ໄດ້ໂດຍກົງ
+MyNamespace::myFunction();  // ຍັງຕ້ອງໃຊ້ namespace qualifier
+\`\`\`
+
+### Nested Namespaces
+
+ສາມາດຊ້ອນ namespaces ເຂົ້າກັນໄດ້:
+
+\`\`\`cpp
+namespace Outer {
+    int x = 10;
+    
+    namespace Inner {
+        int y = 20;
+    }
+}
+
+// ການເຂົ້າເຖິງ
+int a = Outer::x;
+int b = Outer::Inner::y;
+\`\`\`
+
+ໃນ C++17 ແລະຫຼັງຈາກນັ້ນ, ສາມາດປະກາດດ້ວຍວິທີລັດໄດ້:
+
+\`\`\`cpp
+namespace Outer::Inner::VeryInner {
+    int z = 30;
+}
+\`\`\`
+
+### Namespace Aliases
+
+ໃຊ້ເພື່ອສ້າງຊື່ທີ່ສັ້ນລົງສຳລັບ namespaces ທີ່ມີຊື່ຍາວ:
+
+\`\`\`cpp
+namespace VeryLongNamespaceName {
+    void function() {}
+}
+
+// Create alias
+namespace VLNN = VeryLongNamespaceName;
+
+// ໃຊ້ alias
+VLNN::function();
+\`\`\`
+
+### Anonymous Namespaces
+
+Namespaces ທີ່ບໍ່ມີຊື່ (anonymous) ຈຳກັດການເຂົ້າເຖິງສະມາຊິກໃຫ້ຢູ່ສະເພາະພາຍໃນໄຟລ໌ປະຈຸບັນເທົ່ານັ້ນ:
+
+\`\`\`cpp
+namespace {
+    int hiddenVariable = 42;  // ມອງເຫັນສະເພາະພາຍໃນໄຟລ໌ນີ້ເທົ່ານັ້ນ
+    void hiddenFunction() {}
+}
+
+// ສາມາດເຂົ້າເຖິງໂດຍກົງໃນໄຟລ໌ໂດຍບໍ່ຕ້ອງໃຊ້ prefix
+void someFunction() {
+    hiddenVariable = 100;
+    hiddenFunction();
+}
+\`\`\`
+
+### std Namespace
+
+`std` ແມ່ນ namespace ມາດຕະຖານທີ່ມີທຸກຢ່າງຈາກໄລບຣາຣີມາດຕະຖານຂອງ C++:
+
+\`\`\`cpp
+#include <iostream>
+#include <string>
+#include <vector>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    std::string s = "test";
+    std::vector<int> v = {1, 2, 3};
+    return 0;
+}
+\`\`\`
+
+## Advanced Preprocessor
+
+Preprocessor directives ແມ່ນຄຳສັ່ງພິເສດທີ່ປະມວນຜົນໂດຍ compiler ກ່ອນການແປພາສາຈິງ.
+
+### Macro Definitions (`#define`)
+
+Macros ແທນຂໍ້ຄວາມໜຶ່ງດ້ວຍອີກຂໍ້ຄວາມໜຶ່ງກ່ອນການ compile:
+
+#### ຕົວຢ່າງພື້ນຖານ:
+
+\`\`\`cpp
+#define PI 3.14159
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+double area = PI * radius * radius;
+int maximum = MAX(x, y);
+\`\`\`
+
+#### ຕົວຢ່າງຂັ້ນສູງ:
+
+\`\`\`cpp
+// Multiline macros
+#define MULTI_LINE_MACRO do { \
+    statement1; \
+    statement2; \
+    statement3; \
+} while(0)
+
+// Stringification operator (#)
+#define STRINGIFY(x) #x
+
+std::string s = STRINGIFY(Hello);  // s = "Hello"
+
+// Token concatenation operator (##)
+#define CONCAT(a, b) a##b
+
+int xy = 10;
+std::cout << CONCAT(x, y);  // Accesses variable "xy"
+\`\`\`
+
+### Conditional Compilation
+
+ເລືອກສ່ວນຂອງໂຄດທີ່ຈະ compile ອີງຕາມເງື່ອນໄຂ:
+
+#### Basic conditionals:
+
+\`\`\`cpp
+#define DEBUG 1
+
+#if DEBUG
+    std::cout << "Debug version" << std::endl;
+#else
+    std::cout << "Release version" << std::endl;
+#endif
+\`\`\`
+
+#### Platform-specific code:
+
+\`\`\`cpp
+#ifdef _WIN32
+    #include <windows.h>
+    // Windows-specific code
+#elif __APPLE__
+    #include <CoreFoundation/CoreFoundation.h>
+    // macOS-specific code
+#elif __linux__
+    // Linux-specific code
+#else
+    #error "Unsupported platform"
+#endif
+\`\`\`
+
+#### Feature checking:
+
+\`\`\`cpp
+#if __cplusplus >= 201703L
+    // Use C++17 features
+#elif __cplusplus >= 201402L
+    // Use C++14 features
+#else
+    // Use older features
+#endif
+\`\`\`
+
+### Predefined Macros
+
+C++ ກຳນົດຫຼາຍ macros ທີ່ມີປະໂຫຍດ:
+
+\`\`\`cpp
+__FILE__    // Current source filename
+__LINE__    // Current line number in the source file
+__DATE__    // Date of compilation
+__TIME__    // Time of compilation
+__cplusplus // C++ version
+__func__    // Current function name (not a macro but used similarly)
+\`\`\`
+
+ເຫຼົ່ານີ້ເປັນປະໂຫຍດສຳລັບການ debugging:
+
+\`\`\`cpp
+#define LOG(msg) std::cout << __FILE__ << ":" << __LINE__ << " - " << msg << std::endl
+
+LOG("Something happened");  // Outputs filename:line - Something happened
+\`\`\`
+
+### Pragma Directives
+
+`#pragma` ໃຊ້ສຳລັບຄຳສັ່ງສະເພາະໃຫ້ compiler:
+
+\`\`\`cpp
+// Prevent multiple inclusions of headers
+#pragma once
+
+// Compiler-specific optimizations
+#pragma optimize("speed", on)
+
+// Control warnings
+#pragma warning(disable: 4996)
+\`\`\`
+
+### ຂໍ້ຄວນລະວັງໃນການໃຊ້ Preprocessor
+
+1. **ຜົນກະທົບເຖິງຂໍ້ຜິດພາດ**: Macros ບໍ່ມີການກວດສອບປະເພດຂໍ້ມູນແລະສາມາດເຮັດໃຫ້ການ debug ຍາກຂຶ້ນ
+2. **ຕ້ອງລະວັງສັນຍາລັກວົງເລັບ**: ຄວນໃຊ້ວົງເລັບສຳລັບພາລາມິເຕີແລະ expressions ໃນ macros
+3. **ໃຊ້ທາງເລືອກທີ່ດີກວ່າຖ້າເປັນໄປໄດ້**:
+   - `constexpr` ແທນຄ່າຄົງທີ່ #define
+   - Template functions ແທນ function-like macros
+   - Inline functions ແທນ simple macros
+
+## ຕົວຢ່າງການໃຊ້ງານລວມກັນ
+
+ຕົວຢ່າງນີ້ສະແດງການໃຊ້ namespaces ແລະ preprocessor ຮ່ວມກັນ:
+
+\`\`\`cpp
+#include <iostream>
+#include <string>
+
+// Debug configuration through preprocessor
+#define DEBUG_MODE 1
+
+// Logging macros
+#if DEBUG_MODE
+    #define LOG(msg) std::cout << "[DEBUG] " << __FILE__ << ":" << __LINE__ << " - " << msg << std::endl
+    #define LOG_ERROR(msg) std::cerr << "[ERROR] " << __FILE__ << ":" << __LINE__ << " - " << msg << std::endl
+#else
+    #define LOG(msg)
+    #define LOG_ERROR(msg)
+#endif
+
+// Mathematics namespace
+namespace Math {
+    const double PI = 3.14159265358979;
+    
+    double square(double x) {
+        LOG("Calculating square of " + std::to_string(x));
+        return x * x;
+    }
+    
+    double cube(double x) {
+        LOG("Calculating cube of " + std::to_string(x));
+        return x * x * x;
+    }
+    
+    // Geometry nested namespace
+    namespace Geometry {
+        double circleArea(double radius) {
+            LOG("Calculating circle area with radius " + std::to_string(radius));
+            return PI * Math::square(radius);
+        }
+        
+        double sphereVolume(double radius) {
+            LOG("Calculating sphere volume with radius " + std::to_string(radius));
+            return (4.0/3.0) * PI * Math::cube(radius);
+        }
+    }
+}
+
+// Utility namespace
+namespace Util {
+    // Platform-specific implementations
+    #ifdef _WIN32
+        void clearScreen() {
+            system("cls");
+        }
+    #else
+        void clearScreen() {
+            system("clear");
+        }
+    #endif
+    
+    void printSeparator() {
+        std::cout << "---------------------------------" << std::endl;
+    }
+}
+
+// Create namespace aliases for convenience
+namespace MG = Math::Geometry;
+
+int main() {
+    LOG("Program started");
+    
+    double radius = 5.0;
+    
+    // Using full namespace qualification
+    double area = Math::Geometry::circleArea(radius);
+    
+    // Using namespace alias
+    double volume = MG::sphereVolume(radius);
+    
+    Util::printSeparator();
+    std::cout << "Circle area: " << area << std::endl;
+    std::cout << "Sphere volume: " << volume << std::endl;
+    Util::printSeparator();
+    
+    // Conditional compilation example
+    #if DEBUG_MODE
+        std::cout << "Debug information:" << std::endl;
+        std::cout << "Compiled on: " << __DATE__ << " at " << __TIME__ << std::endl;
+        std::cout << "C++ version: " << __cplusplus << std::endl;
+    #endif
+    
+    LOG("Program finished");
+    return 0;
+}
+\`\`\`
+
+## ສະຫຼຸບ
+
+- **Namespaces** ຊ່ວຍຈັດລະບຽບໂຄດແລະຫຼີກເວັ້ນການຂັດແຍ່ງຊື່, ເຮັດໃຫ້ໂຄດອ່ານງ່າຍຂຶ້ນແລະບຳລຸງຮັກສາງ່າຍຂຶ້ນ.
+- **Preprocessor directives** ໃຫ້ການຄວບຄຸມລະດັບຕ່ຳຕໍ່ການ compile ໂດຍອະນຸຍາດໃຫ້ທ່ານກຳນົດ macros, ລວມໄຟລ໌, ແລະຄວບຄຸມການ compile ແບບມີເງື່ອນໄຂ.
+
+ແຕ່ລະເຄື່ອງມືມີບ່ອນໃຊ້ທີ່ເໝາະສົມໃນການເຂົ້າລະຫັດ C++ ຂັ້ນສູງ, ແລະການເຂົ້າໃຈໄດ້ຢ່າງເລິກເຊິ່ງຈະຊ່ວຍໃຫ້ທ່ານສ້າງລະບົບ C++ ທີ່ມີຄຸນນະພາບສູງ.
+
+ໃນບົດຕໍ່ໄປ, ພວກເຮົາຈະເຂົ້າສູ່ການຮຽນຮູ້ກ່ຽວກັບ File I/O ໃນພາສາ C++.
+                        `,
+                        codeExample: `#include <iostream>
+#include <string>
+#include <vector>
+
+// ກຳນົດຄ່າຄົງທີ່ແລະ macros
+#define APP_NAME "ລະບົບຈັດການສິນຄ້າ"
+#define APP_VERSION "1.0.0"
+#define DEBUG_MODE 1
+
+// Logging macros
+#if DEBUG_MODE
+    #define LOG(msg) std::cout << "[INFO] " << __func__ << ":" << __LINE__ << " - " << msg << std::endl
+    #define LOG_ERROR(msg) std::cerr << "[ERROR] " << __func__ << ":" << __LINE__ << " - " << msg << std::endl
+#else
+    #define LOG(msg)
+    #define LOG_ERROR(msg)
+#endif
+
+// Utility macros
+#define SAFE_DELETE(p) if(p) { delete p; p = nullptr; }
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+// ====== ເລີ່ມການປະກາດ namespaces ======
+
+// Namespace ສຳລັບຂໍ້ມູນຜູ້ໃຊ້
+namespace UserManagement {
+    struct User {
+        int id;
+        std::string name;
+        std::string role;
+    };
+    
+    User* currentUser = nullptr;
+    
+    void login(const std::string& username) {
+        LOG("ເຂົ້າສູ່ລະບົບດ້ວຍຊື່ຜູ້ໃຊ້: " + username);
+        currentUser = new User{1, username, "admin"};
+        std::cout << "ຍິນດີຕ້ອນຮັບ, " << username << "!" << std::endl;
+    }
+    
+    void logout() {
+        if (currentUser) {
+            LOG("ອອກຈາກລະບົບຜູ້ໃຊ້: " + currentUser->name);
+            SAFE_DELETE(currentUser);
+            std::cout << "ອອກຈາກລະບົບແລ້ວ." << std::endl;
+        }
+    }
+}
+
+// Namespace ສຳລັບການຈັດການສິນຄ້າ
+namespace Inventory {
+    struct Product {
+        int id;
+        std::string name;
+        double price;
+        int quantity;
+    };
+    
+    std::vector<Product> products;
+    
+    void addProduct(const std::string& name, double price, int quantity) {
+        LOG("ເພີ່ມສິນຄ້າ: " + name);
+        int newId = products.size() + 1;
+        products.push_back({newId, name, price, quantity});
+        std::cout << "ເພີ່ມສິນຄ້າ '" << name << "' ສຳເລັດແລ້ວ (ID: " << newId << ")" << std::endl;
+    }
+    
+    void displayProducts() {
+        LOG("ສະແດງລາຍການສິນຄ້າ");
+        std::cout << "\n===== ລາຍການສິນຄ້າທັງໝົດ =====\n" << std::endl;
+        
+        if (products.empty()) {
+            std::cout << "ບໍ່ມີສິນຄ້າໃນລະບົບ" << std::endl;
+            return;
+        }
+        
+        std::cout << "ID  | ຊື່                 | ລາຄາ      | ຈຳນວນ" << std::endl;
+        std::cout << "---------------------------------------------" << std::endl;
+        
+        for (const auto& product : products) {
+            printf("%-3d | %-18s | %-9.2f | %d\n", 
+                   product.id, product.name.c_str(), product.price, product.quantity);
+        }
+        std::cout << std::endl;
+    }
+    
+    namespace Reporting {
+        double calculateTotalValue() {
+            LOG("ຄຳນວນມູນຄ່າລວມຂອງສິນຄ້າ");
+            double total = 0.0;
+            for (const auto& product : products) {
+                total += product.price * product.quantity;
+            }
+            return total;
+        }
+        
+        void generateSummaryReport() {
+            LOG("ສ້າງລາຍງານສະຫຼຸບ");
+            double totalValue = calculateTotalValue();
+            int totalItems = 0;
+            for (const auto& product : products) {
+                totalItems += product.quantity;
+            }
+            
+            std::cout << "\n===== ລາຍງານສະຫຼຸບ =====\n" << std::endl;
+            std::cout << "ຈຳນວນລາຍການສິນຄ້າ: " << products.size() << std::endl;
+            std::cout << "ຈຳນວນສິນຄ້າທັງໝົດ: " << totalItems << std::endl;
+            std::cout << "ມູນຄ່າສິນຄ້າລວມ: $" << totalValue << std::endl;
+            std::cout << std::endl;
+        }
+    }
+}
+
+// ສ້າງ namespace aliases ເພື່ອໃຫ້ໃຊ້ງ່າຍຂຶ້ນ
+namespace UM = UserManagement;
+namespace IR = Inventory::Reporting;
+
+// ຟັງຊັ່ນສຳລັບສະແດງການໃຊ້ macros
+void demonstratePreprocessor() {
+    LOG("ສາທິດການໃຊ້ preprocessor");
+    
+    int a = 5, b = 10;
+    std::cout << "MIN(5, 10) = " << MIN(a, b) << std::endl;
+    std::cout << "MAX(5, 10) = " << MAX(a, b) << std::endl;
+    
+    // ສະແດງຂໍ້ມູລການຄອມໄພລ໌
+    #if DEBUG_MODE
+        std::cout << "\n===== ຂໍ້ມູນການພັດທະນາ =====\n" << std::endl;
+        std::cout << "ຄອມໄພລ໌ເມື່ອ: " << __DATE__ << " " << __TIME__ << std::endl;
+        std::cout << "ໄຟລ໌ໄດ້: " << __FILE__ << std::endl;
+        std::cout << "ເວີຊັ່ນຂອງ C++: " << __cplusplus << std::endl;
+        
+        // Platform detection
+        #ifdef _WIN32
+            std::cout << "ລະບົບປະຕິບັດການ: Windows" << std::endl;
+        #elif __APPLE__
+            std::cout << "ລະບົບປະຕິບັດການ: macOS" << std::endl;
+        #elif __linux__
+            std::cout << "ລະບົບປະຕິບັດການ: Linux" << std::endl;
+        #else
+            std::cout << "ລະບົບປະຕິບັດການ: ບໍ່ຮູ້ຈັກ" << std::endl;
+        #endif
+        
+        std::cout << std::endl;
+    #endif
+}
+
+// ====== ຟັງຊັ່ນຫຼັກຂອງໂປຣແກຣມ ======
+int main() {
+    LOG("ເລີ່ມໂປຣແກຣມ");
+    
+    // ສະແດງຂໍ້ຄວາມຕ້ອນຮັບ
+    std::cout << "=====================================" << std::endl;
+    std::cout << "   " << APP_NAME << " v" << APP_VERSION << std::endl;
+    std::cout << "=====================================" << std::endl;
+    
+    // ສາທິດການໃຊ້ preprocessor
+    demonstratePreprocessor();
+    
+    // ສາທິດການໃຊ້ namespaces
+    std::string username;
+    std::cout << "ກະລຸນາປ້ອນຊື່ຜູ້ໃຊ້: ";
+    std::getline(std::cin, username);
+    
+    // ໃຊ້ namespace alias
+    UM::login(username);
+    
+    // ເພີ່ມສິນຄ້າບາງລາຍການ
+    Inventory::addProduct("ກະເປົາໜັງ", 99.99, 5);
+    Inventory::addProduct("ລໍ້ໂຮລາ", 45.50, 10);
+    Inventory::addProduct("ເສື້ອເຊີດ", 29.99, 20);
+    
+    // ສະແດງລາຍການສິນຄ້າໃຊ້ຊື່ namespace ເຕັມ
+    Inventory::displayProducts();
+    
+    // ສ້າງລາຍງານໃຊ້ namespace alias
+    IR::generateSummaryReport();
+    
+    // ເພີ່ມສິນຄ້າໃໝ່ຕາມທີ່ຜູ້ໃຊ້ຕ້ອງການ
+    std::string userChoice;
+    std::cout << "ທ່ານຕ້ອງການເພີ່ມສິນຄ້າໃໝ່ບໍ່? (y/n): ";
+    std::getline(std::cin, userChoice);
+    
+    if (userChoice == "y" || userChoice == "Y") {
+        std::string name;
+        double price;
+        int quantity;
+        
+        std::cout << "ຊື່ສິນຄ້າ: ";
+        std::getline(std::cin, name);
+        
+        std::cout << "ລາຄາ: $";
+        std::cin >> price;
+        
+        std::cout << "ຈຳນວນ: ";
+        std::cin >> quantity;
+        
+        Inventory::addProduct(name, price, quantity);
+        Inventory::displayProducts();
+        IR::generateSummaryReport();
+    }
+    
+    // ອອກຈາກລະບົບແລະຈົບໂປຣແກຣມ
+    UM::logout();
+    
+    LOG("ໂປຣແກຣມສິ້ນສຸດ");
+    return 0;
+}`,
+                        quiz: [
+                            {
+                                question: "ຈຸດປະສົງຫຼັກຂອງ namespaces ໃນພາສາ C++ ແມ່ນຫຍັງ?",
+                                options: [
+                                    "ເພື່ອລວມເອົາໄລບຣາຣີພາຍນອກໃຫ້ເຂົ້າກັບໂປຣແກຣມ",
+                                    "ເພື່ອຫຼີກລ້ຽງຂໍ້ຂັດແຍ່ງຊື່ແລະຈັດລະບຽບໂຄດເປັນກຸ່ມທີ່ມີຄວາມໝາຍ",
+                                    "ເພື່ອລວບລວມຕົວແປທີ່ເກັບໄວ້ໃນໜ່ວຍຄວາມຈຳ",
+                                    "ເພື່ອປັບປຸງປະສິດທິພາບຂອງການຄອມໄພລ໌"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "Preprocessor directive ໃດທີ່ໃຊ້ໃນການຄອມໄພລ໌ແບບມີເງື່ອນໄຂ?",
+                                options: [
+                                    "#define",
+                                    "#pragma",
+                                    "#if/#ifdef/#ifndef",
+                                    "#include"
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                question: "ຄຳສັ່ງໃດໃຊ້ສຳລັບສ້າງ namespace alias?",
+                                options: [
+                                    "using namespace alias",
+                                    "typedef namespace",
+                                    "namespace alias =",
+                                    "alias namespace"
+                                ],
+                                correctAnswer: 2
+                            }
+                        ]
+                    },
+                    {
+                        id: "lesson30",
+                        title: "ບົດທີ 30: ໂຄງການຈົບ (Capstone Projects)",
+                        content: `
+# ໂຄງການຈົບ (Capstone Projects)
+
+ໃນບົດນີ້, ພວກເຮົາຈະສະເໜີຫຼາຍໂຄງການທີ່ທ່ານສາມາດເຮັດເພື່ອຝຶກຄວາມສາມາດ C++ ຂອງທ່ານແລະສະແດງສິ່ງທີ່ທ່ານໄດ້ຮຽນຮູ້. ໂຄງການເຫຼົ່ານີ້ຈັດຕາມລະດັບຄວາມຍາກຈາກພື້ນຖານຫາຂັ້ນສູງ.
+
+## ເຫດຜົນສຳລັບໂຄງການຈົບ
+
+ໂຄງການຈົບ (capstone projects) ຊ່ວຍໃຫ້ທ່ານ:
+
+1. **ນຳໃຊ້ແນວຄິດເປັນພາກປະຕິບັດ**: ໃຊ້ຄວາມຮູ້ C++ ທີ່ທ່ານໄດ້ຮຽນມາໃນບັນຫາໂລກຈິງ
+2. **ພັດທະນາຄວາມສາມາດແກ້ໄຂບັນຫາ**: ຜ່ານການແກ້ໄຂບັນຫາທີ່ມີຄວາມທ້າທາຍ
+3. **ຝຶກງານເປັນທີມ**: ຖ້າທ່ານເຮັດໂຄງການກັບຄົນອື່ນ
+4. **ສ້າງຕົວຢ່າງຜົນງານ**: ສຳລັບການສະໝັກວຽກຫຼືສຶກສາຕໍ່
+
+## ປະເພດຂອງໂຄງການ
+
+### 1. ການພັດທະນາເກມ
+
+ການພັດທະນາເກມແມ່ນວິທີທີ່ດີເລີດໃນການນຳໃຊ້ແນວຄິດ OOP, algorithms, ແລະ data structures.
+
+#### ໂຄງການ: ເກມ 2D ໂດຍໃຊ້ SDL ຫຼື SFML
+
+**ຂໍ້ກຳນົດ:**
+- ສ້າງເກມ 2D ງ່າຍໆໂດຍໃຊ້ SDL (Simple DirectMedia Layer) ຫຼື SFML (Simple and Fast Multimedia Library)
+- ປະກອບມີ graphics, ການຄວບຄຸມຂອງຜູ້ຫຼິ້ນ, ແລະ game logic
+- ນຳໃຊ້ຫຼັກການ OOP ແລະ design patterns ເຂົ້າໃນການອອກແບບເກມ
+
+**ຕົວເລືອກເກມທີ່ແນະນຳ:**
+- **Snake**: ເກມງູກິນໝາກໄມ້ແບບຄລາສສິກ
+- **Tetris**: ເກມຕໍ່ບລັອກທີ່ມີຊື່ສຽງທົ່ວໂລກ
+- **Breakout**: ເກມທຳລາຍກຳແພງດ້ວຍລູກບອນແລະໄມ້ຕີ
+- **Platformer**: ເກມກະໂດດຂ້າມດ່ານແບບງ່າຍ
+- **Shooter**: ເກມຍິງງ່າຍໆແບບ side-scrolling ຫຼື top-down
+
+**ແນວຄິດຫຼັກໃນການຮຽນຮູ້:**
+- ການຈັດການ game loop ແລະ timing
+- Game physics ແລະ collision detection
+- Resource management (textures, sounds, etc.)
+- Entity-component systems ແລະ Object-oriented design
+
+### 2. ແອັບພລິເຄຊັ່ນເດສຕັອບ
+
+ການສ້າງແອັບພລິເຄຊັ່ນ desktop ຊ່ວຍໃຫ້ທ່ານຝຶກການພັດທະນາ UI, ການຈັດການຂໍ້ມູນ, ແລະ business logic.
+
+#### ໂຄງການ: ແອັບພລິເຄຊັ່ນຈັດການດ້ວຍ Qt ຫຼື wxWidgets
+
+**ຂໍ້ກຳນົດ:**
+- ພັດທະນາແອັບພລິເຄຊັ່ນ desktop ໂດຍໃຊ້ Qt ຫຼື wxWidgets
+- ປະກອບມີ GUI ທີ່ໃຊ້ງານໄດ້ງ່າຍແລະເປັນມິດກັບຜູ້ໃຊ້
+- ມີການເກັບຂໍ້ມູນແລະໂຫຼດຂໍ້ມູນຈາກໄຟລ໌ຫຼືຖານຂໍ້ມູນ
+- ນຳໃຊ້ຮູບແບບ Model-View-Controller (MVC)
+
+**ຕົວເລືອກໂຄງການທີ່ແນະນຳ:**
+- **ລະບົບຈັດການຫ້ອງສະໝຸດ**: ຕິດຕາມປຶ້ມ, ການຢືມ, ແລະສະມາຊິກ
+- **ລະບົບຈັດການການຕິດຕໍ່**: ເກັບກຳແລະຄຸ້ມຄອງລາຍຊື່ຜູ້ຕິດຕໍ່
+- **ລະບົບຈັດການງານ**: ຕິດຕາມວຽກ, ໂຄງການ, ແລະກຳນົດເວລາ
+- **ເຄື່ອງຄິດໄລ່ທາງການເງິນ**: ຄຳນວນເງິນກູ້, ການລົງທຶນ, ຫຼືງົບປະມານ
+- **ເຄື່ອງມືຈັດການຮູບພາບ**: ຈັດການ, ແກ້ໄຂ, ແລະຕິດແທັກຮູບພາບ
+
+**ແນວຄິດຫຼັກໃນການຮຽນຮູ້:**
+- UI design ແລະ Event-driven programming
+- File I/O ແລະ/ຫຼື Database connectivity
+- MVC architecture ແລະ separation of concerns
+- Multithreading ສຳລັບການຕອບສະໜອງຂອງ UI
+
+### 3. ການເຂົ້າລະຫັດລະບົບ (System Programming)
+
+ການເຂົ້າລະຫັດລະບົບໃຊ້ປະໂຫຍດຈາກຄວາມສາມາດຂອງ C++ ໃນການເຂົ້າເຖິງລະດັບຕ່ຳແລະການຄວບຄຸມຊັບພະຍາກອນ.
+
+#### ໂຄງການ: ເຄື່ອງມືລະບົບ
+
+**ຂໍ້ກຳນົດ:**
+- ພັດທະນາເຄື່ອງມືທີ່ແກ້ໄຂບັນຫາລະດັບລະບົບ
+- ມີປະສິດທິພາບສູງ, ມີຄວາມໜ້າເຊື່ອຖື, ແລະມີການຈັດການຂໍ້ຜິດພາດທີ່ດີ
+- ໃຊ້ປະໂຫຍດຈາກຄຸນສົມບັດ C++ ທີ່ເໝາະສົມ (templates, STL, concurrency, etc.)
+
+**ຕົວເລືອກໂຄງການທີ່ແນະນຳ:**
+- **ເຄື່ອງມື compression**: ສ້າງໂປຣແກຣມສຳລັບການບີບອັດແລະແຕກໄຟລ໌
+- **Memory profiler**: ເຄື່ອງມືຕິດຕາມແລະວິເຄາະການໃຊ້ໜ່ວຍຄວາມຈຳຂອງໂປຣແກຣມອື່ນ
+- **Thread pool**: ການຈັດຕັ້ງ thread pool ທີ່ສາມາດໃຊ້ຊ້ຳໄດ້ສຳລັບການປະມວນຜົນແບບຂະໜານ
+- **Network scanner**: ເຄື່ອງມືສຳລັບສະແກນເຄືອຂ່າຍແລະກວດຫາອຸປະກອນຫຼືບໍລິການ
+- **Simple shell**: ສ້າງ shell ງ່າຍໆສຳລັບການປະຕິບັດຄຳສັ່ງຂອງລະບົບ
+
+**ແນວຄິດຫຼັກໃນການຮຽນຮູ້:**
+- System API ແລະ Process management
+- Memory management ທີ່ມີປະສິດທິພາບ
+- Concurrency ແລະ multithreading
+- Network programming
+
+### 4. ໄລບຣາຣີຫຼືໂຄງຮ່າງພັດທະນາຊອບແວ
+
+ການສ້າງໄລບຣາຣີຊ່ວຍໃຫ້ທ່ານພັດທະນາຄວາມເຂົ້າໃຈອັນເລິກເຊິ່ງກ່ຽວກັບການອອກແບບໂຄດທີ່ນຳໃຊ້ຊ້ຳໄດ້.
+
+#### ໂຄງການ: ໄລບຣາຣີຊ່ວຍໃຫ້ໃຊ້ຊ້ຳໄດ້
+
+**ຂໍ້ກຳນົດ:**
+- ພັດທະນາໄລບຣາຣີທີ່ສາມາດໃຊ້ຊ້ຳໄດ້ສຳລັບບັນຫາສະເພາະ
+- ສ້າງ API ທີ່ສະອາດແລະໃຊ້ງ່າຍ
+- ລວມເອົາເອກະສານແລະຕົວຢ່າງທີ່ພຽງພໍ
+- ສະໜັບສະໜູນ cross-platform ຖ້າເປັນໄປໄດ້
+
+**ຕົວເລືອກໂຄງການທີ່ແນະນຳ:**
+- **Math library**: ຊຸດຟັງຊັ່ນຄະນິດສາດ, ຕົວປະຕິບັດການ, ແລະໂຄງສ້າງຂໍ້ມູນ
+- **Data structure library**: ການຈັດຕັ້ງໂຄງສ້າງຂໍ້ມູນທີ່ມີປະສິດທິພາບແລະ algorithms
+- **Logging framework**: ໄລບຣາຣີລະບົບບັນທຶກທີ່ຍືດຫຍຸ່ນ, ມີລະດັບຄວາມຮຸນແຮງ, ແລະຮູບແບບຕ່າງໆ
+- **Testing framework**: ລະບົບສຳລັບການຂຽນແລະການຮັນ unit tests
+- **Configuration manager**: ຈັດການການຕັ້ງຄ່າແອັບພລິເຄຊັ່ນຈາກໄຟລ໌ຫຼືແຫຼ່ງຂໍ້ມູລອື່ນໆ
+
+**ແນວຄິດຫຼັກໃນການຮຽນຮູ້:**
+- API design ແລະ usability
+- Templates ແລະ generic programming
+- Unit testing ແລະ documentation
+- Build systems ແລະ dependency management
+
+## ຕົວຢ່າງໂຄງການແບບລະອຽດ: ເກມ Snake
+
+ເພື່ອເປັນຕົວຢ່າງ, ໃຫ້ພວກເຮົາພິຈາລະນາການພັດທະນາເກມ Snake ງ່າຍໆໂດຍໃຊ້ C++ ແລະ SDL.
+
+### ຂະບວນການ:
+
+1. **ການຕັ້ງຄ່າໂຄງການ**
+   - ຕິດຕັ້ງ SDL ແລະ SDL_ttf (ສຳລັບຂໍ້ຄວາມ)
+   - ສ້າງໂຄງສ້າງໂຄງການ ແລະ ໄຟລ໌ຫຼັກ
+   - ຕັ້ງຄ່າລະບົບການ build (Makefile ຫຼື CMake)
+
+2. **ການອອກແບບຄຼາດສ໌**
+   - `Game`: ຈັດການ game loop ແລະ rendering
+   - `Snake`: ເກັບຮັກສາສະຖານະຂອງງູ
+   - `Food`: ຈັດການອາຫານທີ່ງູກິນ
+   - `Collision`: ກວດຫາການຕຳກັນ
+   - `Input`: ຈັດການອິນພຸດຂອງຜູ້ຫຼິ້ນ
+   - `Score`: ຕິດຕາມແລະສະແດງຄະແນນ
+
+3. **ການພັດທະນາ**
+   - ເລີ່ມຕົ້ນດ້ວຍການຕັ້ງຄ່າ SDL ແລະ game loop ພື້ນຖານ
+   - ປະຕິບັດງູທີ່ສາມາດເຄື່ອນທີ່ໄດ້
+   - ເພີ່ມການສ້າງອາຫານແລະກົນໄກການກິນ
+   - ປະຕິບັດການກວດຫາການຕຳກັນ ແລະ ເງື່ອນໄຂການຈົບເກມ
+   - ເພີ່ມລະບົບຄະແນນແລະ UI
+   - ເພີ່ມສຽງແລະຜົນກະທົບພິເສດ
+
+4. **ການທົດສອບແລະການແກ້ໄຂຂໍ້ຜິດພາດ**
+   - ທົດສອບການຄວບຄຸມ, ພຶດຕິກຳຂອງເກມ, ແລະເງື່ອນໄຂສະເພາະ
+   - ແກ້ໄຂຂໍ້ຜິດພາດແລະການຜິດພາດໃນການທຳງານ
+   - ປັບປຸງການຫຼິ້ນແລະຄວາມທ້າທາຍຂອງເກມ
+
+5. **ການຕັ້ງຄ່າເພີ່ມເຕີມ (Optional)**
+   - ເພີ່ມໜ້າຈໍເມນູ
+   - ເພີ່ມລະດັບຄວາມຍາກ
+   - ເພີ່ມການບັນທຶກຄະແນນສູງສຸດ
+   - ຮອງຮັບຄວາມແຕກຕ່າງຂອງຮູບແບບໜ້າຈໍ
+
+### ຕົວຢ່າງໂຄດສກັດສຳລັບການເລີ່ມຕົ້ນ:
+
+ນີ້ແມ່ນຕົວຢ່າງໂຄດທີ່ສັງເຂບສຳລັບການເລີ່ມຕົ້ນການພັດທະນາເກມ Snake:
+
+\`\`\`cpp
+// main.cpp
+#include <SDL.h>
+#include <iostream>
+#include "Game.h"
+
+int main(int argc, char* argv[]) {
+    Game game(800, 600, "Snake Game");
+    
+    if (!game.initialize()) {
+        std::cerr << "Failed to initialize game!" << std::endl;
+        return 1;
+    }
+    
+    game.run();
+    game.cleanup();
+    
+    return 0;
+}
+
+// Game.h
+#pragma once
+#include <SDL.h>
+#include <string>
+#include "Snake.h"
+#include "Food.h"
+
+class Game {
+private:
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+    bool isRunning;
+    int screenWidth;
+    int screenHeight;
+    std::string title;
+    
+    Snake snake;
+    Food food;
+    int score;
+    
+public:
+    Game(int width, int height, const std::string& windowTitle);
+    ~Game();
+    
+    bool initialize();
+    void handleEvents();
+    void update();
+    void render();
+    void run();
+    void cleanup();
+};
+
+// Snake.h
+#pragma once
+#include <SDL.h>
+#include <vector>
+
+enum class Direction {
+    UP, DOWN, LEFT, RIGHT
+};
+
+struct Segment {
+    int x;
+    int y;
+};
+
+class Snake {
+private:
+    std::vector<Segment> body;
+    Direction direction;
+    int segmentSize;
+    bool growing;
+    
+public:
+    Snake(int startX, int startY, int size);
+    
+    void handleInput(SDL_Event& event);
+    void move();
+    void grow();
+    bool checkCollision();
+    void render(SDL_Renderer* renderer);
+    
+    // Getters
+    const std::vector<Segment>& getBody() const;
+    Direction getDirection() const;
+};
+
+// Food.h
+#pragma once
+#include <SDL.h>
+#include "Snake.h"
+
+class Food {
+private:
+    int x;
+    int y;
+    int size;
+    
+public:
+    Food(int size);
+    
+    void spawn(const Snake& snake, int maxWidth, int maxHeight);
+    bool isEaten(const Snake& snake);
+    void render(SDL_Renderer* renderer);
+    
+    // Getters
+    int getX() const;
+    int getY() const;
+};
+\`\`\`
+
+### ການຈັດຕັ້ງໃຊ້ຄຼາສ:
+
+\`\`\`cpp
+// Game.cpp
+#include "Game.h"
+#include <iostream>
+
+Game::Game(int width, int height, const std::string& windowTitle)
+    : window(nullptr), renderer(nullptr), isRunning(false),
+      screenWidth(width), screenHeight(height), title(windowTitle),
+      snake(width/2, height/2, 20), food(20), score(0) {
+}
+
+Game::~Game() {
+    cleanup();
+}
+
+bool Game::initialize() {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    
+    window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                             screenWidth, screenHeight, SDL_WINDOW_SHOWN);
+    if (!window) {
+        std::cerr << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer) {
+        std::cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    isRunning = true;
+    
+    // Spawn the initial food
+    food.spawn(snake, screenWidth, screenHeight);
+    
+    return true;
+}
+
+void Game::handleEvents() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            isRunning = false;
+        }
+        
+        snake.handleInput(event);
+    }
+}
+
+void Game::update() {
+    snake.move();
+    
+    // Check for collisions with walls or self
+    if (snake.checkCollision()) {
+        isRunning = false;
+        std::cout << "Game Over! Final score: " << score << std::endl;
+        return;
+    }
+    
+    // Check if food is eaten
+    if (food.isEaten(snake)) {
+        snake.grow();
+        food.spawn(snake, screenWidth, screenHeight);
+        score += 10;
+        std::cout << "Score: " << score << std::endl;
+    }
+}
+
+void Game::render() {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    
+    // Render game objects
+    snake.render(renderer);
+    food.render(renderer);
+    
+    SDL_RenderPresent(renderer);
+}
+
+void Game::run() {
+    const int FPS = 15;
+    const int frameDelay = 1000 / FPS;
+    
+    Uint32 frameStart;
+    int frameTime;
+    
+    while (isRunning) {
+        frameStart = SDL_GetTicks();
+        
+        handleEvents();
+        update();
+        render();
+        
+        frameTime = SDL_GetTicks() - frameStart;
+        
+        if (frameDelay > frameTime) {
+            SDL_Delay(frameDelay - frameTime);
+        }
+    }
+}
+
+void Game::cleanup() {
+    if (renderer) {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+    
+    if (window) {
+        SDL_DestroyWindow(window);
+        window = nullptr;
+    }
+    
+    SDL_Quit();
+}
+\`\`\`
+
+ເກມນີ້ຈະເຮັດວຽກດັ່ງນີ້:
+1. ສະແດງໜ້າຕ່າງເກມ
+2. ມີງູທີ່ເຄື່ອນທີ່ໄດ້ໂດຍໃຊ້ລູກສອນ
+3. ມີອາຫານສະແດງຢູ່ຕາມຕຳແໜ່ງແບບສຸ່ມ
+4. ເມື່ອງູກິນອາຫານ, ມັນຈະໃຫຍ່ຂຶ້ນແລະຄະແນນເພີ່ມຂຶ້ນ
+5. ເກມຈົບເມື່ອງູຕຳກັບຂອບຫຼືຕົວມັນເອງ
+
+ການຕັ້ງຄ່າເພີ່ມເຕີມອາດລວມເຖິງ:
+- ເມນູເລີ່ມຕົ້ນແລະເມນູກາຕາຍ
+- ຜົນກະທົບສຽງ
+- ການບັນທຶກຄະແນນສູງສຸດ
+- ການເພີ່ມອຸປະສັກຫຼືອາຫານພິເສດ
+
+## ຄຳແນະນຳໃນການທຳໂຄງການໃຫ້ສຳເລັດ
+
+1. **ວາງແຜນກ່ອນຂຽນໂຄດ**: ເລີ່ມຕົ້ນດ້ວຍການອອກແບບຄຼາສແລະຄວາມສຳພັນ
+2. **ເຄື່ອງມືທີ່ຖືກຕ້ອງ**: ເລືອກເຄື່ອງມືທີ່ເໝາະສົມກັບໂຄງການຂອງທ່ານ
+3. **ເລີ່ມຕົ້ນນ້ອຍ**: ເລີ່ມຕົ້ນດ້ວຍ minimum viable product (MVP) ແລ້ວຄ່ອຍໆເພີ່ມຄຸນສົມບັດ
+4. **ຕັ້ງຂີດໝາຍທີ່ຊັດເຈນ**: ແບ່ງໂຄງການເປັນໂມດູນ/tasks ທີ່ນ້ອຍລົງ
+5. **ຂຽນ unit tests**: ເພື່ອຮັບປະກັນວ່າໂຄດຂອງທ່ານທຳງານຖືກຕ້ອງ
+6. **ທົບທວນໂຄດສະມ່ຳສະເໝີ**: ຊອກຫາຂໍ້ຜິດພາດແລະໂອກາດໃນການປັບປຸງ
+7. **ຂໍຄຳຄິດເຫັນ**: ຈາກເພື່ອນຮ່ວມງານຫຼືຊຸມຊົນ
+8. **ເອກະສານ**: ຂຽນເອກະສານຄົບຖ້ວນວ່າໂຄດຂອງທ່ານເຮັດວຽກແນວໃດ
+
+## ການເລີ່ມໃນອາຊີບ C++
+
+ເມື່ອທ່ານສຳເລັດໂຄງການຈົບຂອງທ່ານແລ້ວ, ທ່ານສາມາດໃຊ້ມັນເພື່ອ:
+
+1. **ສ້າງ portfolio**: ນຳໂຄດຂອງທ່ານໄປໄວ້ໃນ GitHub ຫຼື GitLab 
+2. **ຫຼາຍໂອກາດໃນອາຊີບ**:
+   - ນັກພັດທະນາຊອບແວ C++
+   - ນັກພັດທະນາເກມ
+   - ນັກພັດທະນາລະບົບຝັງຕົວ (Embedded)
+   - ວິສະວະກອນ High-Performance Computing
+   - ການພັດທະນາ FinTech
+
+## ແຫຼ່ງຂໍ້ມູນເພີ່ມເຕີມ
+
+ເມື່ອເຮັດໂຄງການ, ຄວນໃຊ້ປະໂຫຍດຈາກແຫຼ່ງຂໍ້ມູນເຫຼົ່ານີ້:
+
+- **ຊຸມຊົນ**: Stack Overflow, Reddit r/cpp, Discord programming servers
+- **ໄລບຣາຣີແລະ frameworks**: Boost, Qt, SDL, SFML, OpenGL
+- **ເອກະສານ**: cppreference.com, C++ Standard Library docs
+- **ປຶ້ມແລະບົດຄວາມ**: "Effective Modern C++", "C++ Primer", "The C++ Programming Language"
+- **ວິດີໂອຫຼັກສູດ**: Pluralsight, Udemy, YouTube
+- **ການປະຊຸມແລະບລັອກ**: CppCon, C++ blogs
+
+## ສະຫຼຸບ
+
+ໂຄງການຈົບມີຄວາມສຳຄັນຫຼາຍສຳລັບການນຳໃຊ້ແນວຄິດ C++ ຂັ້ນສູງໃນສະຖານະການໂລກຈິງ. ມັນຊ່ວຍໃຫ້ທ່ານໄດ້ຮັບປະສົບການພາກປະຕິບັດທີ່ມີຄຸນຄ່າຊຶ່ງເປັນສິ່ງສຳຄັນສຳລັບຄວາມສຳເລັດໃນອາຊີບການເຂົ້າລະຫັດຂອງທ່ານ.
+
+ໂດຍການເພີ່ມຄວາມຮູ້ແລະຝຶກເຂົ້າລະຫັດໃນ C++ ຢ່າງສະໝ່ຳສະເໝີ, ທ່ານຈະກາຍເປັນໂປຣແກຣມເມີ C++ ທີ່ມີທັກສະສູງ ທີ່ສາມາດແກ້ໄຂບັນຫາທີ່ຊັບຊ້ອນໄດ້ຢ່າງມີປະສິດທິພາບແລະມີສະໄຕລ໌.
+
+ຂໍໃຫ້ໂຊກດີກັບໂຄງການຈົບຂອງທ່ານ!
+                        `,
+                        codeExample: `#include <iostream>
+#include <vector>
+#include <ctime>
+#include <cstdlib>
+#include <conio.h> // ສຳລັບ _getch() ໃນ Windows
+#include <windows.h> // ສຳລັບ Sleep() ແລະ system() ໃນ Windows
+
+// ນິຍາມຊະນິດຂໍ້ມູນພື້ນຖານ
+enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
+enum Colors { BLACK = 0, BLUE, GREEN, CYAN, RED, MAGENTA, YELLOW, WHITE };
+
+// ໂຄງສ້າງຂໍ້ມູນສຳລັບຜົນຈຸດ
+struct Point {
+    int x;
+    int y;
+};
+
+// ການຕັ້ງຄ່າສີ (ສຳລັບລະບົບ Windows)
+void setColor(int textColor, int bgColor) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (textColor + (bgColor * 16)));
+}
+
+// ການຕັ້ງຕຳແໜ່ງ cursor (ສຳລັບລະບົບ Windows)
+void setCursorPosition(int x, int y) {
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+// ຄຼາສສຳລັບເກມ Snake
+class SnakeGame {
+private:
+    // ຂະໜາດຂອງພື້ນທີ່ເກມ
+    int width;
+    int height;
+    
+    // ຂໍ້ມູນງູ
+    std::vector<Point> snake;
+    Direction dir;
+    
+    // ຂໍ້ມູນອາຫານ
+    Point food;
+    
+    // ສະຖານະເກມ
+    bool gameOver;
+    int score;
+    int speed;
+    
+    // ສ້າງອາຫານໃນຕຳແໜ່ງແບບສຸ່ມ
+    void generateFood() {
+        food.x = rand() % (width - 2) + 1;
+        food.y = rand() % (height - 2) + 1;
+        
+        // ກວດເບິ່ງວ່າອາຫານບໍ່ຢູ່ໃນຕຳແໜ່ງຂອງງູ
+        for (auto& segment : snake) {
+            if (food.x == segment.x && food.y == segment.y) {
+                generateFood(); // ຖ້າຊ້ອນກັນ, ຫາຕຳແໜ່ງໃໝ່
+                break;
+            }
+        }
+    }
+    
+    // ແຕ້ມຂອບເຂດເກມ
+    void drawBorder() {
+        setCursorPosition(0, 0);
+        
+        // ແຕ້ມຂອບເຂດເທິງ
+        setColor(WHITE, BLACK);
+        for (int i = 0; i < width; i++)
+            std::cout << "■";
+        std::cout << std::endl;
+        
+        // ແຕ້ມຂອບເຂດດ້ານຂ້າງ
+        for (int i = 1; i < height - 1; i++) {
+            setCursorPosition(0, i);
+            std::cout << "■";
+            setCursorPosition(width - 1, i);
+            std::cout << "■";
+        }
+        
+        // ແຕ້ມຂອບເຂດລຸ່ມ
+        setCursorPosition(0, height - 1);
+        for (int i = 0; i < width; i++)
+            std::cout << "■";
+    }
+    
+    // ແຕ້ມອົງປະກອບເກມ
+    void draw() {
+        // ແຕ້ມອາຫານ
+        setCursorPosition(food.x, food.y);
+        setColor(RED, BLACK);
+        std::cout << "●";
+        
+        // ແຕ້ມຫົວງູ
+        setCursorPosition(snake[0].x, snake[0].y);
+        setColor(GREEN, BLACK);
+        std::cout << "◉";
+        
+        // ແຕ້ມຕົວງູ
+        for (size_t i = 1; i < snake.size(); i++) {
+            setCursorPosition(snake[i].x, snake[i].y);
+            setColor(CYAN, BLACK);
+            std::cout << "○";
+        }
+        
+        // ສະແດງຄະແນນ
+        setCursorPosition(width + 2, 1);
+        setColor(YELLOW, BLACK);
+        std::cout << "ຄະແນນ: " << score;
+        
+        // ສະແດງຄຳແນະນຳການຄວບຄຸມ
+        setCursorPosition(width + 2, 3);
+        setColor(WHITE, BLACK);
+        std::cout << "ຄວບຄຸມ:";
+        setCursorPosition(width + 2, 4);
+        std::cout << "↑, ↓, ←, → - ບັງຄັບງູ";
+        setCursorPosition(width + 2, 5);
+        std::cout << "X - ອອກຈາກເກມ";
+        
+        // ຄຳແນະນຳເພີ່ມເຕີມ
+        setCursorPosition(width + 2, 7);
+        setColor(MAGENTA, BLACK);
+        std::cout << "ກົດກິນອາຫານ (●)";
+        setCursorPosition(width + 2, 8);
+        std::cout << "ເພື່ອເພີ່ມຄະແນນ!";
+    }
+    
+    // ການລຶບຮອຍຕົວງູບ່ອນທີ່ບໍ່ຕ້ອງການ
+    void clearTail() {
+        Point last = snake.back();
+        setCursorPosition(last.x, last.y);
+        std::cout << " ";
+    }
+    
+    // ການຮັບຂໍ້ມູນຈາກຜູ້ຫຼິ້ນ
+    void input() {
+        if (_kbhit()) {
+            switch (_getch()) {
+                case 'a':
+                case 75: // ລູກສອນຊ້າຍ
+                    if (dir != RIGHT) dir = LEFT;
+                    break;
+                case 'd':
+                case 77: // ລູກສອນຂວາ
+                    if (dir != LEFT) dir = RIGHT;
+                    break;
+                case 'w':
+                case 72: // ລູກສອນຂຶ້ນ
+                    if (dir != DOWN) dir = UP;
+                    break;
+                case 's':
+                case 80: // ລູກສອນລົງ
+                    if (dir != UP) dir = DOWN;
+                    break;
+                case 'x':
+                case 'X':
+                    gameOver = true;
+                    break;
+            }
+        }
+    }
+    
+    // ອັບເດດສະຖານະເກມ
+    void update() {
+        // ເກັບຕຳແໜ່ງຫົວງູປະຈຸບັນ
+        Point prev = snake[0];
+        Point prev2;
+        
+        // ເຄື່ອນຍ້າຍຫົວງູຕາມທິດທາງ
+        switch (dir) {
+            case LEFT:
+                snake[0].x--;
+                break;
+            case RIGHT:
+                snake[0].x++;
+                break;
+            case UP:
+                snake[0].y--;
+                break;
+            case DOWN:
+                snake[0].y++;
+                break;
+            default:
+                break;
+        }
+        
+        // ເຄື່ອນຍ້າຍສ່ວນທີ່ເຫຼືອຂອງຕົວງູ
+        for (size_t i = 1; i < snake.size(); i++) {
+            prev2 = snake[i];
+            snake[i] = prev;
+            prev = prev2;
+        }
+        
+        // ກວດເບິ່ງວ່າງູກິນອາຫານຫຼືບໍ່
+        if (snake[0].x == food.x && snake[0].y == food.y) {
+            score += 10;
+            
+            // ເພີ່ມຕົວງູ
+            Point newSegment = snake.back();
+            snake.push_back(newSegment);
+            
+            // ສ້າງອາຫານໃໝ່
+            generateFood();
+            
+            // ເພີ່ມຄວາມໄວຂອງເກມເລັກນ້ອຍ (ຂີດຈຳກັດຄວາມໄວສູງສຸດ)
+            if (speed > 30)
+                speed -= 5;
+        }
+        
+        // ກວດເບິ່ງວ່າງູຕຳຂອບເຂດຫຼືບໍ່
+        if (snake[0].x == 0 || snake[0].x == width - 1 ||
+            snake[0].y == 0 || snake[0].y == height - 1) {
+            gameOver = true;
+        }
+        
+        // ກວດເບິ່ງວ່າງູຕຳຕົວເອງຫຼືບໍ່
+        for (size_t i = 1; i < snake.size(); i++) {
+            if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+                gameOver = true;
+                break;
+            }
+        }
+    }
+    
+    // ສະແດງໜ້າຈໍຈົບເກມ
+    void showGameOverScreen() {
+        system("cls");
+        setColor(RED, BLACK);
+        
+        setCursorPosition(width / 2 - 5, height / 2 - 2);
+        std::cout << "ເກມຈົບແລ້ວ!";
+        
+        setCursorPosition(width / 2 - 8, height / 2);
+        std::cout << "ຄະແນນສຸດທ້າຍ: " << score;
+        
+        setCursorPosition(width / 2 - 13, height / 2 + 2);
+        std::cout << "ຂອບໃຈທີ່ຫຼິ້ນເກມ Snake C++ ຂອງພວກເຮົາ!";
+        
+        setCursorPosition(width / 2 - 15, height / 2 + 4);
+        setColor(YELLOW, BLACK);
+        std::cout << "ກົດປຸ່ມໃດກໍໄດ້ເພື່ອອອກຈາກເກມ...";
+        
+        _getch(); // ລໍຖ້າໃຫ້ຜູ້ໃຊ້ກົດປຸ່ມ
+    }
+    
+    // ສະແດງໜ້າຈໍເລີ່ມຕົ້ນ
+    void showStartScreen() {
+        system("cls");
+        setColor(GREEN, BLACK);
+        
+        setCursorPosition(width / 2 - 10, height / 2 - 6);
+        std::cout << "██████ ███    ██  █████  ██   ██ ███████";
+        setCursorPosition(width / 2 - 10, height / 2 - 5);
+        std::cout << "██      ████   ██ ██   ██ ██  ██  ██     ";
+        setCursorPosition(width / 2 - 10, height / 2 - 4);
+        std::cout << "███████ ██ ██  ██ ███████ █████   █████  ";
+        setCursorPosition(width / 2 - 10, height / 2 - 3);
+        std::cout << "     ██ ██  ██ ██ ██   ██ ██  ██  ██     ";
+        setCursorPosition(width / 2 - 10, height / 2 - 2);
+        std::cout << "███████ ██   ████ ██   ██ ██   ██ ███████";
+        
+        setCursorPosition(width / 2 - 10, height / 2);
+        setColor(CYAN, BLACK);
+        std::cout << "ຍິນດີຕ້ອນຮັບສູ່ເກມ Snake ພາສາ C++!";
+        
+        setCursorPosition(width / 2 - 15, height / 2 + 2);
+        setColor(WHITE, BLACK);
+        std::cout << "ຄວບຄຸມ: ລູກສອນໃຊ້ສຳລັບບັງຄັບງູ, X ເພື່ອອອກຈາກເກມ";
+        
+        setCursorPosition(width / 2 - 15, height / 2 + 4);
+        std::cout << "ເກັບກິນອາຫານໃຫ້ຫຼາຍທີ່ສຸດເທົ່າທີ່ເຮັດໄດ້!";
+        setCursorPosition(width / 2 - 15, height / 2 + 5);
+        std::cout << "ລະວັງບໍ່ໃຫ້ຕຳຂອບຫຼືຕົວງູເອງ!";
+        
+        setCursorPosition(width / 2 - 12, height / 2 + 7);
+        setColor(YELLOW, BLACK);
+        std::cout << "ກົດປຸ່ມໃດກໍໄດ້ເພື່ອເລີ່ມເກມ...";
+        
+        _getch(); // ລໍຖ້າໃຫ້ຜູ້ໃຊ້ກົດປຸ່ມ
+    }
+    
+public:
+    // Constructor
+    SnakeGame(int w, int h) : width(w), height(h), gameOver(false), score(0), speed(150) {
+        // ຕັ້ງຄ່າເລີ່ມຕົ້ນສຳລັບງູ
+        dir = STOP;
+        
+        // ກຳນົດຕຳແໜ່ງເລີ່ມຕົ້ນຢູ່ກາງໜ້າຈໍ
+        Point head;
+        head.x = width / 2;
+        head.y = height / 2;
+        snake.push_back(head);
+        
+        // ສ້າງອາຫານແບບສຸ່ມ
+        srand(static_cast<unsigned>(time(0)));
+        generateFood();
+        
+        // ຊ່ອນ cursor
+        CONSOLE_CURSOR_INFO cursorInfo;
+        cursorInfo.dwSize = 100;
+        cursorInfo.bVisible = FALSE;
+        SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+    }
+    
+    // ຟັງຊັ່ນຫຼັກສຳລັບຮັນເກມ
+    void run() {
+        // ສະແດງໜ້າຈໍເລີ່ມຕົ້ນ
+        showStartScreen();
+        
+        // ກຽມພື້ນທີ່ເກມ
+        system("cls");
+        drawBorder();
+        
+        // Game loop
+        while (!gameOver) {
+            draw();       // ແຕ້ມອົງປະກອບເກມ
+            input();      // ຮັບຂໍ້ມູນຜູ້ຫຼິ້ນ
+            update();     // ອັບເດດສະຖານະເກມ
+            clearTail();  // ລຶບຕຳແໜ່ງຕົວງູບ່ອນທີ່ບໍ່ຕ້ອງການ
+            Sleep(speed); // ຄວບຄຸມຄວາມໄວຂອງເກມ
+        }
+        
+        // ສະແດງໜ້າຈໍຈົບເກມ
+        showGameOverScreen();
+        
+        // ຣີເຊັດສີແລະລ້າງໜ້າຈໍ
+        setColor(WHITE, BLACK);
+        system("cls");
+    }
+};
+
+// ຟັງຊັ່ນຫຼັກ
+int main() {
+    // ຕັ້ງຄ່າຂະໜາດໜ້າຈໍເກມ
+    const int gameWidth = 40;
+    const int gameHeight = 20;
+    
+    // ສ້າງເກມດ້ວຍຂະໜາດທີ່ກຳນົດ
+    SnakeGame game(gameWidth, gameHeight);
+    
+    // ຮັນເກມ
+    game.run();
+    
+    return 0;
+}`,
+                        quiz: [
+                            {
+                                question: "ຈຸດປະສົງຫຼັກຂອງໂຄງການຈົບແມ່ນຫຍັງ?",
+                                options: [
+                                    "ເພື່ອໃຫ້ຄະແນນຜ່ານການສອບເສັງ",
+                                    "ເພື່ອນຳໃຊ້ຄວາມຮູ້ C++ ໃນບັນຫາໂລກຈິງ",
+                                    "ເພື່ອສຶກສາຫົວຂໍ້ມາດຕະຖານຂອງ C++",
+                                    "ເພື່ອສ້າງເກມເທົ່ານັ້ນ"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                question: "ເປັນຫຍັງການພັດທະນາເກມຈຶ່ງເປັນໂຄງການທີ່ດີສຳລັບການຮຽນຮູ້ C++?",
+                                options: [
+                                    "ເພາະວ່າພວກມັນບໍ່ຕ້ອງການຄວາມຮູ້ດ້ານເຕັກນິກ",
+                                    "ເພາະວ່າພວກມັນງ່າຍກວ່າການພັດທະນາແອັບພລິເຄຊັ່ນ",
+                                    "ເພາະວ່າພວກມັນໃຊ້ແນວຄິດ OOP, algorithms, ແລະ data structures",
+                                    "ເພາະວ່າພວກມັນໃຊ້ພຽງແຕ່ຄຼາສທີ່ສ້າງມາແລ້ວ"
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                question: "ແນວຄິດໃດບໍ່ແມ່ນສ່ວນໜຶ່ງຂອງຂະບວນການພັດທະນາເກມ Snake?",
+                                options: [
+                                    "ການກວດຫາການຕຳກັນ",
+                                    "ການຕິດຕໍ່ກັບຖານຂໍ້ມູນ",
+                                    "ການຮັບອິນພຸດຂອງຜູ້ຫຼິ້ນ",
+                                    "ການຈັດການກັບ game loop"
+                                ],
+                                correctAnswer: 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+        
+        // Current state
+        let currentSection = 0;
+        let currentLesson = 0;
+        let currentQuizQuestion = 0;
+        let currentCodeExample = "";
+        let originalCodeExample = "";
+        
+        // DOM elements
+        const outlineEl = document.getElementById('course-outline');
+        const lessonFilterEl = document.getElementById('lesson-filter');
+        const searchInputEl = document.getElementById('search-input');
+        const searchResultsEl = document.getElementById('search-results');
+        const outlineTabEl = document.getElementById('outline-tab');
+        const searchTabEl = document.getElementById('search-tab');
+        const outlineContentEl = document.getElementById('outline-content');
+        const searchContentEl = document.getElementById('search-content');
+        const contentTabEl = document.getElementById('content-tab');
+        const codeTabEl = document.getElementById('code-tab');
+        const quizTabEl = document.getElementById('quiz-tab');
+        const contentBtnEl = document.getElementById('content-btn');
+        const codeBtnEl = document.getElementById('code-btn');
+        const quizBtnEl = document.getElementById('quiz-btn');
+        const prevLessonBtn = document.getElementById('prev-lesson');
+        const nextLessonBtn = document.getElementById('next-lesson');
+        const runCodeBtn = document.getElementById('run-code');
+        const resetCodeBtn = document.getElementById('reset-code');
+        const askAssistantBtn = document.getElementById('ask-assistant');
+        const codeOutputEl = document.getElementById('code-output');
+        const quizContainerEl = document.getElementById('quiz-container');
+        const quizResultsEl = document.getElementById('quiz-results');
+        const checkAnswersBtn = document.getElementById('check-answers');
+        const nextQuizBtn = document.getElementById('next-quiz');
+        
+        // Initialize Ace editor
+        const editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/c_cpp");
+        editor.setFontSize(14);
+        
+        // Populate course outline
+        function populateCourseOutline() {
+            outlineEl.innerHTML = '';
+            courseData.forEach((section, sectionIndex) => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'mb-4';
+                
+                const sectionTitleEl = document.createElement('h3');
+                sectionTitleEl.className = 'font-bold text-lg mb-2 cursor-pointer hover:text-indigo-600 transition';
+                sectionTitleEl.textContent = section.title;
+                sectionTitleEl.addEventListener('click', () => {
+                    sectionEl.querySelector('.section-lessons').classList.toggle('hidden');
+                });
+                
+                const lessonsContainerEl = document.createElement('div');
+                lessonsContainerEl.className = 'section-lessons pl-4 space-y-1';
+                
+                section.lessons.forEach((lesson, lessonIndex) => {
+                    const lessonEl = document.createElement('div');
+                    lessonEl.className = 'cursor-pointer py-1 px-2 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900 transition';
+                    if (currentSection === sectionIndex && currentLesson === lessonIndex) {
+                        lessonEl.classList.add('bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600', 'dark:text-indigo-400', 'font-medium');
+                    }
+                    
+                    lessonEl.textContent = lesson.title;
+                    lessonEl.addEventListener('click', () => {
+                        currentSection = sectionIndex;
+                        currentLesson = lessonIndex;
+                        loadLesson();
+                    });
+                    
+                    lessonsContainerEl.appendChild(lessonEl);
+                });
+                
+                sectionEl.appendChild(sectionTitleEl);
+                sectionEl.appendChild(lessonsContainerEl);
+                outlineEl.appendChild(sectionEl);
+            });
+        }
+        
+        // Filter lessons
+        lessonFilterEl.addEventListener('input', () => {
+            const filter = lessonFilterEl.value.toLowerCase();
+            
+            Array.from(outlineEl.querySelectorAll('.section-lessons')).forEach(lessonsContainer => {
+                let hasVisibleLesson = false;
+                
+                Array.from(lessonsContainer.children).forEach(lesson => {
+                    const text = lesson.textContent.toLowerCase();
+                    if (text.includes(filter)) {
+                        lesson.style.display = 'block';
+                        hasVisibleLesson = true;
+                    } else {
+                        lesson.style.display = 'none';
+                    }
+                });
+                
+                // Show section only if it has visible lessons
+                lessonsContainer.parentElement.style.display = hasVisibleLesson ? 'block' : 'none';
+                
+                // Always show section content when filtering
+                lessonsContainer.classList.remove('hidden');
+            });
+        });
+        
+        // Search functionality
+        searchInputEl.addEventListener('input', () => {
+            const query = searchInputEl.value.toLowerCase().trim();
+            
+            if (query.length < 2) {
+                searchResultsEl.innerHTML = '<div class="text-gray-500 dark:text-gray-400 text-center py-4">ພິມຢ່າງໜ້ອຍ 2 ຕົວອັກສອນເພື່ອຄົ້ນຫາ</div>';
+                return;
+            }
+            
+            searchResultsEl.innerHTML = '';
+            let foundResults = false;
+            
+            courseData.forEach((section, sectionIndex) => {
+                section.lessons.forEach((lesson, lessonIndex) => {
+                    const content = lesson.content.toLowerCase();
+                    const title = lesson.title.toLowerCase();
+                    
+                    if (title.includes(query) || content.includes(query)) {
+                        foundResults = true;
+                        const resultEl = document.createElement('div');
+                        resultEl.className = 'cursor-pointer p-2 mb-2 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-gray-200 dark:border-gray-700';
+                        
+                        const titleEl = document.createElement('div');
+                        titleEl.className = 'font-medium';
+                        titleEl.textContent = lesson.title;
+                        
+                        // Create excerpt with highlighted query
+                        let excerpt = '';
+                        if (content.includes(query)) {
+                            const index = content.indexOf(query);
+                            const start = Math.max(0, index - 50);
+                            const end = Math.min(content.length, index + query.length + 50);
+                            excerpt = '...' + content.substring(start, end) + '...';
+                        } else {
+                            excerpt = content.substring(0, 100) + '...';
+                        }
+                        
+                        const excerptEl = document.createElement('div');
+                        excerptEl.className = 'text-sm text-gray-600 dark:text-gray-400 mt-1';
+                        excerptEl.textContent = excerpt;
+                        
+                        resultEl.appendChild(titleEl);
+                        resultEl.appendChild(excerptEl);
+                        
+                        resultEl.addEventListener('click', () => {
+                            currentSection = sectionIndex;
+                            currentLesson = lessonIndex;
+                            loadLesson();
+                            
+                            // Switch to content tab
+                            showTab('content');
+                            
+                            // Switch to outline view after clicking a search result
+                            showOutlineTab();
+                        });
+                        
+                        searchResultsEl.appendChild(resultEl);
+                    }
+                });
+            });
+            
+            if (!foundResults) {
+                searchResultsEl.innerHTML = '<div class="text-gray-500 dark:text-gray-400 text-center py-4">ບໍ່ພົບຜົນການຄົ້ນຫາ</div>';
+            }
+        });
+        
+        // Tab switching
+        outlineTabEl.addEventListener('click', showOutlineTab);
+        searchTabEl.addEventListener('click', showSearchTab);
+        
+        function showOutlineTab() {
+            outlineTabEl.classList.add('tab-active');
+            searchTabEl.classList.remove('tab-active');
+            outlineContentEl.classList.remove('hidden');
+            searchContentEl.classList.add('hidden');
+        }
+        
+        function showSearchTab() {
+            outlineTabEl.classList.remove('tab-active');
+            searchTabEl.classList.add('tab-active');
+            outlineContentEl.classList.add('hidden');
+            searchContentEl.classList.remove('hidden');
+            searchInputEl.focus();
+        }
+        
+        // Content tab switching
+        contentBtnEl.addEventListener('click', () => showTab('content'));
+        codeBtnEl.addEventListener('click', () => showTab('code'));
+        quizBtnEl.addEventListener('click', () => showTab('quiz'));
+        
+        function showTab(tab) {
+            // Hide all tabs
+            contentTabEl.classList.add('hidden');
+            codeTabEl.classList.add('hidden');
+            quizTabEl.classList.add('hidden');
+            
+            // Remove active class from all buttons
+            contentBtnEl.classList.remove('tab-active');
+            codeBtnEl.classList.remove('tab-active');
+            quizBtnEl.classList.remove('tab-active');
+            
+            // Show selected tab
+            if (tab === 'content') {
+                contentTabEl.classList.remove('hidden');
+                contentBtnEl.classList.add('tab-active');
+            } else if (tab === 'code') {
+                codeTabEl.classList.remove('hidden');
+                codeBtnEl.classList.add('tab-active');
+                editor.resize();
+            } else if (tab === 'quiz') {
+                quizTabEl.classList.remove('hidden');
+                quizBtnEl.classList.add('tab-active');
+                loadQuiz();
+            }
+        }
+        
+        // Navigation buttons
+        prevLessonBtn.addEventListener('click', () => {
+            if (currentLesson > 0) {
+                currentLesson--;
+                loadLesson();
+            } else if (currentSection > 0) {
+                currentSection--;
+                currentLesson = courseData[currentSection].lessons.length - 1;
+                loadLesson();
+            }
+        });
+        
+        nextLessonBtn.addEventListener('click', () => {
+            if (currentLesson < courseData[currentSection].lessons.length - 1) {
+                currentLesson++;
+                loadLesson();
+            } else if (currentSection < courseData.length - 1) {
+                currentSection++;
+                currentLesson = 0;
+                loadLesson();
+            }
+        });
+        
+        // Run code
+        runCodeBtn.addEventListener('click', () => {
+            const code = editor.getValue();
+            codeOutputEl.textContent = "ກຳລັງຮັນໂຄດ C++...\n\n";
+            codeOutputEl.textContent += "[ໝາຍເຫດ: ໃນສະພາບແວດລ້ອມເວັບນີ້, ບໍ່ສາມາດຮັນໂຄດ C++ ໄດ້ໂດຍກົງ.\n";
+            codeOutputEl.textContent += "ກະລຸນາຄັດລອກໂຄດນີ້ໄປຮັນໃນ compiler C++ ທີ່ທ່ານຕິດຕັ້ງໃນເຄື່ອງຂອງທ່ານ.]";
+        });
+        
+        // Reset code
+        resetCodeBtn.addEventListener('click', () => {
+            if (confirm("ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຣີເຊັດໂຄດກັບຄືນໄປຫາຕົ້ນສະບັບ?")) {
+                editor.setValue(originalCodeExample);
+                editor.clearSelection();
+            }
+        });
+        
+        // Ask assistant
+        askAssistantBtn.addEventListener('click', async () => {
+            const code = editor.getValue();
+            
+            try {
+                await window.Poe.sendUserMessage(
+                    `@Claude-3.7-Sonnet ກະລຸນາຊ່ວຍວິເຄາະແລະອະທິບາຍໂຄດ C++ ນີ້:\n\n\`\`\`cpp\n${code}\n\`\`\`\n\nອະທິບາຍວ່າໂຄດນີ້ເຮັດຫຍັງ, ມີຂໍ້ຜິດພາດຫຼືບັນຫາບໍ່ ແລະມີວິທີປັບປຸງແນວໃດແດ່.`,
+                    { openChat: true }
+                );
+            } catch (error) {
+                console.error("ເກີດຂໍ້ຜິດພາດໃນການສົ່ງຂໍ້ຄວາມ:", error);
+                alert("ບໍ່ສາມາດສົ່ງໂຄດໄປຍັງຜູ້ຊ່ວຍໄດ້. ກະລຸນາລອງໃໝ່ອີກຄັ້ງ.");
+            }
+        });
+        
+        // Quiz functionality
+        function loadQuiz() {
+            const currentLessonData = courseData[currentSection].lessons[currentLesson];
+            if (!currentLessonData.quiz || currentLessonData.quiz.length === 0) {
+                quizContainerEl.innerHTML = '<div class="text-center py-8">ບົດຮຽນນີ້ບໍ່ມີແບບທົດສອບ</div>';
+                quizResultsEl.classList.add('hidden');
+                checkAnswersBtn.classList.add('hidden');
+                nextQuizBtn.classList.add('hidden');
+                return;
+            }
+            
+            currentQuizQuestion = 0;
+            displayCurrentQuestion();
+        }
+        
+        function displayCurrentQuestion() {
+            const currentLessonData = courseData[currentSection].lessons[currentLesson];
+            const quiz = currentLessonData.quiz;
+            
+            if (currentQuizQuestion >= quiz.length) {
+                currentQuizQuestion = 0; // Reset if we're beyond the number of questions
+            }
+            
+            const question = quiz[currentQuizQuestion];
+            
+            quizContainerEl.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="text-lg font-medium mb-3">ຄຳຖາມ ${currentQuizQuestion + 1} ຈາກ ${quiz.length}</h3>
+                    <p class="text-lg mb-4">${question.question}</p>
+                    <div class="space-y-2" id="options-container">
+                        ${question.options.map((option, index) => `
+                            <div class="quiz-option p-3 border rounded-md cursor-pointer" data-index="${index}">
+                                <label class="cursor-pointer flex items-start">
+                                    <input type="radio" name="quiz-option" value="${index}" class="mt-1 mr-2">
+                                    <span>${option}</span>
+                                </label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Add click event to options
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    option.querySelector('input').checked = true;
+                });
+            });
+            
+            quizResultsEl.classList.add('hidden');
+            checkAnswersBtn.classList.remove('hidden');
+            nextQuizBtn.classList.add('hidden');
+        }
+        
+        checkAnswersBtn.addEventListener('click', () => {
+            const currentLessonData = courseData[currentSection].lessons[currentLesson];
+            const quiz = currentLessonData.quiz;
+            const question = quiz[currentQuizQuestion];
+            
+            const selectedOption = document.querySelector('input[name="quiz-option"]:checked');
+            if (!selectedOption) {
+                alert("ກະລຸນາເລືອກຄຳຕອບກ່ອນກວດສອບ");
+                return;
+            }
+            
+            const selectedIndex = parseInt(selectedOption.value);
+            const correctIndex = question.correctAnswer;
+            
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                const optionIndex = parseInt(option.dataset.index);
+                
+                if (optionIndex === correctIndex) {
+                    option.classList.add('correct');
+                } else if (optionIndex === selectedIndex && selectedIndex !== correctIndex) {
+                    option.classList.add('incorrect');
+                }
+                
+                // Disable further selections
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Show result message
+            if (selectedIndex === correctIndex) {
+                quizResultsEl.innerHTML = '<div class="text-green-600 dark:text-green-400 font-medium">✓ ຖືກຕ້ອງ! ເກັ່ງຫຼາຍ!</div>';
+            } else {
+                quizResultsEl.innerHTML = `<div class="text-red-600 dark:text-red-400 font-medium">✗ ບໍ່ຖືກຕ້ອງ. ຄຳຕອບທີ່ຖືກຕ້ອງແມ່ນ: ${question.options[correctIndex]}</div>`;
+            }
+            
+            quizResultsEl.classList.remove('hidden');
+            checkAnswersBtn.classList.add('hidden');
+            nextQuizBtn.classList.remove('hidden');
+        });
+        
+        nextQuizBtn.addEventListener('click', () => {
+            const currentLessonData = courseData[currentSection].lessons[currentLesson];
+            currentQuizQuestion = (currentQuizQuestion + 1) % currentLessonData.quiz.length;
+            displayCurrentQuestion();
+        });
+        
+        // Load lesson content
+        function loadLesson() {
+            const currentLessonData = courseData[currentSection].lessons[currentLesson];
+            
+            // Update content tab
+            contentTabEl.innerHTML = marked.parse(currentLessonData.content);
+            
+            // Update code example
+            currentCodeExample = currentLessonData.codeExample || '';
+            originalCodeExample = currentCodeExample;
+            editor.setValue(currentCodeExample);
+            editor.clearSelection();
+            
+            // Reset code output
+            codeOutputEl.textContent = '';
+            
+            // Reset quiz
+            currentQuizQuestion = 0;
+            
+            // Update navigation buttons state
+            const isFirstLesson = currentSection === 0 && currentLesson === 0;
+            const isLastLesson = currentSection === courseData.length - 1 && 
+                                currentLesson === courseData[currentSection].lessons.length - 1;
+            
+            prevLessonBtn.disabled = isFirstLesson;
+            prevLessonBtn.classList.toggle('opacity-50', isFirstLesson);
+            
+            nextLessonBtn.disabled = isLastLesson;
+            nextLessonBtn.classList.toggle('opacity-50', isLastLesson);
+            
+            // Show the content tab by default
+            showTab('content');
+            
+            // Update outline selection
+            populateCourseOutline();
+            
+            // Update document title
+            document.title = currentLessonData.title + " - ບົດຮຽນພາສາ C++";
+        }
+        
+        // Initialize app
+        populateCourseOutline();
+        loadLesson();
+    </script>
+</body>
+</html>

@@ -1,0 +1,2550 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ລະບົບຈັດການຂໍ້ມູນນັກຮຽນ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+
+        // Check dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Noto Sans Lao', sans-serif;
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Styles for desktop-like window */
+        .desktop-window {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .window-titlebar {
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .window-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .window-button {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+        .window-content {
+            height: calc(100vh - 4rem);
+            overflow: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <div class="desktop-window bg-white dark:bg-gray-800 mx-auto my-4 max-w-full sm:max-w-7xl h-[calc(100vh-2rem)]">
+        <!-- Window Title Bar -->
+        <div class="window-titlebar bg-gray-200 dark:bg-gray-700">
+            <div class="flex items-center">
+                <span class="text-lg font-semibold">ລະບົບຈັດການຂໍ້ມູນນັກຮຽນ (Student Management System)</span>
+            </div>
+            <div class="window-buttons">
+                <div class="window-button bg-red-500"></div>
+                <div class="window-button bg-yellow-500"></div>
+                <div class="window-button bg-green-500"></div>
+            </div>
+        </div>
+
+        <div class="flex h-[calc(100%-2.5rem)]">
+            <!-- Sidebar Navigation -->
+            <aside class="bg-gray-100 dark:bg-gray-800 w-64 overflow-auto border-r border-gray-200 dark:border-gray-700">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold text-primary">ໂຮງຮຽນຕົວຢ່າງ</h2>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">ລະບົບຈັດການນັກຮຽນ</p>
+                </div>
+                <nav class="p-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <button data-section="dashboard" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white bg-primary text-white">
+                                <i class="fas fa-tachometer-alt w-6"></i>
+                                <span>ພາບລວມ</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button data-section="students" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-user-graduate w-6"></i>
+                                <span>ນັກຮຽນ</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button data-section="classes" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-chalkboard w-6"></i>
+                                <span>ຫຼັກສູດ/ວິຊາຮຽນ</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button data-section="grades" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-chart-line w-6"></i>
+                                <span>ຄະແນນ</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button data-section="attendance" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-clipboard-check w-6"></i>
+                                <span>ການເຂົ້າຮ່ວມ</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button data-section="reports" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-file-alt w-6"></i>
+                                <span>ລາຍງານ</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button data-section="settings" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-cog w-6"></i>
+                                <span>ຕັ້ງຄ່າ</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="absolute bottom-0 p-4 w-64 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user-circle text-2xl text-gray-600 dark:text-gray-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-medium">ຜູ້ບໍລິຫານລະບົບ</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">admin@school.edu</p>
+                        </div>
+                        <button id="darkModeToggle" class="ml-auto p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <i class="fas fa-moon hidden dark:block"></i>
+                            <i class="fas fa-sun block dark:hidden"></i>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-auto p-4">
+                <div id="content-area">
+                    <!-- Dashboard Section -->
+                    <section id="dashboard" class="content-section slide-in">
+                        <h2 class="text-2xl font-bold mb-6">ພາບລວມລະບົບ</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <div class="flex items-center">
+                                    <div class="rounded-full bg-blue-100 dark:bg-blue-900 p-3 mr-4">
+                                        <i class="fas fa-user-graduate text-blue-500 dark:text-blue-300"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-500 dark:text-gray-400">ນັກຮຽນທັງໝົດ</h3>
+                                        <p class="text-2xl font-bold" id="student-count">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <div class="flex items-center">
+                                    <div class="rounded-full bg-green-100 dark:bg-green-900 p-3 mr-4">
+                                        <i class="fas fa-chalkboard text-green-500 dark:text-green-300"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-500 dark:text-gray-400">ຫ້ອງຮຽນທັງໝົດ</h3>
+                                        <p class="text-2xl font-bold" id="class-count">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <div class="flex items-center">
+                                    <div class="rounded-full bg-purple-100 dark:bg-purple-900 p-3 mr-4">
+                                        <i class="fas fa-book text-purple-500 dark:text-purple-300"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-500 dark:text-gray-400">ວິຊາຮຽນທັງໝົດ</h3>
+                                        <p class="text-2xl font-bold" id="subject-count">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <div class="flex items-center">
+                                    <div class="rounded-full bg-yellow-100 dark:bg-yellow-900 p-3 mr-4">
+                                        <i class="fas fa-user-tie text-yellow-500 dark:text-yellow-300"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-500 dark:text-gray-400">ຄູອາຈານທັງໝົດ</h3>
+                                        <p class="text-2xl font-bold" id="teacher-count">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <h3 class="text-lg font-semibold mb-4">ການເຂົ້າຮ່ວມປະຈຳວັນ</h3>
+                                <div class="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold mb-2 text-primary" id="attendance-rate">0%</div>
+                                        <p class="text-gray-500 dark:text-gray-400">ອັດຕາການເຂົ້າຮ່ວມເຂົ້າຫ້ອງຮຽນ</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <h3 class="text-lg font-semibold mb-4">ຄະແນນສະເລ່ຍ</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-50 dark:bg-gray-700">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left">ວິຊາຮຽນ</th>
+                                                <th class="px-4 py-2 text-left">ຄະແນນເກຣດສະເລ່ຍ</th>
+                                                <th class="px-4 py-2 text-left">ຄະແນນສູງສຸດ</th>
+                                                <th class="px-4 py-2 text-left">ຄະແນນຕ່ຳສຸດ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="grade-averages">
+                                            <!-- Grade data will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-4">ນັກຮຽນຫຼ້າສຸດ</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left">ລະຫັດນັກຮຽນ</th>
+                                            <th class="px-4 py-2 text-left">ຊື່-ນາມສະກຸນ</th>
+                                            <th class="px-4 py-2 text-left">ຫ້ອງຮຽນ</th>
+                                            <th class="px-4 py-2 text-left">ເພດ</th>
+                                            <th class="px-4 py-2 text-left">ວັນເດືອນປີເກີດ</th>
+                                            <th class="px-4 py-2 text-left">ສະຖານະ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-students">
+                                        <!-- Recent students will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Students Section -->
+                    <section id="students" class="content-section hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold">ຂໍ້ມູນນັກຮຽນ</h2>
+                            <button id="add-student-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-plus"></i>
+                                <span>ເພີ່ມນັກຮຽນໃໝ່</span>
+                            </button>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                            <div class="flex flex-col md:flex-row gap-4 mb-4">
+                                <div class="flex-1">
+                                    <input type="text" id="student-search" placeholder="ຄົ້ນຫານັກຮຽນ..." class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                </div>
+                                <div class="flex gap-2">
+                                    <select id="student-class-filter" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                        <option value="">ທຸກຫ້ອງຮຽນ</option>
+                                        <!-- Classes will be loaded here -->
+                                    </select>
+                                    <select id="student-gender-filter" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                        <option value="">ທຸກເພດ</option>
+                                        <option value="ຊາຍ">ຊາຍ</option>
+                                        <option value="ຍິງ">ຍິງ</option>
+                                    </select>
+                                    <select id="student-sort" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                        <option value="id-asc">ລະຫັດ: ນ້ອຍ-ໃຫຍ່</option>
+                                        <option value="id-desc">ລະຫັດ: ໃຫຍ່-ນ້ອຍ</option>
+                                        <option value="name-asc">ຊື່: A-Z</option>
+                                        <option value="name-desc">ຊື່: Z-A</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left">ລະຫັດນັກຮຽນ</th>
+                                            <th class="px-4 py-2 text-left">ຮູບ</th>
+                                            <th class="px-4 py-2 text-left">ຊື່-ນາມສະກຸນ</th>
+                                            <th class="px-4 py-2 text-left">ຫ້ອງຮຽນ</th>
+                                            <th class="px-4 py-2 text-left">ເພດ</th>
+                                            <th class="px-4 py-2 text-left">ວັນເດືອນປີເກີດ</th>
+                                            <th class="px-4 py-2 text-left">ສະຖານະ</th>
+                                            <th class="px-4 py-2 text-left">ຈັດການ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="students-table">
+                                        <!-- Students will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">ສະແດງ <span id="student-range">0-0</span> ຈາກ <span id="student-total">0</span> ລາຍການ</p>
+                            <div class="flex gap-2">
+                                <button id="student-prev" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button id="student-next" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Classes/Subjects Section -->
+                    <section id="classes" class="content-section hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Classes Management -->
+                            <div>
+                                <div class="flex justify-between items-center mb-6">
+                                    <h2 class="text-xl font-bold">ຫ້ອງຮຽນ</h2>
+                                    <button id="add-class-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                                        <i class="fas fa-plus"></i>
+                                        <span>ເພີ່ມຫ້ອງຮຽນໃໝ່</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full">
+                                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left">ລະຫັດ</th>
+                                                    <th class="px-4 py-2 text-left">ຊື່ຫ້ອງຮຽນ</th>
+                                                    <th class="px-4 py-2 text-left">ຄູປະຈຳຫ້ອງ</th>
+                                                    <th class="px-4 py-2 text-left">ຈຳນວນນັກຮຽນ</th>
+                                                    <th class="px-4 py-2 text-left">ຈັດການ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="classes-table">
+                                                <!-- Classes will be loaded here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Subjects Management -->
+                            <div>
+                                <div class="flex justify-between items-center mb-6">
+                                    <h2 class="text-xl font-bold">ວິຊາຮຽນ</h2>
+                                    <button id="add-subject-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                                        <i class="fas fa-plus"></i>
+                                        <span>ເພີ່ມວິຊາຮຽນໃໝ່</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full">
+                                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left">ລະຫັດ</th>
+                                                    <th class="px-4 py-2 text-left">ຊື່ວິຊາ</th>
+                                                    <th class="px-4 py-2 text-left">ຄູສອນ</th>
+                                                    <th class="px-4 py-2 text-left">ຫ້ອງຮຽນ</th>
+                                                    <th class="px-4 py-2 text-left">ຈັດການ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subjects-table">
+                                                <!-- Subjects will be loaded here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Teachers Management -->
+                        <div>
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-xl font-bold">ຄູອາຈານ</h2>
+                                <button id="add-teacher-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                                    <i class="fas fa-plus"></i>
+                                    <span>ເພີ່ມຄູອາຈານໃໝ່</span>
+                                </button>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-50 dark:bg-gray-700">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left">ລະຫັດ</th>
+                                                <th class="px-4 py-2 text-left">ຊື່-ນາມສະກຸນ</th>
+                                                <th class="px-4 py-2 text-left">ວິຊາສອນ</th>
+                                                <th class="px-4 py-2 text-left">ຕິດຕໍ່</th>
+                                                <th class="px-4 py-2 text-left">ຈັດການ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="teachers-table">
+                                            <!-- Teachers will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Grades Section -->
+                    <section id="grades" class="content-section hidden">
+                        <h2 class="text-2xl font-bold mb-6">ຈັດການຄະແນນ</h2>
+                        
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                            <div class="flex flex-col md:flex-row gap-4 mb-4">
+                                <div class="flex-1">
+                                    <label for="grade-class" class="block mb-1">ຫ້ອງຮຽນ</label>
+                                    <select id="grade-class" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                        <option value="">ເລືອກຫ້ອງຮຽນ</option>
+                                        <!-- Classes will be loaded here -->
+                                    </select>
+                                </div>
+                                <div class="flex-1">
+                                    <label for="grade-subject" class="block mb-1">ວິຊາຮຽນ</label>
+                                    <select id="grade-subject" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base" disabled>
+                                        <option value="">ເລືອກວິຊາຮຽນ</option>
+                                        <!-- Subjects will be loaded based on class -->
+                                    </select>
+                                </div>
+                                <div class="flex-1">
+                                    <label for="grade-term" class="block mb-1">ພາກຮຽນ</label>
+                                    <select id="grade-term" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base" disabled>
+                                        <option value="">ເລືອກພາກຮຽນ</option>
+                                        <option value="1">ພາກຮຽນທີ 1</option>
+                                        <option value="2">ພາກຮຽນທີ 2</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-end">
+                                    <button id="load-grades-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg" disabled>
+                                        ໂຫຼດຂໍ້ມູນ
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="grades-table-container" class="hidden mt-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h3 class="text-lg font-semibold" id="grades-title">ຄະແນນ</h3>
+                                    <button id="save-grades-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                                        <i class="fas fa-save mr-2"></i> ບັນທຶກຄະແນນ
+                                    </button>
+                                </div>
+                                
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-50 dark:bg-gray-700">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left">ລະຫັດນັກຮຽນ</th>
+                                                <th class="px-4 py-2 text-left">ຊື່-ນາມສະກຸນ</th>
+                                                <th class="px-4 py-2 text-center">ຄະແນນສອບເສັງຍ່ອຍ (20%)</th>
+                                                <th class="px-4 py-2 text-center">ຄະແນນກາງພາກ (30%)</th>
+                                                <th class="px-4 py-2 text-center">ຄະແນນປາຍພາກ (50%)</th>
+                                                <th class="px-4 py-2 text-center">ຄະແນນລວມ</th>
+                                                <th class="px-4 py-2 text-center">ເກຣດ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="grades-table">
+                                            <!-- Grades will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Attendance Section -->
+                    <section id="attendance" class="content-section hidden">
+                        <h2 class="text-2xl font-bold mb-6">ບັນທຶກການເຂົ້າຮ່ວມ</h2>
+                        
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                            <div class="flex flex-col md:flex-row gap-4 mb-4">
+                                <div class="flex-1">
+                                    <label for="attendance-class" class="block mb-1">ຫ້ອງຮຽນ</label>
+                                    <select id="attendance-class" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                        <option value="">ເລືອກຫ້ອງຮຽນ</option>
+                                        <!-- Classes will be loaded here -->
+                                    </select>
+                                </div>
+                                <div class="flex-1">
+                                    <label for="attendance-date" class="block mb-1">ວັນທີ</label>
+                                    <input type="date" id="attendance-date" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700" value="">
+                                </div>
+                                <div class="flex items-end">
+                                    <button id="load-attendance-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg" disabled>
+                                        ໂຫຼດຂໍ້ມູນ
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="attendance-table-container" class="hidden mt-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h3 class="text-lg font-semibold" id="attendance-title">ບັນທຶກການເຂົ້າຮ່ວມ</h3>
+                                    <button id="save-attendance-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                                        <i class="fas fa-save mr-2"></i> ບັນທຶກການເຂົ້າຮ່ວມ
+                                    </button>
+                                </div>
+                                
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-50 dark:bg-gray-700">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left">ລະຫັດນັກຮຽນ</th>
+                                                <th class="px-4 py-2 text-left">ຊື່-ນາມສະກຸນ</th>
+                                                <th class="px-4 py-2 text-center">ສະຖານະ</th>
+                                                <th class="px-4 py-2 text-left">ໝາຍເຫດ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="attendance-table">
+                                            <!-- Attendance will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Reports Section -->
+                    <section id="reports" class="content-section hidden">
+                        <h2 class="text-2xl font-bold mb-6">ລາຍງານ</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <h3 class="text-lg font-semibold mb-4">ລາຍງານຄະແນນຫ້ອງຮຽນ</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="report-class-grade" class="block mb-1">ຫ້ອງຮຽນ</label>
+                                        <select id="report-class-grade" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                            <option value="">ເລືອກຫ້ອງຮຽນ</option>
+                                            <!-- Classes will be loaded here -->
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="report-term-grade" class="block mb-1">ພາກຮຽນ</label>
+                                        <select id="report-term-grade" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                            <option value="1">ພາກຮຽນທີ 1</option>
+                                            <option value="2">ພາກຮຽນທີ 2</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <button id="generate-class-report" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg w-full">
+                                            <i class="fas fa-file-pdf mr-2"></i> ສ້າງລາຍງານ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <h3 class="text-lg font-semibold mb-4">ລາຍງານການເຂົ້າຮ່ວມ</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="report-class-attendance" class="block mb-1">ຫ້ອງຮຽນ</label>
+                                        <select id="report-class-attendance" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                            <option value="">ເລືອກຫ້ອງຮຽນ</option>
+                                            <!-- Classes will be loaded here -->
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="report-start-date" class="block mb-1">ແຕ່ວັນທີ</label>
+                                            <input type="date" id="report-start-date" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                        </div>
+                                        <div>
+                                            <label for="report-end-date" class="block mb-1">ຮອດວັນທີ</label>
+                                            <input type="date" id="report-end-date" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button id="generate-attendance-report" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg w-full">
+                                            <i class="fas fa-file-pdf mr-2"></i> ສ້າງລາຍງານ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                                <h3 class="text-lg font-semibold mb-4">ລາຍງານຜົນການຮຽນຂອງນັກຮຽນ</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="report-student" class="block mb-1">ຊອກຫານັກຮຽນ</label>
+                                        <input type="text" id="report-student-search" placeholder="ຊື່ ຫຼື ລະຫັດນັກຮຽນ..." class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                    </div>
+                                    <div id="report-student-list" class="max-h-32 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded-lg hidden">
+                                        <!-- Search results will appear here -->
+                                    </div>
+                                    <div>
+                                        <label for="report-student-id" class="block mb-1">ລະຫັດນັກຮຽນທີ່ເລືອກ</label>
+                                        <input type="text" id="report-student-id" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700" readonly>
+                                    </div>
+                                    <div>
+                                        <label for="report-term-student" class="block mb-1">ພາກຮຽນ</label>
+                                        <select id="report-term-student" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                            <option value="1">ພາກຮຽນທີ 1</option>
+                                            <option value="2">ພາກຮຽນທີ 2</option>
+                                            <option value="all">ທັງໝົດ</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <button id="generate-student-report" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg w-full">
+                                            <i class="fas fa-file-pdf mr-2"></i> ສ້າງລາຍງານ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Settings Section -->
+                    <section id="settings" class="content-section hidden">
+                        <h2 class="text-2xl font-bold mb-6">ຕັ້ງຄ່າລະບົບ</h2>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+                            <h3 class="text-lg font-semibold mb-4">ຂໍ້ມູນໂຮງຮຽນ</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block mb-1">ຊື່ໂຮງຮຽນ</label>
+                                    <input type="text" value="ໂຮງຮຽນຕົວຢ່າງ" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                </div>
+                                <div>
+                                    <label class="block mb-1">ເບີໂທຕິດຕໍ່</label>
+                                    <input type="text" value="020 1234 5678" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                </div>
+                                <div>
+                                    <label class="block mb-1">ອີເມວຕິດຕໍ່</label>
+                                    <input type="email" value="contact@school.edu.la" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                </div>
+                                <div>
+                                    <label class="block mb-1">ທີ່ຢູ່</label>
+                                    <input type="text" value="ນະຄອນຫຼວງວຽງຈັນ, ລາວ" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+                            <h3 class="text-lg font-semibold mb-4">ສະເກນຄະແນນ</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left">ເກຣດ</th>
+                                            <th class="px-4 py-2 text-left">ຄະແນນຕ່ຳສຸດ</th>
+                                            <th class="px-4 py-2 text-left">ຄຳອະທິບາຍ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="px-4 py-2">A</td>
+                                            <td class="px-4 py-2">90</td>
+                                            <td class="px-4 py-2">ດີເລີດ</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">B</td>
+                                            <td class="px-4 py-2">80</td>
+                                            <td class="px-4 py-2">ດີຫຼາຍ</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">C</td>
+                                            <td class="px-4 py-2">70</td>
+                                            <td class="px-4 py-2">ດີ</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">D</td>
+                                            <td class="px-4 py-2">60</td>
+                                            <td class="px-4 py-2">ຜ່ານ</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">F</td>
+                                            <td class="px-4 py-2">0</td>
+                                            <td class="px-4 py-2">ບໍ່ຜ່ານ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+                            <h3 class="text-lg font-semibold mb-4">ການແຈ້ງເຕືອນ</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span>ແຈ້ງເຕືອນເມື່ອນັກຮຽນຂາດຮຽນຕິດຕໍ່ກັນຫຼາຍກວ່າ 3 ວັນ</span>
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" value="" class="sr-only peer" checked>
+                                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>ແຈ້ງເຕືອນເມື່ອນັກຮຽນມີຜົນການຮຽນຕ່ຳກວ່າເກນ</span>
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" value="" class="sr-only peer" checked>
+                                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>ແຈ້ງເຕືອນລາຍງານສະຫຼຸບປະຈຳເດືອນ</span>
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" value="" class="sr-only peer">
+                                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg">ບັນທຶກການຕັ້ງຄ່າ</button>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal container -->
+    <div id="modal-container" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <!-- Student Modal -->
+        <div id="student-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="student-modal-title">ເພີ່ມນັກຮຽນໃໝ່</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="student-form" class="space-y-4">
+                <input type="hidden" id="student-id">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-1">
+                        <div class="mb-4">
+                            <label class="block mb-1">ຮູບນັກຮຽນ</label>
+                            <div class="w-32 h-32 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center mx-auto">
+                                <i class="fas fa-user-graduate text-4xl text-gray-400"></i>
+                            </div>
+                            <div class="mt-2 text-center">
+                                <button type="button" class="text-sm text-primary">ອັບໂຫຼດຮູບ</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="student-status" class="block mb-1">ສະຖານະ</label>
+                            <select id="student-status" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                <option value="active">ກຳລັງຮຽນ</option>
+                                <option value="suspended">ຢຸດຮຽນຊົ່ວຄາວ</option>
+                                <option value="graduated">ຈົບການສຶກສາ</option>
+                                <option value="transferred">ຍ້າຍໂຮງຮຽນ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="student-id-number" class="block mb-1">ລະຫັດນັກຮຽນ</label>
+                                <input type="text" id="student-id-number" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label for="student-class-select" class="block mb-1">ຫ້ອງຮຽນ</label>
+                                <select id="student-class-select" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <!-- Classes will be loaded here -->
+                                </select>
+                            </div>
+                            <div>
+                                <label for="student-first-name" class="block mb-1">ຊື່</label>
+                                <input type="text" id="student-first-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label for="student-last-name" class="block mb-1">ນາມສະກຸນ</label>
+                                <input type="text" id="student-last-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label for="student-gender" class="block mb-1">ເພດ</label>
+                                <select id="student-gender" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="ຊາຍ">ຊາຍ</option>
+                                    <option value="ຍິງ">ຍິງ</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="student-birthdate" class="block mb-1">ວັນເດືອນປີເກີດ</label>
+                                <input type="date" id="student-birthdate" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="student-address" class="block mb-1">ທີ່ຢູ່</label>
+                                <textarea id="student-address" rows="2" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700"></textarea>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold mt-4 mb-2">ຂໍ້ມູນຕິດຕໍ່ຜູ້ປົກຄອງ</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="parent-name" class="block mb-1">ຊື່ຜູ້ປົກຄອງ</label>
+                                <input type="text" id="parent-name" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label for="parent-phone" class="block mb-1">ເບີໂທຕິດຕໍ່</label>
+                                <input type="tel" id="parent-phone" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label for="parent-relationship" class="block mb-1">ຄວາມສຳພັນ</label>
+                                <select id="parent-relationship" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="parent">ພໍ່ແມ່</option>
+                                    <option value="guardian">ຜູ້ປົກຄອງ</option>
+                                    <option value="relative">ຍາດພີ່ນ້ອງ</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="parent-email" class="block mb-1">ອີເມວ</label>
+                                <input type="email" id="parent-email" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="button" class="modal-close mr-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg">ບັນທຶກ</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Class Modal -->
+        <div id="class-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="class-modal-title">ເພີ່ມຫ້ອງຮຽນໃໝ່</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="class-form" class="space-y-4">
+                <input type="hidden" id="class-id">
+                <div>
+                    <label for="class-name" class="block mb-1">ຊື່ຫ້ອງຮຽນ</label>
+                    <input type="text" id="class-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="class-teacher" class="block mb-1">ຄູປະຈຳຫ້ອງ</label>
+                    <select id="class-teacher" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                        <!-- Teachers will be loaded here -->
+                    </select>
+                </div>
+                <div>
+                    <label for="class-room" class="block mb-1">ຫ້ອງຮຽນ</label>
+                    <input type="text" id="class-room" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="class-notes" class="block mb-1">ໝາຍເຫດ</label>
+                    <textarea id="class-notes" rows="2" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700"></textarea>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="button" class="modal-close mr-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg">ບັນທຶກ</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Subject Modal -->
+        <div id="subject-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="subject-modal-title">ເພີ່ມວິຊາຮຽນໃໝ່</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="subject-form" class="space-y-4">
+                <input type="hidden" id="subject-id">
+                <div>
+                    <label for="subject-name" class="block mb-1">ຊື່ວິຊາຮຽນ</label>
+                    <input type="text" id="subject-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="subject-teacher" class="block mb-1">ຄູສອນ</label>
+                    <select id="subject-teacher" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                        <!-- Teachers will be loaded here -->
+                    </select>
+                </div>
+                <div>
+                    <label for="subject-class" class="block mb-1">ຫ້ອງຮຽນ</label>
+                    <select id="subject-class" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                        <!-- Classes will be loaded here -->
+                    </select>
+                </div>
+                <div>
+                    <label for="subject-description" class="block mb-1">ຄຳອະທິບາຍ</label>
+                    <textarea id="subject-description" rows="2" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700"></textarea>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="button" class="modal-close mr-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg">ບັນທຶກ</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Teacher Modal -->
+        <div id="teacher-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="teacher-modal-title">ເພີ່ມຄູອາຈານໃໝ່</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="teacher-form" class="space-y-4">
+                <input type="hidden" id="teacher-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="teacher-first-name" class="block mb-1">ຊື່</label>
+                        <input type="text" id="teacher-first-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="teacher-last-name" class="block mb-1">ນາມສະກຸນ</label>
+                        <input type="text" id="teacher-last-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="teacher-subject" class="block mb-1">ວິຊາສອນ</label>
+                        <input type="text" id="teacher-subject" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="teacher-phone" class="block mb-1">ເບີໂທຕິດຕໍ່</label>
+                        <input type="tel" id="teacher-phone" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="teacher-email" class="block mb-1">ອີເມວ</label>
+                        <input type="email" id="teacher-email" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="teacher-qualification" class="block mb-1">ວຸດທິການສຶກສາ</label>
+                        <select id="teacher-qualification" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                            <option value="bachelor">ປະລິນຍາຕີ</option>
+                            <option value="master">ປະລິນຍາໂທ</option>
+                            <option value="phd">ປະລິນຍາເອກ</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="teacher-address" class="block mb-1">ທີ່ຢູ່</label>
+                    <textarea id="teacher-address" rows="2" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700"></textarea>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="button" class="modal-close mr-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg">ບັນທຶກ</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="delete-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md hidden">
+            <div class="text-center">
+                <div class="mb-4 text-red-500">
+                    <i class="fas fa-exclamation-triangle text-5xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2" id="delete-title">ຢືນຢັນການລຶບ</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6" id="delete-message">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້.</p>
+                <div class="flex justify-center space-x-4">
+                    <button type="button" class="modal-close px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="button" id="confirm-delete" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">ລຶບ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated Database using localStorage
+        const DB = {
+            // Initialize the database if it doesn't exist
+            init() {
+                if (!localStorage.getItem('students')) {
+                    localStorage.setItem('students', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('classes')) {
+                    localStorage.setItem('classes', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('subjects')) {
+                    localStorage.setItem('subjects', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('teachers')) {
+                    localStorage.setItem('teachers', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('grades')) {
+                    localStorage.setItem('grades', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('attendance')) {
+                    localStorage.setItem('attendance', JSON.stringify([]));
+                }
+                
+                // If empty, populate with sample data
+                this.loadSampleData();
+            },
+            
+            // Load sample data if the database is empty
+            loadSampleData() {
+                const students = this.getStudents();
+                const classes = this.getClasses();
+                const subjects = this.getSubjects();
+                const teachers = this.getTeachers();
+                
+                if (teachers.length === 0) {
+                    const sampleTeachers = [
+                        { id: 't1', firstName: 'ສຸລິຍາ', lastName: 'ວົງສຸພາ', subject: 'ຄະນິດສາດ', phone: '020 1234 5678', email: 'suriya@example.com', qualification: 'master', address: 'ນະຄອນຫຼວງວຽງຈັນ' },
+                        { id: 't2', firstName: 'ຄຳມີ', lastName: 'ສີວິໄລ', subject: 'ພາສາລາວ', phone: '020 8765 4321', email: 'khammy@example.com', qualification: 'bachelor', address: 'ນະຄອນຫຼວງວຽງຈັນ' },
+                        { id: 't3', firstName: 'ວັນນະສິນ', lastName: 'ສຸຂດີ', subject: 'ວິທະຍາສາດ', phone: '020 5555 9999', email: 'vannaxin@example.com', qualification: 'master', address: 'ນະຄອນຫຼວງວຽງຈັນ' },
+                        { id: 't4', firstName: 'ພູວຽງ', lastName: 'ສຸພານຸວົງ', subject: 'ພາສາອັງກິດ', phone: '020 7777 3333', email: 'phuvieng@example.com', qualification: 'bachelor', address: 'ນະຄອນຫຼວງວຽງຈັນ' }
+                    ];
+                    localStorage.setItem('teachers', JSON.stringify(sampleTeachers));
+                }
+                
+                if (classes.length === 0) {
+                    const sampleClasses = [
+                        { id: 'c1', name: 'ມ.1/1', teacher: 't1', room: '101', notes: '' },
+                        { id: 'c2', name: 'ມ.1/2', teacher: 't2', room: '102', notes: '' },
+                        { id: 'c3', name: 'ມ.2/1', teacher: 't3', room: '201', notes: '' },
+                        { id: 'c4', name: 'ມ.2/2', teacher: 't4', room: '202', notes: '' }
+                    ];
+                    localStorage.setItem('classes', JSON.stringify(sampleClasses));
+                }
+                
+                if (subjects.length === 0) {
+                    const sampleSubjects = [
+                        { id: 's1', name: 'ຄະນິດສາດ', teacher: 't1', class: 'c1', description: 'ວິຊາຄະນິດສາດພື້ນຖານ' },
+                        { id: 's2', name: 'ພາສາລາວ', teacher: 't2', class: 'c1', description: 'ພາສາລາວ ແລະ ວັນນະຄະດີ' },
+                        { id: 's3', name: 'ວິທະຍາສາດ', teacher: 't3', class: 'c1', description: 'ຄວາມຮູ້ທາງດ້ານວິທະຍາສາດທຳມະຊາດ' },
+                        { id: 's4', name: 'ພາສາອັງກິດ', teacher: 't4', class: 'c1', description: 'ພາສາອັງກິດພື້ນຖານ' },
+                        { id: 's5', name: 'ຄະນິດສາດ', teacher: 't1', class: 'c2', description: 'ວິຊາຄະນິດສາດພື້ນຖານ' },
+                        { id: 's6', name: 'ພາສາລາວ', teacher: 't2', class: 'c2', description: 'ພາສາລາວ ແລະ ວັນນະຄະດີ' },
+                        { id: 's7', name: 'ວິທະຍາສາດ', teacher: 't3', class: 'c3', description: 'ຄວາມຮູ້ທາງດ້ານວິທະຍາສາດທຳມະຊາດ' },
+                        { id: 's8', name: 'ພາສາອັງກິດ', teacher: 't4', class: 'c3', description: 'ພາສາອັງກິດພື້ນຖານ' }
+                    ];
+                    localStorage.setItem('subjects', JSON.stringify(sampleSubjects));
+                }
+                
+                if (students.length === 0) {
+                    const sampleStudents = [
+                        { id: 'st1', idNumber: '230001', firstName: 'ສົມສະໄໝ', lastName: 'ພູທອງ', gender: 'ຊາຍ', birthdate: '2010-05-15', class: 'c1', status: 'active', address: 'ບ້ານສີຖານ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ທອງສຸກ ພູທອງ', phone: '020 1234 5678', relationship: 'parent', email: '' } },
+                        { id: 'st2', idNumber: '230002', firstName: 'ອຸທຸມພອນ', lastName: 'ເພັດດາລາ', gender: 'ຍິງ', birthdate: '2010-07-22', class: 'c1', status: 'active', address: 'ບ້ານສີສັງວານ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ສຸກສະຫວັນ ເພັດດາລາ', phone: '020 8765 4321', relationship: 'parent', email: '' } },
+                        { id: 'st3', idNumber: '230003', firstName: 'ວັນທອງ', lastName: 'ສຸວັນນະວົງ', gender: 'ຊາຍ', birthdate: '2010-03-10', class: 'c1', status: 'active', address: 'ບ້ານໜອງບົວ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ຄຳຫຼ້າ ສຸວັນນະວົງ', phone: '020 5555 9999', relationship: 'parent', email: '' } },
+                        { id: 'st4', idNumber: '230004', firstName: 'ສຸກສາຄອນ', lastName: 'ວິໄລພອນ', gender: 'ຍິງ', birthdate: '2009-11-05', class: 'c2', status: 'active', address: 'ບ້ານນາໄຊ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ພູວັນ ວິໄລພອນ', phone: '020 7777 3333', relationship: 'parent', email: '' } },
+                        { id: 'st5', idNumber: '230005', firstName: 'ໄຊຍະສິດ', lastName: 'ສີຫຼ້າ', gender: 'ຊາຍ', birthdate: '2009-09-17', class: 'c2', status: 'active', address: 'ບ້ານດົງນາໂຊກ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ເພັດສະຫວັນ ສີຫຼ້າ', phone: '020 2222 6666', relationship: 'parent', email: '' } },
+                        { id: 'st6', idNumber: '230006', firstName: 'ໄມວັນ', lastName: 'ສຸຂະວົງ', gender: 'ຍິງ', birthdate: '2009-12-30', class: 'c2', status: 'active', address: 'ບ້ານໂນນສະຫວ່າງ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ຄຳຕັນ ສຸຂະວົງ', phone: '020 3333 8888', relationship: 'parent', email: '' } },
+                        { id: 'st7', idNumber: '220001', firstName: 'ທອງລົມ', lastName: 'ສຸດທິວົງ', gender: 'ຊາຍ', birthdate: '2008-02-12', class: 'c3', status: 'active', address: 'ບ້ານໂພນທັນ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ສົມພົງ ສຸດທິວົງ', phone: '020 4444 7777', relationship: 'parent', email: '' } },
+                        { id: 'st8', idNumber: '220002', firstName: 'ສຸກສະໄໝ', lastName: 'ພັນທະວົງ', gender: 'ຍິງ', birthdate: '2008-06-25', class: 'c3', status: 'active', address: 'ບ້ານດົງໂດກ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ບຸນມີ ພັນທະວົງ', phone: '020 9999 1111', relationship: 'parent', email: '' } },
+                        { id: 'st9', idNumber: '220003', firstName: 'ບຸນມີ', lastName: 'ສີທອງ', gender: 'ຊາຍ', birthdate: '2008-08-10', class: 'c3', status: 'active', address: 'ບ້ານທ່າງ່ອນ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ສົມຈິດ ສີທອງ', phone: '020 6666 2222', relationship: 'parent', email: '' } },
+                        { id: 'st10', idNumber: '220004', firstName: 'ສອນສະຫວັນ', lastName: 'ໄຊຍະຄຳ', gender: 'ຍິງ', birthdate: '2008-04-18', class: 'c4', status: 'active', address: 'ບ້ານໂນນສະຫວັນ, ນະຄອນຫຼວງວຽງຈັນ', parent: { name: 'ລັດສະໝີ ໄຊຍະຄຳ', phone: '020 8888 4444', relationship: 'parent', email: '' } }
+                    ];
+                    localStorage.setItem('students', JSON.stringify(sampleStudents));
+                }
+                
+                // Sample grades
+                const grades = this.getGrades();
+                if (grades.length === 0) {
+                    const sampleGrades = [
+                        { id: 'g1', student: 'st1', subject: 's1', term: '1', quiz: 16, midterm: 25, final: 40, total: 81, grade: 'B' },
+                        { id: 'g2', student: 'st1', subject: 's2', term: '1', quiz: 18, midterm: 28, final: 45, total: 91, grade: 'A' },
+                        { id: 'g3', student: 'st1', subject: 's3', term: '1', quiz: 15, midterm: 22, final: 38, total: 75, grade: 'C' },
+                        { id: 'g4', student: 'st1', subject: 's4', term: '1', quiz: 17, midterm: 26, final: 42, total: 85, grade: 'B' },
+                        { id: 'g5', student: 'st2', subject: 's1', term: '1', quiz: 19, midterm: 27, final: 46, total: 92, grade: 'A' },
+                        { id: 'g6', student: 'st2', subject: 's2', term: '1', quiz: 16, midterm: 24, final: 40, total: 80, grade: 'B' },
+                        { id: 'g7', student: 'st2', subject: 's3', term: '1', quiz: 17, midterm: 26, final: 41, total: 84, grade: 'B' },
+                        { id: 'g8', student: 'st2', subject: 's4', term: '1', quiz: 18, midterm: 28, final: 45, total: 91, grade: 'A' },
+                        { id: 'g9', student: 'st3', subject: 's1', term: '1', quiz: 14, midterm: 21, final: 35, total: 70, grade: 'C' },
+                        { id: 'g10', student: 'st3', subject: 's2', term: '1', quiz: 15, midterm: 22, final: 36, total: 73, grade: 'C' }
+                    ];
+                    localStorage.setItem('grades', JSON.stringify(sampleGrades));
+                }
+                
+                // Sample attendance
+                const attendance = this.getAttendance();
+                if (attendance.length === 0) {
+                    const today = new Date();
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    
+                    const sampleAttendance = [
+                        { id: 'a1', class: 'c1', date: today.toISOString().split('T')[0], records: [
+                            { student: 'st1', status: 'present', notes: '' },
+                            { student: 'st2', status: 'present', notes: '' },
+                            { student: 'st3', status: 'absent', notes: 'ລາປ່ວຍ' }
+                        ]},
+                        { id: 'a2', class: 'c1', date: yesterday.toISOString().split('T')[0], records: [
+                            { student: 'st1', status: 'present', notes: '' },
+                            { student: 'st2', status: 'present', notes: '' },
+                            { student: 'st3', status: 'present', notes: '' }
+                        ]},
+                        { id: 'a3', class: 'c2', date: today.toISOString().split('T')[0], records: [
+                            { student: 'st4', status: 'present', notes: '' },
+                            { student: 'st5', status: 'late', notes: 'ມາຊ້າ 15 ນາທີ' },
+                            { student: 'st6', status: 'present', notes: '' }
+                        ]}
+                    ];
+                    localStorage.setItem('attendance', JSON.stringify(sampleAttendance));
+                }
+            },
+            
+            // CRUD operations for students
+            getStudents() {
+                return JSON.parse(localStorage.getItem('students') || '[]');
+            },
+            
+            getStudent(id) {
+                const students = this.getStudents();
+                return students.find(student => student.id === id);
+            },
+            
+            getStudentsByClass(classId) {
+                const students = this.getStudents();
+                return students.filter(student => student.class === classId && student.status === 'active');
+            },
+            
+            saveStudent(student) {
+                const students = this.getStudents();
+                if (!student.id) {
+                    // New student
+                    student.id = 'st' + Date.now();
+                    students.push(student);
+                } else {
+                    // Update existing student
+                    const index = students.findIndex(s => s.id === student.id);
+                    if (index !== -1) {
+                        students[index] = student;
+                    }
+                }
+                localStorage.setItem('students', JSON.stringify(students));
+                return student;
+            },
+            
+            deleteStudent(id) {
+                let students = this.getStudents();
+                students = students.filter(student => student.id !== id);
+                localStorage.setItem('students', JSON.stringify(students));
+            },
+            
+            // CRUD operations for classes
+            getClasses() {
+                return JSON.parse(localStorage.getItem('classes') || '[]');
+            },
+            
+            getClass(id) {
+                const classes = this.getClasses();
+                return classes.find(cls => cls.id === id);
+            },
+            
+            saveClass(cls) {
+                const classes = this.getClasses();
+                if (!cls.id) {
+                    // New class
+                    cls.id = 'c' + Date.now();
+                    classes.push(cls);
+                } else {
+                    // Update existing class
+                    const index = classes.findIndex(c => c.id === cls.id);
+                    if (index !== -1) {
+                        classes[index] = cls;
+                    }
+                }
+                localStorage.setItem('classes', JSON.stringify(classes));
+                return cls;
+            },
+            
+            deleteClass(id) {
+                let classes = this.getClasses();
+                classes = classes.filter(cls => cls.id !== id);
+                localStorage.setItem('classes', JSON.stringify(classes));
+            },
+            
+            // CRUD operations for subjects
+            getSubjects() {
+                return JSON.parse(localStorage.getItem('subjects') || '[]');
+            },
+            
+            getSubject(id) {
+                const subjects = this.getSubjects();
+                return subjects.find(subject => subject.id === id);
+            },
+            
+            getSubjectsByClass(classId) {
+                const subjects = this.getSubjects();
+                return subjects.filter(subject => subject.class === classId);
+            },
+            
+            saveSubject(subject) {
+                const subjects = this.getSubjects();
+                if (!subject.id) {
+                    // New subject
+                    subject.id = 's' + Date.now();
+                    subjects.push(subject);
+                } else {
+                    // Update existing subject
+                    const index = subjects.findIndex(s => s.id === subject.id);
+                    if (index !== -1) {
+                        subjects[index] = subject;
+                    }
+                }
+                localStorage.setItem('subjects', JSON.stringify(subjects));
+                return subject;
+            },
+            
+            deleteSubject(id) {
+                let subjects = this.getSubjects();
+                subjects = subjects.filter(subject => subject.id !== id);
+                localStorage.setItem('subjects', JSON.stringify(subjects));
+            },
+            
+            // CRUD operations for teachers
+            getTeachers() {
+                return JSON.parse(localStorage.getItem('teachers') || '[]');
+            },
+            
+            getTeacher(id) {
+                const teachers = this.getTeachers();
+                return teachers.find(teacher => teacher.id === id);
+            },
+            
+            saveTeacher(teacher) {
+                const teachers = this.getTeachers();
+                if (!teacher.id) {
+                    // New teacher
+                    teacher.id = 't' + Date.now();
+                    teachers.push(teacher);
+                } else {
+                    // Update existing teacher
+                    const index = teachers.findIndex(t => t.id === teacher.id);
+                    if (index !== -1) {
+                        teachers[index] = teacher;
+                    }
+                }
+                localStorage.setItem('teachers', JSON.stringify(teachers));
+                return teacher;
+            },
+            
+            deleteTeacher(id) {
+                let teachers = this.getTeachers();
+                teachers = teachers.filter(teacher => teacher.id !== id);
+                localStorage.setItem('teachers', JSON.stringify(teachers));
+            },
+            
+            // CRUD operations for grades
+            getGrades() {
+                return JSON.parse(localStorage.getItem('grades') || '[]');
+            },
+            
+            getGradesByStudentAndSubject(studentId, subjectId, term) {
+                const grades = this.getGrades();
+                return grades.find(grade => grade.student === studentId && grade.subject === subjectId && grade.term === term);
+            },
+            
+            getGradesBySubject(subjectId, term) {
+                const grades = this.getGrades();
+                return grades.filter(grade => grade.subject === subjectId && grade.term === term);
+            },
+            
+            getGradesByStudent(studentId, term) {
+                const grades = this.getGrades();
+                if (term === 'all') {
+                    return grades.filter(grade => grade.student === studentId);
+                }
+                return grades.filter(grade => grade.student === studentId && grade.term === term);
+            },
+            
+            saveGrade(grade) {
+                const grades = this.getGrades();
+                // Calculate total and grade
+                grade.total = (grade.quiz || 0) + (grade.midterm || 0) + (grade.final || 0);
+                grade.grade = this.calculateGrade(grade.total);
+                
+                const existingGrade = this.getGradesByStudentAndSubject(grade.student, grade.subject, grade.term);
+                
+                if (existingGrade) {
+                    // Update existing grade
+                    const index = grades.findIndex(g => g.id === existingGrade.id);
+                    if (index !== -1) {
+                        grade.id = existingGrade.id;
+                        grades[index] = grade;
+                    }
+                } else {
+                    // New grade
+                    grade.id = 'g' + Date.now();
+                    grades.push(grade);
+                }
+                
+                localStorage.setItem('grades', JSON.stringify(grades));
+                return grade;
+            },
+            
+            calculateGrade(total) {
+                if (total >= 90) return 'A';
+                if (total >= 80) return 'B';
+                if (total >= 70) return 'C';
+                if (total >= 60) return 'D';
+                return 'F';
+            },
+            
+            // CRUD operations for attendance
+            getAttendance() {
+                return JSON.parse(localStorage.getItem('attendance') || '[]');
+            },
+            
+            getAttendanceByClassAndDate(classId, date) {
+                const attendance = this.getAttendance();
+                return attendance.find(a => a.class === classId && a.date === date);
+            },
+            
+            getAttendanceByDateRange(classId, startDate, endDate) {
+                const attendance = this.getAttendance();
+                return attendance.filter(a => a.class === classId && a.date >= startDate && a.date <= endDate);
+            },
+            
+            saveAttendance(attendance) {
+                const allAttendance = this.getAttendance();
+                const existingAttendance = this.getAttendanceByClassAndDate(attendance.class, attendance.date);
+                
+                if (existingAttendance) {
+                    // Update existing attendance
+                    const index = allAttendance.findIndex(a => a.id === existingAttendance.id);
+                    if (index !== -1) {
+                        attendance.id = existingAttendance.id;
+                        allAttendance[index] = attendance;
+                    }
+                } else {
+                    // New attendance
+                    attendance.id = 'a' + Date.now();
+                    allAttendance.push(attendance);
+                }
+                
+                localStorage.setItem('attendance', JSON.stringify(allAttendance));
+                return attendance;
+            },
+            
+            // Calculate statistics
+            getStudentCount() {
+                const students = this.getStudents();
+                return students.filter(student => student.status === 'active').length;
+            },
+            
+            getClassCount() {
+                return this.getClasses().length;
+            },
+            
+            getSubjectCount() {
+                return this.getSubjects().length;
+            },
+            
+            getTeacherCount() {
+                return this.getTeachers().length;
+            },
+            
+            getAttendanceRate() {
+                const attendance = this.getAttendance();
+                let presentCount = 0;
+                let totalCount = 0;
+                
+                attendance.forEach(a => {
+                    a.records.forEach(record => {
+                        totalCount++;
+                        if (record.status === 'present') {
+                            presentCount++;
+                        }
+                    });
+                });
+                
+                return totalCount > 0 ? Math.round((presentCount / totalCount) * 100) : 0;
+            },
+            
+            getGradeAverages() {
+                const subjects = this.getSubjects();
+                const grades = this.getGrades();
+                const result = [];
+                
+                const uniqueSubjects = [...new Set(subjects.map(subject => subject.name))];
+                
+                uniqueSubjects.forEach(subjectName => {
+                    const subjectGrades = grades.filter(grade => {
+                        const subject = this.getSubject(grade.subject);
+                        return subject && subject.name === subjectName;
+                    });
+                    
+                    if (subjectGrades.length > 0) {
+                        const totals = subjectGrades.map(grade => grade.total);
+                        const avg = totals.reduce((sum, total) => sum + total, 0) / totals.length;
+                        const max = Math.max(...totals);
+                        const min = Math.min(...totals);
+                        
+                        result.push({
+                            subject: subjectName,
+                            average: Math.round(avg * 10) / 10,
+                            max,
+                            min,
+                            grade: this.calculateGrade(avg)
+                        });
+                    }
+                });
+                
+                return result;
+            },
+            
+            getRecentStudents(limit = 5) {
+                const students = this.getStudents();
+                return students.sort((a, b) => b.id.localeCompare(a.id)).slice(0, limit);
+            }
+        };
+
+        // Initialize the database
+        DB.init();
+
+        // UI Controller
+        const UI = {
+            // Cache DOM elements
+            init() {
+                // Navigation elements
+                this.navLinks = document.querySelectorAll('.nav-link');
+                this.contentSections = document.querySelectorAll('.content-section');
+                
+                // Dashboard elements
+                this.studentCount = document.getElementById('student-count');
+                this.classCount = document.getElementById('class-count');
+                this.subjectCount = document.getElementById('subject-count');
+                this.teacherCount = document.getElementById('teacher-count');
+                this.attendanceRate = document.getElementById('attendance-rate');
+                this.gradeAverages = document.getElementById('grade-averages');
+                this.recentStudents = document.getElementById('recent-students');
+                
+                // Students elements
+                this.studentsTable = document.getElementById('students-table');
+                this.addStudentBtn = document.getElementById('add-student-btn');
+                this.studentForm = document.getElementById('student-form');
+                this.studentModal = document.getElementById('student-modal');
+                this.studentModalTitle = document.getElementById('student-modal-title');
+                this.studentClassSelect = document.getElementById('student-class-select');
+                this.studentClassFilter = document.getElementById('student-class-filter');
+                
+                // Classes elements
+                this.classesTable = document.getElementById('classes-table');
+                this.addClassBtn = document.getElementById('add-class-btn');
+                this.classForm = document.getElementById('class-form');
+                this.classModal = document.getElementById('class-modal');
+                this.classModalTitle = document.getElementById('class-modal-title');
+                this.classTeacher = document.getElementById('class-teacher');
+                
+                // Subjects elements
+                this.subjectsTable = document.getElementById('subjects-table');
+                this.addSubjectBtn = document.getElementById('add-subject-btn');
+                this.subjectForm = document.getElementById('subject-form');
+                this.subjectModal = document.getElementById('subject-modal');
+                this.subjectModalTitle = document.getElementById('subject-modal-title');
+                this.subjectTeacher = document.getElementById('subject-teacher');
+                this.subjectClass = document.getElementById('subject-class');
+                
+                // Teachers elements
+                this.teachersTable = document.getElementById('teachers-table');
+                this.addTeacherBtn = document.getElementById('add-teacher-btn');
+                this.teacherForm = document.getElementById('teacher-form');
+                this.teacherModal = document.getElementById('teacher-modal');
+                this.teacherModalTitle = document.getElementById('teacher-modal-title');
+                
+                // Grades elements
+                this.gradeClass = document.getElementById('grade-class');
+                this.gradeSubject = document.getElementById('grade-subject');
+                this.gradeTerm = document.getElementById('grade-term');
+                this.loadGradesBtn = document.getElementById('load-grades-btn');
+                this.gradesTableContainer = document.getElementById('grades-table-container');
+                this.gradesTitle = document.getElementById('grades-title');
+                this.gradesTable = document.getElementById('grades-table');
+                this.saveGradesBtn = document.getElementById('save-grades-btn');
+                
+                // Attendance elements
+                this.attendanceClass = document.getElementById('attendance-class');
+                this.attendanceDate = document.getElementById('attendance-date');
+                this.loadAttendanceBtn = document.getElementById('load-attendance-btn');
+                this.attendanceTableContainer = document.getElementById('attendance-table-container');
+                this.attendanceTitle = document.getElementById('attendance-title');
+                this.attendanceTable = document.getElementById('attendance-table');
+                this.saveAttendanceBtn = document.getElementById('save-attendance-btn');
+                
+                // Report elements
+                this.reportClassGrade = document.getElementById('report-class-grade');
+                this.reportTermGrade = document.getElementById('report-term-grade');
+                this.generateClassReport = document.getElementById('generate-class-report');
+                this.reportClassAttendance = document.getElementById('report-class-attendance');
+                this.reportStartDate = document.getElementById('report-start-date');
+                this.reportEndDate = document.getElementById('report-end-date');
+                this.generateAttendanceReport = document.getElementById('generate-attendance-report');
+                this.reportStudentSearch = document.getElementById('report-student-search');
+                this.reportStudentList = document.getElementById('report-student-list');
+                this.reportStudentId = document.getElementById('report-student-id');
+                this.reportTermStudent = document.getElementById('report-term-student');
+                this.generateStudentReport = document.getElementById('generate-student-report');
+                
+                // Modal elements
+                this.modalContainer = document.getElementById('modal-container');
+                this.modalCloseButtons = document.querySelectorAll('.modal-close');
+                this.deleteModal = document.getElementById('delete-modal');
+                this.deleteTitle = document.getElementById('delete-title');
+                this.deleteMessage = document.getElementById('delete-message');
+                this.confirmDeleteBtn = document.getElementById('confirm-delete');
+                
+                // Dark mode toggle
+                this.darkModeToggle = document.getElementById('darkModeToggle');
+                
+                // Initialize event listeners
+                this.initEventListeners();
+                
+                // Set default attendance date to today
+                const today = new Date().toISOString().split('T')[0];
+                this.attendanceDate.value = today;
+                this.reportStartDate.value = today;
+                this.reportEndDate.value = today;
+                
+                // Load initial data
+                this.loadDashboard();
+            },
+            
+            // Set up event listeners
+            initEventListeners() {
+                // Navigation
+                this.navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        const section = link.getAttribute('data-section');
+                        this.showSection(section);
+                    });
+                });
+                
+                // Student form
+                this.addStudentBtn.addEventListener('click', () => this.showStudentModal());
+                this.studentForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveStudent();
+                });
+                
+                // Class form
+                this.addClassBtn.addEventListener('click', () => this.showClassModal());
+                this.classForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveClass();
+                });
+                
+                // Subject form
+                this.addSubjectBtn.addEventListener('click', () => this.showSubjectModal());
+                this.subjectForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveSubject();
+                });
+                
+                // Teacher form
+                this.addTeacherBtn.addEventListener('click', () => this.showTeacherModal());
+                this.teacherForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveTeacher();
+                });
+                
+                // Grades
+                this.gradeClass.addEventListener('change', () => {
+                    const classId = this.gradeClass.value;
+                    if (classId) {
+                        this.loadSubjectsForClass(classId, this.gradeSubject);
+                        this.gradeSubject.disabled = false;
+                        this.gradeTerm.disabled = false;
+                    } else {
+                        this.gradeSubject.disabled = true;
+                        this.gradeTerm.disabled = true;
+                    }
+                    this.updateLoadGradesButton();
+                });
+                
+                this.gradeSubject.addEventListener('change', () => {
+                    this.updateLoadGradesButton();
+                });
+                
+                this.gradeTerm.addEventListener('change', () => {
+                    this.updateLoadGradesButton();
+                });
+                
+                this.loadGradesBtn.addEventListener('click', () => {
+                    this.loadGrades();
+                });
+                
+                this.saveGradesBtn.addEventListener('click', () => {
+                    this.saveGrades();
+                });
+                
+                // Attendance
+                this.attendanceClass.addEventListener('change', () => {
+                    this.updateLoadAttendanceButton();
+                });
+                
+                this.attendanceDate.addEventListener('change', () => {
+                    this.updateLoadAttendanceButton();
+                });
+                
+                this.loadAttendanceBtn.addEventListener('click', () => {
+                    this.loadAttendance();
+                });
+                
+                this.saveAttendanceBtn.addEventListener('click', () => {
+                    this.saveAttendance();
+                });
+                
+                // Reports
+                this.reportStudentSearch.addEventListener('input', () => {
+                    this.searchStudents();
+                });
+                
+                this.generateClassReport.addEventListener('click', () => {
+                    this.generateClassGradeReport();
+                });
+                
+                this.generateAttendanceReport.addEventListener('click', () => {
+                    this.generateAttendanceReport();
+                });
+                
+                this.generateStudentReport.addEventListener('click', () => {
+                    this.generateStudentReport();
+                });
+                
+                // Modal close buttons
+                this.modalCloseButtons.forEach(button => {
+                    button.addEventListener('click', () => this.closeModal());
+                });
+                
+                // Delete confirmation
+                this.confirmDeleteBtn.addEventListener('click', () => {
+                    const type = this.confirmDeleteBtn.getAttribute('data-type');
+                    const id = this.confirmDeleteBtn.getAttribute('data-id');
+                    this.confirmDelete(type, id);
+                });
+                
+                // Dark mode toggle
+                this.darkModeToggle.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                });
+            },
+            
+            // Show selected section
+            showSection(sectionId) {
+                // Update navigation links
+                this.navLinks.forEach(link => {
+                    if (link.getAttribute('data-section') === sectionId) {
+                        link.classList.add('bg-primary', 'text-white');
+                    } else {
+                        link.classList.remove('bg-primary', 'text-white');
+                    }
+                });
+                
+                // Show selected section, hide others
+                this.contentSections.forEach(section => {
+                    if (section.id === sectionId) {
+                        section.classList.remove('hidden');
+                        section.classList.add('slide-in');
+                        
+                        // Load section data
+                        if (sectionId === 'dashboard') {
+                            this.loadDashboard();
+                        } else if (sectionId === 'students') {
+                            this.loadStudents();
+                        } else if (sectionId === 'classes') {
+                            this.loadClasses();
+                            this.loadSubjects();
+                            this.loadTeachers();
+                        } else if (sectionId === 'grades') {
+                            this.loadClassesForSelect(this.gradeClass);
+                        } else if (sectionId === 'attendance') {
+                            this.loadClassesForSelect(this.attendanceClass);
+                        } else if (sectionId === 'reports') {
+                            this.loadClassesForSelect(this.reportClassGrade);
+                            this.loadClassesForSelect(this.reportClassAttendance);
+                        }
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+            },
+            
+            // Load dashboard data
+            loadDashboard() {
+                this.studentCount.textContent = DB.getStudentCount();
+                this.classCount.textContent = DB.getClassCount();
+                this.subjectCount.textContent = DB.getSubjectCount();
+                this.teacherCount.textContent = DB.getTeacherCount();
+                this.attendanceRate.textContent = DB.getAttendanceRate() + '%';
+                
+                // Load grade averages
+                const averages = DB.getGradeAverages();
+                if (averages.length > 0) {
+                    let html = '';
+                    averages.forEach(avg => {
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${avg.subject}</td>
+                                <td class="px-4 py-2">${avg.grade} (${avg.average})</td>
+                                <td class="px-4 py-2">${avg.max}</td>
+                                <td class="px-4 py-2">${avg.min}</td>
+                            </tr>
+                        `;
+                    });
+                    this.gradeAverages.innerHTML = html;
+                } else {
+                    this.gradeAverages.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="4">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+                
+                // Load recent students
+                const recentStudents = DB.getRecentStudents();
+                if (recentStudents.length > 0) {
+                    let html = '';
+                    recentStudents.forEach(student => {
+                        const cls = DB.getClass(student.class);
+                        const className = cls ? cls.name : '';
+                        
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${student.idNumber}</td>
+                                <td class="px-4 py-2">${student.firstName} ${student.lastName}</td>
+                                <td class="px-4 py-2">${className}</td>
+                                <td class="px-4 py-2">${student.gender}</td>
+                                <td class="px-4 py-2">${this.formatDate(student.birthdate)}</td>
+                                <td class="px-4 py-2"><span class="${this.getStatusClass(student.status)}">${this.translateStatus(student.status)}</span></td>
+                            </tr>
+                        `;
+                    });
+                    this.recentStudents.innerHTML = html;
+                } else {
+                    this.recentStudents.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="6">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load students data
+            loadStudents() {
+                const students = DB.getStudents();
+                
+                // Load class filter
+                this.loadClassesForSelect(this.studentClassFilter);
+                
+                if (students.length > 0) {
+                    let html = '';
+                    students.forEach(student => {
+                        const cls = DB.getClass(student.class);
+                        const className = cls ? cls.name : '';
+                        
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${student.idNumber}</td>
+                                <td class="px-4 py-2">
+                                    <div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user-graduate text-gray-400"></i>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2">${student.firstName} ${student.lastName}</td>
+                                <td class="px-4 py-2">${className}</td>
+                                <td class="px-4 py-2">${student.gender}</td>
+                                <td class="px-4 py-2">${this.formatDate(student.birthdate)}</td>
+                                <td class="px-4 py-2"><span class="${this.getStatusClass(student.status)}">${this.translateStatus(student.status)}</span></td>
+                                <td class="px-4 py-2">
+                                    <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="UI.editStudent('${student.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800" onclick="UI.showDeleteModal('student', '${student.id}', '${student.firstName} ${student.lastName}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    this.studentsTable.innerHTML = html;
+                } else {
+                    this.studentsTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="8">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load classes data
+            loadClasses() {
+                const classes = DB.getClasses();
+                
+                if (classes.length > 0) {
+                    let html = '';
+                    classes.forEach(cls => {
+                        const teacher = DB.getTeacher(cls.teacher);
+                        const teacherName = teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
+                        const studentCount = DB.getStudentsByClass(cls.id).length;
+                        
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${cls.id}</td>
+                                <td class="px-4 py-2">${cls.name}</td>
+                                <td class="px-4 py-2">${teacherName}</td>
+                                <td class="px-4 py-2">${studentCount}</td>
+                                <td class="px-4 py-2">
+                                    <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="UI.editClass('${cls.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800" onclick="UI.showDeleteModal('class', '${cls.id}', '${cls.name}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    this.classesTable.innerHTML = html;
+                } else {
+                    this.classesTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="5">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load subjects data
+            loadSubjects() {
+                const subjects = DB.getSubjects();
+                
+                if (subjects.length > 0) {
+                    let html = '';
+                    subjects.forEach(subject => {
+                        const teacher = DB.getTeacher(subject.teacher);
+                        const teacherName = teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
+                        const cls = DB.getClass(subject.class);
+                        const className = cls ? cls.name : '';
+                        
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${subject.id}</td>
+                                <td class="px-4 py-2">${subject.name}</td>
+                                <td class="px-4 py-2">${teacherName}</td>
+                                <td class="px-4 py-2">${className}</td>
+                                <td class="px-4 py-2">
+                                    <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="UI.editSubject('${subject.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800" onclick="UI.showDeleteModal('subject', '${subject.id}', '${subject.name}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    this.subjectsTable.innerHTML = html;
+                } else {
+                    this.subjectsTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="5">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load teachers data
+            loadTeachers() {
+                const teachers = DB.getTeachers();
+                
+                if (teachers.length > 0) {
+                    let html = '';
+                    teachers.forEach(teacher => {
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${teacher.id}</td>
+                                <td class="px-4 py-2">${teacher.firstName} ${teacher.lastName}</td>
+                                <td class="px-4 py-2">${teacher.subject}</td>
+                                <td class="px-4 py-2">${teacher.phone}</td>
+                                <td class="px-4 py-2">
+                                    <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="UI.editTeacher('${teacher.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800" onclick="UI.showDeleteModal('teacher', '${teacher.id}', '${teacher.firstName} ${teacher.lastName}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    this.teachersTable.innerHTML = html;
+                } else {
+                    this.teachersTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="5">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load classes for select
+            loadClassesForSelect(selectElement) {
+                const classes = DB.getClasses();
+                
+                let html = '<option value="">ເລືອກຫ້ອງຮຽນ</option>';
+                classes.forEach(cls => {
+                    html += `<option value="${cls.id}">${cls.name}</option>`;
+                });
+                
+                selectElement.innerHTML = html;
+            },
+            
+            // Load subjects for a class
+            loadSubjectsForClass(classId, selectElement) {
+                const subjects = DB.getSubjectsByClass(classId);
+                
+                let html = '<option value="">ເລືອກວິຊາຮຽນ</option>';
+                subjects.forEach(subject => {
+                    html += `<option value="${subject.id}">${subject.name}</option>`;
+                });
+                
+                selectElement.innerHTML = html;
+            },
+            
+            // Load teachers for select
+            loadTeachersForSelect(selectElement) {
+                const teachers = DB.getTeachers();
+                
+                let html = '<option value="">ເລືອກຄູອາຈານ</option>';
+                teachers.forEach(teacher => {
+                    html += `<option value="${teacher.id}">${teacher.firstName} ${teacher.lastName}</option>`;
+                });
+                
+                selectElement.innerHTML = html;
+            },
+            
+            // Update Load Grades button status
+            updateLoadGradesButton() {
+                const classId = this.gradeClass.value;
+                const subjectId = this.gradeSubject.value;
+                const term = this.gradeTerm.value;
+                
+                this.loadGradesBtn.disabled = !classId || !subjectId || !term;
+            },
+            
+            // Load grades
+            loadGrades() {
+                const classId = this.gradeClass.value;
+                const subjectId = this.gradeSubject.value;
+                const term = this.gradeTerm.value;
+                
+                if (!classId || !subjectId || !term) return;
+                
+                const subject = DB.getSubject(subjectId);
+                const cls = DB.getClass(classId);
+                
+                if (!subject || !cls) return;
+                
+                this.gradesTitle.textContent = `ຄະແນນວິຊາ ${subject.name} - ${cls.name} - ພາກຮຽນທີ ${term}`;
+                
+                const students = DB.getStudentsByClass(classId);
+                
+                let html = '';
+                students.forEach(student => {
+                    const grade = DB.getGradesByStudentAndSubject(student.id, subjectId, term) || {};
+                    
+                    html += `
+                        <tr data-student-id="${student.id}">
+                            <td class="px-4 py-2">${student.idNumber}</td>
+                            <td class="px-4 py-2">${student.firstName} ${student.lastName}</td>
+                            <td class="px-4 py-2 text-center">
+                                <input type="number" min="0" max="20" value="${grade.quiz || ''}" class="quiz-score w-16 text-center p-1 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <input type="number" min="0" max="30" value="${grade.midterm || ''}" class="midterm-score w-16 text-center p-1 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <input type="number" min="0" max="50" value="${grade.final || ''}" class="final-score w-16 text-center p-1 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </td>
+                            <td class="px-4 py-2 text-center total-score">${grade.total || ''}</td>
+                            <td class="px-4 py-2 text-center grade">${grade.grade || ''}</td>
+                        </tr>
+                    `;
+                });
+                
+                this.gradesTable.innerHTML = html;
+                this.gradesTableContainer.classList.remove('hidden');
+                
+                // Add event listeners for score inputs
+                const quizInputs = document.querySelectorAll('.quiz-score');
+                const midtermInputs = document.querySelectorAll('.midterm-score');
+                const finalInputs = document.querySelectorAll('.final-score');
+                
+                const updateTotal = (row) => {
+                    const quizScore = parseFloat(row.querySelector('.quiz-score').value) || 0;
+                    const midtermScore = parseFloat(row.querySelector('.midterm-score').value) || 0;
+                    const finalScore = parseFloat(row.querySelector('.final-score').value) || 0;
+                    
+                    const total = quizScore + midtermScore + finalScore;
+                    const grade = DB.calculateGrade(total);
+                    
+                    row.querySelector('.total-score').textContent = total;
+                    row.querySelector('.grade').textContent = grade;
+                };
+                
+                quizInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        updateTotal(input.closest('tr'));
+                    });
+                });
+                
+                midtermInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        updateTotal(input.closest('tr'));
+                    });
+                });
+                
+                finalInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        updateTotal(input.closest('tr'));
+                    });
+                });
+            },
+            
+            // Save grades
+            saveGrades() {
+                const subjectId = this.gradeSubject.value;
+                const term = this.gradeTerm.value;
+                
+                if (!subjectId || !term) return;
+                
+                const rows = this.gradesTable.querySelectorAll('tr');
+                
+                rows.forEach(row => {
+                    const studentId = row.getAttribute('data-student-id');
+                    if (!studentId) return;
+                    
+                    const quizScore = parseFloat(row.querySelector('.quiz-score').value) || 0;
+                    const midtermScore = parseFloat(row.querySelector('.midterm-score').value) || 0;
+                    const finalScore = parseFloat(row.querySelector('.final-score').value) || 0;
+                    
+                    const grade = {
+                        student: studentId,
+                        subject: subjectId,
+                        term: term,
+                        quiz: quizScore,
+                        midterm: midtermScore,
+                        final: finalScore
+                    };
+                    
+                    DB.saveGrade(grade);
+                });
+                
+                alert('ບັນທຶກຄະແນນສຳເລັດແລ້ວ');
+                this.loadGrades(); // Reload to show updated grades
+            },
+            
+            // Update Load Attendance button status
+            updateLoadAttendanceButton() {
+                const classId = this.attendanceClass.value;
+                const date = this.attendanceDate.value;
+                
+                this.loadAttendanceBtn.disabled = !classId || !date;
+            },
+            
+            // Load attendance
+            loadAttendance() {
+                const classId = this.attendanceClass.value;
+                const date = this.attendanceDate.value;
+                
+                if (!classId || !date) return;
+                
+                const cls = DB.getClass(classId);
+                if (!cls) return;
+                
+                const formattedDate = this.formatDate(date);
+                this.attendanceTitle.textContent = `ບັນທຶກການເຂົ້າຮ່ວມ - ${cls.name} - ${formattedDate}`;
+                
+                const students = DB.getStudentsByClass(classId);
+                const attendance = DB.getAttendanceByClassAndDate(classId, date) || { records: [] };
+                
+                let html = '';
+                students.forEach(student => {
+                    const record = attendance.records.find(r => r.student === student.id) || {};
+                    
+                    html += `
+                        <tr data-student-id="${student.id}">
+                            <td class="px-4 py-2">${student.idNumber}</td>
+                            <td class="px-4 py-2">${student.firstName} ${student.lastName}</td>
+                            <td class="px-4 py-2 text-center">
+                                <select class="attendance-status p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="present" ${record.status === 'present' ? 'selected' : ''}>ມາຮຽນ</option>
+                                    <option value="absent" ${record.status === 'absent' ? 'selected' : ''}>ຂາດຮຽນ</option>
+                                    <option value="late" ${record.status === 'late' ? 'selected' : ''}>ມາຊ້າ</option>
+                                    <option value="excused" ${record.status === 'excused' ? 'selected' : ''}>ລາພັກ</option>
+                                </select>
+                            </td>
+                            <td class="px-4 py-2">
+                                <input type="text" class="attendance-notes w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700" value="${record.notes || ''}">
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                this.attendanceTable.innerHTML = html;
+                this.attendanceTableContainer.classList.remove('hidden');
+            },
+            
+            // Save attendance
+            saveAttendance() {
+                const classId = this.attendanceClass.value;
+                const date = this.attendanceDate.value;
+                
+                if (!classId || !date) return;
+                
+                const rows = this.attendanceTable.querySelectorAll('tr');
+                const records = [];
+                
+                rows.forEach(row => {
+                    const studentId = row.getAttribute('data-student-id');
+                    if (!studentId) return;
+                    
+                    const status = row.querySelector('.attendance-status').value;
+                    const notes = row.querySelector('.attendance-notes').value;
+                    
+                    records.push({
+                        student: studentId,
+                        status: status,
+                        notes: notes
+                    });
+                });
+                
+                const attendance = {
+                    class: classId,
+                    date: date,
+                    records: records
+                };
+                
+                DB.saveAttendance(attendance);
+                
+                alert('ບັນທຶກການເຂົ້າຮ່ວມສຳເລັດແລ້ວ');
+            },
+            
+            // Search students for reports
+            searchStudents() {
+                const query = this.reportStudentSearch.value.toLowerCase();
+                if (query.length < 2) {
+                    this.reportStudentList.classList.add('hidden');
+                    return;
+                }
+                
+                const students = DB.getStudents();
+                const results = students.filter(student => 
+                    student.idNumber.toLowerCase().includes(query) || 
+                    student.firstName.toLowerCase().includes(query) || 
+                    student.lastName.toLowerCase().includes(query)
+                );
+                
+                if (results.length > 0) {
+                    let html = '';
+                    results.slice(0, 5).forEach(student => {
+                        html += `
+                            <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onclick="UI.selectStudentForReport('${student.id}', '${student.idNumber}', '${student.firstName} ${student.lastName}')">
+                                ${student.idNumber} - ${student.firstName} ${student.lastName}
+                            </div>
+                        `;
+                    });
+                    this.reportStudentList.innerHTML = html;
+                    this.reportStudentList.classList.remove('hidden');
+                } else {
+                    this.reportStudentList.innerHTML = '<div class="p-2">ບໍ່ພົບຂໍ້ມູນ</div>';
+                    this.reportStudentList.classList.remove('hidden');
+                }
+            },
+            
+            // Select student for report
+            selectStudentForReport(id, idNumber, name) {
+                this.reportStudentId.value = id;
+                this.reportStudentSearch.value = `${idNumber} - ${name}`;
+                this.reportStudentList.classList.add('hidden');
+            },
+            
+            // Generate class grade report
+            generateClassGradeReport() {
+                const classId = this.reportClassGrade.value;
+                const term = this.reportTermGrade.value;
+                
+                if (!classId) {
+                    alert('ກະລຸນາເລືອກຫ້ອງຮຽນ');
+                    return;
+                }
+                
+                const cls = DB.getClass(classId);
+                const students = DB.getStudentsByClass(classId);
+                const subjects = DB.getSubjectsByClass(classId);
+                
+                alert(`ສ້າງລາຍງານຄະແນນຫ້ອງຮຽນ ${cls.name} ພາກຮຽນທີ ${term} ສຳເລັດແລ້ວ`);
+            },
+            
+            // Generate attendance report
+            generateAttendanceReport() {
+                const classId = this.reportClassAttendance.value;
+                const startDate = this.reportStartDate.value;
+                const endDate = this.reportEndDate.value;
+                
+                if (!classId) {
+                    alert('ກະລຸນາເລືອກຫ້ອງຮຽນ');
+                    return;
+                }
+                
+                if (!startDate || !endDate) {
+                    alert('ກະລຸນາເລືອກຊ່ວງວັນທີ');
+                    return;
+                }
+                
+                const cls = DB.getClass(classId);
+                
+                alert(`ສ້າງລາຍງານການເຂົ້າຮ່ວມຫ້ອງຮຽນ ${cls.name} ຈາກວັນທີ ${this.formatDate(startDate)} ຮອດ ${this.formatDate(endDate)} ສຳເລັດແລ້ວ`);
+            },
+            
+            // Generate student report
+            generateStudentReport() {
+                const studentId = this.reportStudentId.value;
+                const term = this.reportTermStudent.value;
+                
+                if (!studentId) {
+                    alert('ກະລຸນາເລືອກນັກຮຽນ');
+                    return;
+                }
+                
+                const student = DB.getStudent(studentId);
+                
+                alert(`ສ້າງລາຍງານຜົນການຮຽນຂອງນັກຮຽນ ${student.firstName} ${student.lastName} ພາກຮຽນທີ ${term === 'all' ? 'ທັງໝົດ' : term} ສຳເລັດແລ້ວ`);
+            },
+            
+            // Show student modal
+            showStudentModal(studentId = null) {
+                this.loadClassesForSelect(this.studentClassSelect);
+                this.studentModalTitle.textContent = studentId ? 'ແກ້ໄຂຂໍ້ມູນນັກຮຽນ' : 'ເພີ່ມນັກຮຽນໃໝ່';
+                
+                if (studentId) {
+                    const student = DB.getStudent(studentId);
+                    if (student) {
+                        document.getElementById('student-id').value = student.id;
+                        document.getElementById('student-id-number').value = student.idNumber;
+                        document.getElementById('student-first-name').value = student.firstName;
+                        document.getElementById('student-last-name').value = student.lastName;
+                        document.getElementById('student-gender').value = student.gender;
+                        document.getElementById('student-birthdate').value = student.birthdate;
+                        document.getElementById('student-class-select').value = student.class;
+                        document.getElementById('student-status').value = student.status;
+                        document.getElementById('student-address').value = student.address || '';
+                        
+                        if (student.parent) {
+                            document.getElementById('parent-name').value = student.parent.name || '';
+                            document.getElementById('parent-phone').value = student.parent.phone || '';
+                            document.getElementById('parent-relationship').value = student.parent.relationship || 'parent';
+                            document.getElementById('parent-email').value = student.parent.email || '';
+                        }
+                    }
+                } else {
+                    this.studentForm.reset();
+                    document.getElementById('student-id').value = '';
+                    document.getElementById('student-status').value = 'active';
+                }
+                
+                this.showModal(this.studentModal);
+            },
+            
+            // Save student
+            saveStudent() {
+                const id = document.getElementById('student-id').value;
+                const idNumber = document.getElementById('student-id-number').value;
+                const firstName = document.getElementById('student-first-name').value;
+                const lastName = document.getElementById('student-last-name').value;
+                const gender = document.getElementById('student-gender').value;
+                const birthdate = document.getElementById('student-birthdate').value;
+                const cls = document.getElementById('student-class-select').value;
+                const status = document.getElementById('student-status').value;
+                const address = document.getElementById('student-address').value;
+                
+                const parentName = document.getElementById('parent-name').value;
+                const parentPhone = document.getElementById('parent-phone').value;
+                const parentRelationship = document.getElementById('parent-relationship').value;
+                const parentEmail = document.getElementById('parent-email').value;
+                
+                const student = {
+                    id,
+                    idNumber,
+                    firstName,
+                    lastName,
+                    gender,
+                    birthdate,
+                    class: cls,
+                    status,
+                    address,
+                    parent: {
+                        name: parentName,
+                        phone: parentPhone,
+                        relationship: parentRelationship,
+                        email: parentEmail
+                    }
+                };
+                
+                DB.saveStudent(student);
+                this.closeModal();
+                this.loadStudents();
+                this.loadDashboard();
+            },
+            
+            // Edit student
+            editStudent(studentId) {
+                this.showStudentModal(studentId);
+            },
+            
+            // Show class modal
+            showClassModal(classId = null) {
+                this.loadTeachersForSelect(this.classTeacher);
+                this.classModalTitle.textContent = classId ? 'ແກ້ໄຂຫ້ອງຮຽນ' : 'ເພີ່ມຫ້ອງຮຽນໃໝ່';
+                
+                if (classId) {
+                    const cls = DB.getClass(classId);
+                    if (cls) {
+                        document.getElementById('class-id').value = cls.id;
+                        document.getElementById('class-name').value = cls.name;
+                        document.getElementById('class-teacher').value = cls.teacher;
+                        document.getElementById('class-room').value = cls.room || '';
+                        document.getElementById('class-notes').value = cls.notes || '';
+                    }
+                } else {
+                    this.classForm.reset();
+                    document.getElementById('class-id').value = '';
+                }
+                
+                this.showModal(this.classModal);
+            },
+            
+            // Save class
+            saveClass() {
+                const id = document.getElementById('class-id').value;
+                const name = document.getElementById('class-name').value;
+                const teacher = document.getElementById('class-teacher').value;
+                const room = document.getElementById('class-room').value;
+                const notes = document.getElementById('class-notes').value;
+                
+                const cls = {
+                    id,
+                    name,
+                    teacher,
+                    room,
+                    notes
+                };
+                
+                DB.saveClass(cls);
+                this.closeModal();
+                this.loadClasses();
+                this.loadDashboard();
+            },
+            
+            // Edit class
+            editClass(classId) {
+                this.showClassModal(classId);
+            },
+            
+            // Show subject modal
+            showSubjectModal(subjectId = null) {
+                this.loadTeachersForSelect(this.subjectTeacher);
+                this.loadClassesForSelect(this.subjectClass);
+                this.subjectModalTitle.textContent = subjectId ? 'ແກ້ໄຂວິຊາຮຽນ' : 'ເພີ່ມວິຊາຮຽນໃໝ່';
+                
+                if (subjectId) {
+                    const subject = DB.getSubject(subjectId);
+                    if (subject) {
+                        document.getElementById('subject-id').value = subject.id;
+                        document.getElementById('subject-name').value = subject.name;
+                        document.getElementById('subject-teacher').value = subject.teacher;
+                        document.getElementById('subject-class').value = subject.class;
+                        document.getElementById('subject-description').value = subject.description || '';
+                    }
+                } else {
+                    this.subjectForm.reset();
+                    document.getElementById('subject-id').value = '';
+                }
+                
+                this.showModal(this.subjectModal);
+            },
+            
+            // Save subject
+            saveSubject() {
+                const id = document.getElementById('subject-id').value;
+                const name = document.getElementById('subject-name').value;
+                const teacher = document.getElementById('subject-teacher').value;
+                const cls = document.getElementById('subject-class').value;
+                const description = document.getElementById('subject-description').value;
+                
+                const subject = {
+                    id,
+                    name,
+                    teacher,
+                    class: cls,
+                    description
+                };
+                
+                DB.saveSubject(subject);
+                this.closeModal();
+                this.loadSubjects();
+                this.loadDashboard();
+            },
+            
+            // Edit subject
+            editSubject(subjectId) {
+                this.showSubjectModal(subjectId);
+            },
+            
+            // Show teacher modal
+            showTeacherModal(teacherId = null) {
+                this.teacherModalTitle.textContent = teacherId ? 'ແກ້ໄຂຂໍ້ມູນຄູອາຈານ' : 'ເພີ່ມຄູອາຈານໃໝ່';
+                
+                if (teacherId) {
+                    const teacher = DB.getTeacher(teacherId);
+                    if (teacher) {
+                        document.getElementById('teacher-id').value = teacher.id;
+                        document.getElementById('teacher-first-name').value = teacher.firstName;
+                        document.getElementById('teacher-last-name').value = teacher.lastName;
+                        document.getElementById('teacher-subject').value = teacher.subject;
+                        document.getElementById('teacher-phone').value = teacher.phone || '';
+                        document.getElementById('teacher-email').value = teacher.email || '';
+                        document.getElementById('teacher-qualification').value = teacher.qualification || 'bachelor';
+                        document.getElementById('teacher-address').value = teacher.address || '';
+                    }
+                } else {
+                    this.teacherForm.reset();
+                    document.getElementById('teacher-id').value = '';
+                    document.getElementById('teacher-qualification').value = 'bachelor';
+                }
+                
+                this.showModal(this.teacherModal);
+            },
+            
+            // Save teacher
+            saveTeacher() {
+                const id = document.getElementById('teacher-id').value;
+                const firstName = document.getElementById('teacher-first-name').value;
+                const lastName = document.getElementById('teacher-last-name').value;
+                const subject = document.getElementById('teacher-subject').value;
+                const phone = document.getElementById('teacher-phone').value;
+                const email = document.getElementById('teacher-email').value;
+                const qualification = document.getElementById('teacher-qualification').value;
+                const address = document.getElementById('teacher-address').value;
+                
+                const teacher = {
+                    id,
+                    firstName,
+                    lastName,
+                    subject,
+                    phone,
+                    email,
+                    qualification,
+                    address
+                };
+                
+                DB.saveTeacher(teacher);
+                this.closeModal();
+                this.loadTeachers();
+                this.loadDashboard();
+            },
+            
+            // Edit teacher
+            editTeacher(teacherId) {
+                this.showTeacherModal(teacherId);
+            },
+            
+            // Show delete confirmation modal
+            showDeleteModal(type, id, name = '') {
+                this.deleteTitle.textContent = 'ຢືນຢັນການລຶບ';
+                
+                if (type === 'student') {
+                    this.deleteMessage.textContent = `ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບນັກຮຽນ "${name}"? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້.`;
+                } else if (type === 'class') {
+                    this.deleteMessage.textContent = `ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຫ້ອງຮຽນ "${name}"? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້ ແລະ ຈະສົ່ງຜົນກະທົບກັບຂໍ້ມູນນັກຮຽນ ແລະ ວິຊາຮຽນທີ່ກ່ຽວຂ້ອງ.`;
+                } else if (type === 'subject') {
+                    this.deleteMessage.textContent = `ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບວິຊາຮຽນ "${name}"? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້ ແລະ ຈະສົ່ງຜົນກະທົບກັບຂໍ້ມູນຄະແນນທີ່ກ່ຽວຂ້ອງ.`;
+                } else if (type === 'teacher') {
+                    this.deleteMessage.textContent = `ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຄູອາຈານ "${name}"? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້ ແລະ ຈະສົ່ງຜົນກະທົບກັບຂໍ້ມູນຫ້ອງຮຽນ ແລະ ວິຊາຮຽນທີ່ກ່ຽວຂ້ອງ.`;
+                }
+                
+                this.confirmDeleteBtn.setAttribute('data-type', type);
+                this.confirmDeleteBtn.setAttribute('data-id', id);
+                
+                this.showModal(this.deleteModal);
+            },
+            
+            // Confirm delete
+            confirmDelete(type, id) {
+                if (type === 'student') {
+                    DB.deleteStudent(id);
+                    this.loadStudents();
+                } else if (type === 'class') {
+                    DB.deleteClass(id);
+                    this.loadClasses();
+                } else if (type === 'subject') {
+                    DB.deleteSubject(id);
+                    this.loadSubjects();
+                } else if (type === 'teacher') {
+                    DB.deleteTeacher(id);
+                    this.loadTeachers();
+                }
+                
+                this.closeModal();
+                this.loadDashboard();
+            },
+            
+            // Show modal
+            showModal(modal) {
+                this.modalContainer.classList.remove('hidden');
+                
+                // Hide all modals first
+                this.studentModal.classList.add('hidden');
+                this.classModal.classList.add('hidden');
+                this.subjectModal.classList.add('hidden');
+                this.teacherModal.classList.add('hidden');
+                this.deleteModal.classList.add('hidden');
+                
+                // Show the requested modal
+                modal.classList.remove('hidden');
+            },
+            
+            // Close modal
+            closeModal() {
+                this.modalContainer.classList.add('hidden');
+            },
+            
+            // Helper functions
+            formatDate(dateString) {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-GB');
+            },
+            
+            translateStatus(status) {
+                const statuses = {
+                    'active': 'ກຳລັງຮຽນ',
+                    'suspended': 'ຢຸດຮຽນຊົ່ວຄາວ',
+                    'graduated': 'ຈົບການສຶກສາ',
+                    'transferred': 'ຍ້າຍໂຮງຮຽນ'
+                };
+                return statuses[status] || status;
+            },
+            
+            getStatusClass(status) {
+                const classes = {
+                    'active': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                    'suspended': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+                    'graduated': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                    'transferred': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                };
+                return `text-xs font-medium px-2.5 py-0.5 rounded ${classes[status] || ''}`;
+            }
+        };
+
+        // Initialize the UI
+        document.addEventListener('DOMContentLoaded', () => {
+            UI.init();
+            
+            // Make UI functions available globally for event handlers
+            window.UI = UI;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ແພລດຟອມການຮຽນຮູ້ SQL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/sql/sql.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/idea.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sql: {
+                            blue: '#0078D4',
+                            darkblue: '#005A9E',
+                            lightblue: '#0091FF'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans Lao', sans-serif;
+        }
+        
+        .CodeMirror {
+            height: auto;
+            font-size: 16px;
+            border-radius: 0.375rem;
+            font-family: monospace;
+        }
+        
+        .dark .CodeMirror.cm-s-idea {
+            display: none;
+        }
+        
+        .CodeMirror.cm-s-material {
+            display: none;
+        }
+        
+        .dark .CodeMirror.cm-s-material {
+            display: block;
+        }
+        
+        /* Transition animations */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="mb-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-sql-blue dark:text-sql-lightblue">ແພລດຟອມການຮຽນຮູ້ SQL</h1>
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                    <svg id="light-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg id="dark-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">ຮຽນຮູ້ SQL ຈາກລະດັບເລີ່ມຕົ້ນຈົນເຖິງລະດັບສູງ</p>
+        </header>
+        
+        <nav class="mb-8">
+            <div class="flex flex-wrap gap-2">
+                <button class="level-btn px-4 py-2 rounded-lg bg-sql-blue text-white font-medium active" data-level="beginner">ຂັ້ນເລີ່ມຕົ້ນ</button>
+                <button class="level-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium" data-level="intermediate">ຂັ້ນກາງ</button>
+                <button class="level-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium" data-level="advanced">ຂັ້ນສູງ</button>
+            </div>
+        </nav>
+        
+        <div id="topics-container" class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Topic buttons will be populated here -->
+        </div>
+        
+        <div id="tutorial-container" class="mb-8 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="tutorial-title" class="text-2xl font-bold text-sql-blue dark:text-sql-lightblue"></h2>
+                <button id="back-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium">ກັບໄປຫາຫົວຂໍ້</button>
+            </div>
+            
+            <div id="tutorial-content" class="prose dark:prose-invert max-w-none mb-6"></div>
+            
+            <div id="code-section" class="mb-6">
+                <h3 class="text-xl font-bold mb-2">ທົດລອງດ້ວຍຕົນເອງ:</h3>
+                <div id="code-editor" class="mb-4"></div>
+                <div class="flex gap-4">
+                    <button id="run-btn" class="px-4 py-2 rounded-lg bg-sql-blue text-white font-medium">ລັນໂຄດ</button>
+                    <button id="reset-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium">ຣີເຊັດໂຄດ</button>
+                </div>
+            </div>
+            
+            <div id="output-section" class="mb-6">
+                <h3 class="text-xl font-bold mb-2">ຜົນລັບ:</h3>
+                <div id="output" class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 min-h-[100px] whitespace-pre-wrap font-mono"></div>
+            </div>
+        </div>
+        
+        <div id="loading" class="hidden">
+            <div class="flex justify-center items-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sql-blue dark:border-sql-lightblue"></div>
+            </div>
+            <p class="text-center text-gray-600 dark:text-gray-400">ກຳລັງໂຫຼດເນື້ອຫາ...</p>
+        </div>
+        
+        <div id="ask-ai-button" class="fixed bottom-4 right-4">
+            <button id="ask-ai-btn" class="px-4 py-2 rounded-lg bg-sql-blue text-white font-medium shadow-lg hover:shadow-xl transition-shadow">
+                ຖາມ AI ກ່ຽວກັບ SQL
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Setup dark mode detection and toggle
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+        
+        // Tutorial data in Lao
+        const tutorials = {
+            beginner: [
+                {
+                    id: 'select',
+                    title: 'SELECT - ການດຶງຂໍ້ມູນພື້ນຖານ',
+                    content: `
+# ຄຳສັ່ງ SELECT ພື້ນຖານ
+
+ຄຳສັ່ງ SELECT ໃຊ້ສຳລັບດຶງຂໍ້ມູນຈາກຖານຂໍ້ມູນ. ນີ້ແມ່ນຄຳສັ່ງທີ່ໃຊ້ເລື້ອຍໆທີ່ສຸດໃນ SQL.
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT column1, column2, ...
+FROM table_name;
+\`\`\`
+
+## ການເລືອກທຸກຖັນ
+
+\`\`\`sql
+SELECT * FROM table_name;
+\`\`\`
+
+## ຕົວຢ່າງ
+
+ສົມມຸດວ່າພວກເຮົາມີຕາຕະລາງ \`Customers\` ທີ່ມີຂໍ້ມູນລູກຄ້າ, ນີ້ແມ່ນວິທີການດຶງຂໍ້ມູນ:
+                    `,
+                    code: `-- ດຶງຂໍ້ມູນທຸກຖັນຈາກຕາຕະລາງ Customers
+SELECT * FROM Customers;
+
+-- ດຶງຂໍ້ມູນສະເພາະຖັນ CustomerName ແລະ City
+SELECT CustomerName, City FROM Customers;
+
+-- ດຶງຂໍ້ມູນສະເພາະຖັນ CustomerID, CustomerName ແລະ Country
+SELECT CustomerID, CustomerName, Country FROM Customers;`
+                },
+                {
+                    id: 'where',
+                    title: 'WHERE - ການກັ່ນຕອງຂໍ້ມູນ',
+                    content: `
+# ຄຳສັ່ງ WHERE
+
+ຄຳສັ່ງ WHERE ໃຊ້ເພື່ອກັ່ນຕອງຜົນລັບຕາມເງື່ອນໄຂທີ່ກຳນົດ.
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+\`\`\`
+
+## ຕົວດຳເນີນການສົມທຽບ
+
+- ເທົ່າກັບ: \`=\`
+- ບໍ່ເທົ່າກັບ: \`<>\` ຫຼື \`!=\`
+- ຫຼາຍກວ່າ: \`>\`
+- ນ້ອຍກວ່າ: \`<\`
+- ຫຼາຍກວ່າຫຼືເທົ່າກັບ: \`>=\`
+- ນ້ອຍກວ່າຫຼືເທົ່າກັບ: \`<=\`
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- ດຶງຂໍ້ມູນລູກຄ້າທີ່ມາຈາກປະເທດ 'Germany'
+SELECT * FROM Customers
+WHERE Country = 'Germany';
+
+-- ດຶງຂໍ້ມູນສິນຄ້າທີ່ມີລາຄາຫຼາຍກວ່າ 50
+SELECT ProductName, Price FROM Products
+WHERE Price > 50;
+
+-- ດຶງຂໍ້ມູນສັ່ງຊື້ທີ່ສັ່ງກ່ອນວັນທີ 1 ກໍລະກົດ 2022
+SELECT OrderID, OrderDate, CustomerID FROM Orders
+WHERE OrderDate < '2022-07-01';
+
+-- ໃຊ້ AND ເພື່ອລວມຫຼາຍເງື່ອນໄຂ
+SELECT * FROM Customers
+WHERE Country = 'Germany' AND City = 'Berlin';
+
+-- ໃຊ້ OR ເພື່ອກຳນົດເງື່ອນໄຂຫຼາຍທາງເລືອກ
+SELECT * FROM Customers
+WHERE Country = 'Germany' OR Country = 'France';
+
+-- ໃຊ້ NOT ເພື່ອປະຕິເສດເງື່ອນໄຂ
+SELECT * FROM Customers
+WHERE NOT Country = 'Germany';`
+                },
+                {
+                    id: 'orderby',
+                    title: 'ORDER BY - ການຈັດລຽງຂໍ້ມູນ',
+                    content: `
+# ຄຳສັ່ງ ORDER BY
+
+ຄຳສັ່ງ ORDER BY ໃຊ້ເພື່ອຈັດລຽງຜົນລັບຕາມລຳດັບກ່ອນຫຼັງ.
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT column1, column2, ...
+FROM table_name
+ORDER BY column1 [ASC|DESC], column2 [ASC|DESC], ...;
+\`\`\`
+
+## ທິດທາງການຈັດລຽງ
+
+- \`ASC\`: ລຽງຈາກນ້ອຍຫາຫຼາຍ (ຄ່າເລີ່ມຕົ້ນ)
+- \`DESC\`: ລຽງຈາກຫຼາຍຫານ້ອຍ
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- ຈັດລຽງລູກຄ້າຕາມຊື່ (ຈາກ A ຫາ Z)
+SELECT * FROM Customers
+ORDER BY CustomerName;
+
+-- ຈັດລຽງສິນຄ້າຕາມລາຄາຈາກຫຼາຍຫານ້ອຍ
+SELECT ProductName, Price FROM Products
+ORDER BY Price DESC;
+
+-- ຈັດລຽງລູກຄ້າຕາມປະເທດ ແລະ ຕາມຊື່
+SELECT * FROM Customers
+ORDER BY Country, CustomerName;
+
+-- ຈັດລຽງຕາມຕຳແໜ່ງຂອງຖັນ
+SELECT CustomerID, CustomerName, Country FROM Customers
+ORDER BY 3, 2; -- 3 ແມ່ນ Country, 2 ແມ່ນ CustomerName
+
+-- ໃຊ້ WHERE ແລະ ORDER BY ພ້ອມກັນ
+SELECT * FROM Customers
+WHERE Country = 'Germany'
+ORDER BY City;`
+                }
+            ],
+            intermediate: [
+                {
+                    id: 'join',
+                    title: 'JOIN - ການເຊື່ອມຕໍ່ຕາຕະລາງຫຼາຍອັນ',
+                    content: `
+# ຄຳສັ່ງ JOIN
+
+ຄຳສັ່ງ JOIN ໃຊ້ເພື່ອເຊື່ອມຕໍ່ຂໍ້ມູນຈາກຕາຕະລາງຫຼາຍອັນເຂົ້າດ້ວຍກັນ.
+
+## ປະເພດຂອງ JOIN
+
+- \`INNER JOIN\`: ເລືອກຂໍ້ມູນທີ່ກົງກັນໃນທັງສອງຕາຕະລາງ
+- \`LEFT JOIN\`: ເລືອກຂໍ້ມູນທັງໝົດຈາກຕາຕະລາງດ້ານຊ້າຍ ແລະ ຂໍ້ມູນທີ່ກົງກັນຈາກຕາຕະລາງດ້ານຂວາ
+- \`RIGHT JOIN\`: ເລືອກຂໍ້ມູນທັງໝົດຈາກຕາຕະລາງດ້ານຂວາ ແລະ ຂໍ້ມູນທີ່ກົງກັນຈາກຕາຕະລາງດ້ານຊ້າຍ
+- \`FULL JOIN\`: ເລືອກຂໍ້ມູນທັງໝົດເມື່ອມີຄ່າທີ່ກົງກັນໃນຕາຕະລາງໃດຕາຕະລາງໜຶ່ງ
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT columns
+FROM table1
+JOIN_TYPE table2
+ON table1.column = table2.column;
+\`\`\`
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- INNER JOIN: ດຶງລາຍການສັ່ງຊື້ພ້ອມຂໍ້ມູນລູກຄ້າ
+SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+-- LEFT JOIN: ດຶງຂໍ້ມູນລູກຄ້າທັງໝົດ ແລະ ລາຍການສັ່ງຊື້ຂອງພວກເຂົາ (ຖ້າມີ)
+SELECT Customers.CustomerName, Orders.OrderID
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+ORDER BY Customers.CustomerName;
+
+-- RIGHT JOIN: ດຶງຂໍ້ມູນລາຍການສັ່ງຊື້ທັງໝົດ ແລະ ຂໍ້ມູນລູກຄ້າຂອງພວກມັນ
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+RIGHT JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+ORDER BY Orders.OrderID;
+
+-- ເຊື່ອມຕໍ່ຫຼາຍຕາຕະລາງ
+SELECT Orders.OrderID, Customers.CustomerName, Shippers.ShipperName
+FROM ((Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID)
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID);
+
+-- ເຊື່ອມຕໍ່ກັບ WHERE
+SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+WHERE Orders.OrderDate >= '2022-01-01'
+ORDER BY Orders.OrderDate;`
+                },
+                {
+                    id: 'groupby',
+                    title: 'GROUP BY - ການຈັດກຸ່ມຂໍ້ມູນ',
+                    content: `
+# ຄຳສັ່ງ GROUP BY
+
+ຄຳສັ່ງ GROUP BY ໃຊ້ເພື່ອຈັດກຸ່ມແຖວທີ່ມີຄ່າເທົ່າກັນໃນຖັນທີ່ລະບຸ ແລະ ໃຊ້ສຳລັບລວມຂໍ້ມູນໂດຍໃຊ້ຟັງຊັນລວມ.
+
+## ຟັງຊັນລວມທີ່ນິຍົມໃຊ້
+
+- \`COUNT()\`: ນັບຈຳນວນແຖວ
+- \`SUM()\`: ລວມຄ່າ
+- \`AVG()\`: ຄິດໄລ່ຄ່າສະເລ່ຍ
+- \`MIN()\`: ຊອກຫາຄ່າຕ່ຳສຸດ
+- \`MAX()\`: ຊອກຫາຄ່າສູງສຸດ
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT column1, aggregate_function(column2)
+FROM table_name
+GROUP BY column1;
+\`\`\`
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- ນັບຈຳນວນລູກຄ້າໃນແຕ່ລະປະເທດ
+SELECT Country, COUNT(CustomerID) AS NumberOfCustomers
+FROM Customers
+GROUP BY Country
+ORDER BY NumberOfCustomers DESC;
+
+-- ຄິດໄລ່ມູນຄ່າລວມຂອງການສັ່ງຊື້ຂອງແຕ່ລະລູກຄ້າ
+SELECT Customers.CustomerName, SUM(OrderDetails.Quantity * Products.Price) AS TotalAmount
+FROM ((OrderDetails
+INNER JOIN Orders ON OrderDetails.OrderID = Orders.OrderID)
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID)
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+GROUP BY Customers.CustomerName
+ORDER BY TotalAmount DESC;
+
+-- ຄິດໄລ່ລາຄາສະເລ່ຍຂອງຜະລິດຕະພັນໃນແຕ່ລະປະເພດ
+SELECT Categories.CategoryName, AVG(Products.Price) AS AveragePrice
+FROM Products
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+GROUP BY Categories.CategoryName
+ORDER BY AveragePrice DESC;
+
+-- ຊອກຫາລາຄາຜະລິດຕະພັນຕ່ຳສຸດ ແລະ ສູງສຸດໃນແຕ່ລະປະເພດ
+SELECT Categories.CategoryName, 
+       MIN(Products.Price) AS MinPrice, 
+       MAX(Products.Price) AS MaxPrice
+FROM Products
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+GROUP BY Categories.CategoryName
+ORDER BY CategoryName;
+
+-- ໃຊ້ GROUP BY ກັບຫຼາຍຖັນ
+SELECT Country, City, COUNT(CustomerID) AS NumberOfCustomers
+FROM Customers
+GROUP BY Country, City
+ORDER BY NumberOfCustomers DESC;`
+                },
+                {
+                    id: 'having',
+                    title: 'HAVING - ການກັ່ນຕອງກຸ່ມຂໍ້ມູນ',
+                    content: `
+# ຄຳສັ່ງ HAVING
+
+ຄຳສັ່ງ HAVING ໃຊ້ສຳລັບກັ່ນຕອງຜົນລັບຂອງການຈັດກຸ່ມຕາມເງື່ອນໄຂທີ່ກຳນົດ. ມັນເຮັດວຽກຄ້າຍຄືກັບ WHERE ແຕ່ສຳລັບກຸ່ມຂໍ້ມູນແທນທີ່ຈະເປັນແຖວດຽວ.
+
+## ຄວາມແຕກຕ່າງລະຫວ່າງ WHERE ແລະ HAVING
+
+- \`WHERE\` ກັ່ນຕອງແຖວກ່ອນທີ່ຈະຈັດກຸ່ມ
+- \`HAVING\` ກັ່ນຕອງຜົນລັບຫຼັງຈາກຈັດກຸ່ມແລ້ວ
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT column1, aggregate_function(column2)
+FROM table_name
+GROUP BY column1
+HAVING condition;
+\`\`\`
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- ຊອກຫາປະເທດທີ່ມີລູກຄ້າຫຼາຍກວ່າ 5 ຄົນ
+SELECT Country, COUNT(CustomerID) AS NumberOfCustomers
+FROM Customers
+GROUP BY Country
+HAVING COUNT(CustomerID) > 5
+ORDER BY NumberOfCustomers DESC;
+
+-- ຊອກຫາຜະລິດຕະພັນທີ່ມີມູນຄ່າການສັ່ງຊື້ລວມຫຼາຍກວ່າ 1000
+SELECT Products.ProductName, 
+       SUM(OrderDetails.Quantity * Products.Price) AS TotalRevenue
+FROM OrderDetails
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+GROUP BY Products.ProductName
+HAVING SUM(OrderDetails.Quantity * Products.Price) > 1000
+ORDER BY TotalRevenue DESC;
+
+-- ຊອກຫາພະນັກງານທີ່ດຳເນີນການຂາຍຫຼາຍກວ່າ 10 ລາຍການໃນປີ 2022
+SELECT Employees.FirstName, Employees.LastName, 
+       COUNT(Orders.OrderID) AS NumberOfOrders
+FROM Orders
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+WHERE Orders.OrderDate BETWEEN '2022-01-01' AND '2022-12-31'
+GROUP BY Employees.EmployeeID, Employees.FirstName, Employees.LastName
+HAVING COUNT(Orders.OrderID) > 10
+ORDER BY NumberOfOrders DESC;
+
+-- ໃຊ້ທັງ WHERE ແລະ HAVING ພ້ອມກັນ
+SELECT Categories.CategoryName, 
+       AVG(Products.Price) AS AveragePrice
+FROM Products
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+WHERE Products.Price > 10
+GROUP BY Categories.CategoryName
+HAVING AVG(Products.Price) > 20
+ORDER BY AveragePrice DESC;`
+                }
+            ],
+            advanced: [
+                {
+                    id: 'subquery',
+                    title: 'Subqueries - ຄຳສັ່ງສອບຖາມຍ່ອຍ',
+                    content: `
+# ຄຳສັ່ງສອບຖາມຍ່ອຍ (Subqueries)
+
+ຄຳສັ່ງສອບຖາມຍ່ອຍ ຫຼື subquery ແມ່ນຄຳສັ່ງ SQL ທີ່ຊ້ອນຢູ່ໃນອີກຄຳສັ່ງ SQL. ມັນສາມາດໃຊ້ໃນຄຳສັ່ງ SELECT, INSERT, UPDATE ຫຼື DELETE ແລະ ກັບຕົວດຳເນີນການ ເຊັ່ນ =, <, >, IN, ແລະ ອື່ນໆ.
+
+## ຮູບແບບການໃຊ້
+
+- Subquery ໃນ SELECT
+- Subquery ໃນ FROM
+- Subquery ໃນ WHERE
+- Correlated subquery (ມີການອ້າງອີງກັບຕາຕະລາງພາຍນອກ)
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT column1, column2, ...
+FROM table_name
+WHERE column_name OPERATOR
+    (SELECT column_name
+     FROM table_name
+     WHERE condition);
+\`\`\`
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- ຊອກຫາລູກຄ້າທີ່ບໍ່ເຄີຍສັ່ງຊື້ 
+SELECT CustomerName
+FROM Customers
+WHERE CustomerID NOT IN (
+    SELECT DISTINCT CustomerID
+    FROM Orders
+);
+
+-- ຊອກຫາຜະລິດຕະພັນທີ່ມີລາຄາສູງກວ່າລາຄາສະເລ່ຍ
+SELECT ProductName, Price
+FROM Products
+WHERE Price > (
+    SELECT AVG(Price)
+    FROM Products
+)
+ORDER BY Price;
+
+-- ໃຊ້ subquery ເປັນຕາຕະລາງຊົ່ວຄາວ
+SELECT t.CustomerName, t.TotalOrders
+FROM (
+    SELECT c.CustomerName, COUNT(o.OrderID) AS TotalOrders
+    FROM Customers c
+    LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+    GROUP BY c.CustomerName
+) AS t
+WHERE t.TotalOrders > 5
+ORDER BY t.TotalOrders DESC;
+
+-- Correlated subquery (ມີການອ້າງອີງກັບຕາຕະລາງພາຍນອກ)
+SELECT e1.FirstName, e1.LastName, e1.Salary
+FROM Employees e1
+WHERE e1.Salary > (
+    SELECT AVG(e2.Salary)
+    FROM Employees e2
+    WHERE e2.Department = e1.Department
+)
+ORDER BY e1.Department, e1.Salary DESC;
+
+-- ການໃຊ້ EXISTS ກັບ subquery
+SELECT SupplierName
+FROM Suppliers s
+WHERE EXISTS (
+    SELECT ProductID
+    FROM Products p
+    WHERE p.SupplierID = s.SupplierID AND p.Price < 20
+);
+
+-- ການໃຊ້ ANY ກັບ subquery
+SELECT ProductName
+FROM Products
+WHERE ProductID = ANY (
+    SELECT ProductID
+    FROM OrderDetails
+    WHERE Quantity > 100
+);
+
+-- ການໃຊ້ ALL ກັບ subquery
+SELECT ProductName
+FROM Products
+WHERE Price > ALL (
+    SELECT AVG(Price)
+    FROM Products
+    GROUP BY CategoryID
+);`
+                },
+                {
+                    id: 'union',
+                    title: 'UNION - ການລວມຜົນຂອງຫຼາຍຄຳສັ່ງສອບຖາມ',
+                    content: `
+# ຄຳສັ່ງ UNION
+
+ຄຳສັ່ງ UNION ໃຊ້ເພື່ອລວມຜົນລັບຂອງຄຳສັ່ງ SELECT ສອງຫຼືຫຼາຍຄຳສັ່ງເຂົ້າດ້ວຍກັນ.
+
+## ກົດລະບຽບ
+
+- ທຸກຄຳສັ່ງ SELECT ຕ້ອງມີຈຳນວນຖັນທີ່ເທົ່າກັນ
+- ຖັນທີ່ກ່ຽວຂ້ອງຕ້ອງມີປະເພດຂໍ້ມູນທີ່ໃກ້ຄຽງກັນ
+- ຖັນໃນທຸກຄຳສັ່ງ SELECT ຕ້ອງລຽງລຳດັບດຽວກັນ
+
+## ຄວາມແຕກຕ່າງລະຫວ່າງ UNION ແລະ UNION ALL
+
+- \`UNION\`: ຈະລົບຄ່າທີ່ຊ້ຳກັນອອກ
+- \`UNION ALL\`: ຈະລວມທຸກໆຄ່າເຂົ້າດ້ວຍກັນ ລວມທັງຄ່າທີ່ຊ້ຳກັນ
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+SELECT column1, column2, ... FROM table1
+UNION [ALL]
+SELECT column1, column2, ... FROM table2;
+\`\`\`
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- ລວມລາຍຊື່ລູກຄ້າ ແລະ ຜູ້ສະໜອງ
+SELECT 'Customer' AS Type, ContactName, City, Country
+FROM Customers
+UNION
+SELECT 'Supplier', ContactName, City, Country
+FROM Suppliers
+ORDER BY City;
+
+-- ໃຊ້ UNION ALL ເພື່ອລວມຜົນລັບໂດຍບໍ່ລົບຄ່າຊ້ຳກັນ
+SELECT City FROM Customers
+UNION ALL
+SELECT City FROM Suppliers
+ORDER BY City;
+
+-- ລວມຜົນລັບຂອງຫຼາຍຄຳສັ່ງ SELECT
+SELECT City, Country FROM Customers
+WHERE Country = 'Germany'
+UNION
+SELECT City, Country FROM Suppliers
+WHERE Country = 'Germany'
+UNION
+SELECT City, Country FROM Employees
+WHERE Country = 'Germany'
+ORDER BY City;
+
+-- ໃຊ້ UNION ກັບຄຳສັ່ງ WHERE ແລະ ORDER BY
+SELECT City, Country FROM Customers
+WHERE Country = 'USA'
+UNION
+SELECT City, Country FROM Suppliers
+WHERE Country = 'USA'
+ORDER BY City;
+
+-- ໃຊ້ UNION ກັບຟັງຊັນລວມ
+SELECT 'Highest' AS ProductType, ProductName, Price
+FROM Products
+WHERE Price = (SELECT MAX(Price) FROM Products)
+UNION
+SELECT 'Lowest', ProductName, Price
+FROM Products
+WHERE Price = (SELECT MIN(Price) FROM Products);`
+                },
+                {
+                    id: 'stored_procedures',
+                    title: 'Stored Procedures - ຂັ້ນຕອນທີ່ບັນທຶກໄວ້',
+                    content: `
+# Stored Procedures
+
+Stored procedure ແມ່ນກຸ່ມຂອງຄຳສັ່ງ SQL ທີ່ຖືກບັນທຶກໄວ້ເພື່ອໃຊ້ຊ້ຳ. ມັນສາມາດມີພາລາມິເຕີ, ຕົວແປພາຍໃນ, ການດຳເນີນການທາງຕັກກະສາດ, ແລະ ສາມາດເອີ້ນໃຊ້ຈາກຄຳສັ່ງ SQL ຫຼື ໂປຣແກຣມອື່ນໆ.
+
+## ຂໍ້ດີຂອງ Stored Procedures
+
+- ປັບປຸງປະສິດທິພາບ
+- ຄວາມປອດໄພເພີ່ມຂຶ້ນ
+- ສາມາດນຳໃຊ້ຊ້ຳໄດ້
+- ລົດການສົ່ງຂໍ້ມູນຜ່ານເຄືອຂ່າຍ
+- ລົດຄວາມຊັບຊ້ອນຂອງການບຳລຸງຮັກສາ
+
+## ໂຄງສ້າງພື້ນຖານ
+
+\`\`\`sql
+-- ສຳລັບ SQL Server
+CREATE PROCEDURE procedure_name
+    @parameter1 datatype,
+    @parameter2 datatype
+AS
+BEGIN
+    -- SQL statements
+END;
+
+-- ສຳລັບ MySQL
+CREATE PROCEDURE procedure_name(parameter1 datatype, parameter2 datatype)
+BEGIN
+    -- SQL statements
+END;
+\`\`\`
+
+## ຕົວຢ່າງ
+                    `,
+                    code: `-- ສ້າງ stored procedure ທີ່ງ່າຍທີ່ສຸດ (SQL Server)
+CREATE PROCEDURE GetAllCustomers
+AS
+BEGIN
+    SELECT * FROM Customers
+END;
+
+-- ສ້າງ stored procedure ພ້ອມພາລາມິເຕີ (SQL Server)
+CREATE PROCEDURE GetCustomersByCountry
+    @Country nvarchar(50)
+AS
+BEGIN
+    SELECT * FROM Customers
+    WHERE Country = @Country
+END;
+
+-- ສ້າງ stored procedure ພ້ອມພາລາມິເຕີຫຼາຍຕົວ (SQL Server)
+CREATE PROCEDURE GetProductsByPriceRange
+    @MinPrice decimal(10,2),
+    @MaxPrice decimal(10,2)
+AS
+BEGIN
+    SELECT * FROM Products
+    WHERE Price BETWEEN @MinPrice AND @MaxPrice
+    ORDER BY Price
+END;
+
+-- ເອີ້ນໃຊ້ stored procedure
+EXEC GetAllCustomers;
+
+-- ເອີ້ນໃຊ້ stored procedure ພ້ອມພາລາມິເຕີ
+EXEC GetCustomersByCountry @Country = 'Germany';
+
+-- ເອີ້ນໃຊ້ stored procedure ພ້ອມພາລາມິເຕີຫຼາຍຕົວ
+EXEC GetProductsByPriceRange @MinPrice = 10, @MaxPrice = 50;
+
+-- ຕົວຢ່າງ stored procedure ທີ່ຊັບຊ້ອນກວ່າ (SQL Server)
+CREATE PROCEDURE UpdateProductPrice
+    @ProductID int,
+    @NewPrice decimal(10,2),
+    @PriceUpdated bit OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @OldPrice decimal(10,2);
+    
+    -- ດຶງລາຄາປັດຈຸບັນ
+    SELECT @OldPrice = Price FROM Products
+    WHERE ProductID = @ProductID;
+    
+    -- ຖ້າຜະລິດຕະພັນມີຢູ່ ແລະ ລາຄາໃໝ່ແຕກຕ່າງຈາກລາຄາເກົ່າ
+    IF @OldPrice IS NOT NULL AND @OldPrice <> @NewPrice
+    BEGIN
+        -- ອັບເດດລາຄາ
+        UPDATE Products
+        SET Price = @NewPrice
+        WHERE ProductID = @ProductID;
+        
+        -- ຕັ້ງຄ່າ output parameter ເປັນຈິງ
+        SET @PriceUpdated = 1;
+    END
+    ELSE
+    BEGIN
+        -- ຕັ້ງຄ່າ output parameter ເປັນເທັດ
+        SET @PriceUpdated = 0;
+    END
+    
+    -- ສົ່ງຄືນຂໍ້ມູນຜະລິດຕະພັນທີ່ອັບເດດແລ້ວ
+    SELECT * FROM Products
+    WHERE ProductID = @ProductID;
+END;
+
+-- ເອີ້ນໃຊ້ stored procedure ພ້ອມ output parameter
+DECLARE @PriceWasUpdated bit;
+EXEC UpdateProductPrice 
+    @ProductID = 1, 
+    @NewPrice = 20.99, 
+    @PriceUpdated = @PriceWasUpdated OUTPUT;
+    
+-- ເບິ່ງຄ່າຂອງຕົວແປ output
+SELECT @PriceWasUpdated AS 'Price Was Updated';`
+                }
+            ]
+        };
+        
+        // Initialize CodeMirror editor
+        let codeEditor;
+        let currentCode = "";
+        let originalCode = "";
+        
+        function initCodeEditor(code) {
+            if (codeEditor) {
+                codeEditor.toTextArea(); // Destroy old instance
+            }
+            
+            originalCode = code;
+            currentCode = code;
+            
+            const editorElement = document.getElementById('code-editor');
+            const textArea = document.createElement('textarea');
+            editorElement.innerHTML = '';
+            editorElement.appendChild(textArea);
+            textArea.value = code;
+            
+            codeEditor = CodeMirror.fromTextArea(textArea, {
+                mode: "text/x-sql",
+                theme: document.documentElement.classList.contains('dark') ? "material" : "idea",
+                lineNumbers: true,
+                tabSize: 2,
+                indentWithTabs: false,
+                autoCloseBrackets: true,
+                matchBrackets: true
+            });
+            
+            // Create duplicate editors for light/dark mode
+            const lightEditor = codeEditor.getWrapperElement().cloneNode(true);
+            lightEditor.classList.add('cm-s-idea');
+            lightEditor.classList.remove('cm-s-material');
+            editorElement.appendChild(lightEditor);
+            
+            // Make sure light/dark editors stay in sync
+            codeEditor.on('change', (cm) => {
+                currentCode = cm.getValue();
+                const otherEditor = editorElement.querySelector('.CodeMirror:not(.cm-s-' + cm.getOption('theme') + ')');
+                if (otherEditor) {
+                    const otherCM = otherEditor.CodeMirror;
+                    if (otherCM && otherCM.getValue() !== currentCode) {
+                        otherCM.setValue(currentCode);
+                    }
+                }
+            });
+        }
+        
+        // Run the code through Poe AI
+        async function runCode() {
+            const outputElement = document.getElementById('output');
+            outputElement.textContent = "ກຳລັງດຳເນີນການ...";
+            
+            try {
+                // Here we use Poe API to explain the SQL query
+                await window.Poe.sendUserMessage(
+                    "@Claude-3.7-Sonnet ກະລຸນາອະທິບາຍຄຳສັ່ງ SQL ນີ້ເປັນພາສາລາວ ໂດຍໃຫ້ຜົນລັບແບບຕົວຢ່າງທີ່ເປັນໄປໄດ້: \n```sql\n" + currentCode + "\n```",
+                    {
+                        handler: "sql-explainer",
+                        stream: true,
+                        openChat: false
+                    }
+                );
+            } catch (error) {
+                outputElement.textContent = "ເກີດຂໍ້ຜິດພາດ: " + error.message;
+            }
+        }
+        
+        // Poe handler for SQL explanation results
+        window.Poe.registerHandler("sql-explainer", (result) => {
+            const outputElement = document.getElementById('output');
+            const response = result.responses[0];
+            
+            if (response.status === "error") {
+                outputElement.textContent = "ເກີດຂໍ້ຜິດພາດ: " + response.statusText;
+            } else if (response.status === "incomplete") {
+                outputElement.textContent = response.content;
+            } else if (response.status === "complete") {
+                outputElement.textContent = response.content;
+            }
+        });
+        
+        // Reset the code editor to original code
+        function resetCode() {
+            if (codeEditor) {
+                codeEditor.setValue(originalCode);
+                document.getElementById('output').textContent = "";
+            }
+        }
+        
+        // Show topics for a specific level
+        function showTopics(level) {
+            const topicsContainer = document.getElementById('topics-container');
+            topicsContainer.innerHTML = ''; // Clear previous topics
+            
+            // Show topics container, hide tutorial container
+            topicsContainer.classList.remove('hidden');
+            document.getElementById('tutorial-container').classList.add('hidden');
+            document.getElementById('loading').classList.add('hidden');
+            
+            // Update active level button
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                if (btn.dataset.level === level) {
+                    btn.classList.add('bg-sql-blue', 'text-white');
+                    btn.classList.remove('bg-gray-200', 'text-gray-800', 'dark:bg-gray-700', 'dark:text-gray-200');
+                } else {
+                    btn.classList.remove('bg-sql-blue', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-800', 'dark:bg-gray-700', 'dark:text-gray-200');
+                }
+            });
+            
+            // Create topic buttons
+            tutorials[level].forEach(topic => {
+                const topicButton = document.createElement('button');
+                topicButton.className = 'topic-btn p-4 rounded-lg bg-white dark:bg-gray-800 shadow hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700 text-left';
+                topicButton.innerHTML = `
+                    <h3 class="text-xl font-bold text-sql-blue dark:text-sql-lightblue mb-2">${topic.title}</h3>
+                    <p class="text-gray-600 dark:text-gray-300">${topic.content.split('\n')[0].replace('#', '').trim()}</p>
+                `;
+                topicButton.addEventListener('click', () => showTutorial(level, topic.id));
+                topicsContainer.appendChild(topicButton);
+                
+                // Add fade-in animation
+                setTimeout(() => {
+                    topicButton.classList.add('fade-enter-active');
+                }, 100);
+            });
+        }
+        
+        // Show a specific tutorial
+        function showTutorial(level, topicId) {
+            const topic = tutorials[level].find(t => t.id === topicId);
+            if (!topic) return;
+            
+            // Show loading state
+            document.getElementById('topics-container').classList.add('hidden');
+            document.getElementById('tutorial-container').classList.add('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+            
+            // Delay to simulate loading and show the transition
+            setTimeout(() => {
+                document.getElementById('tutorial-title').textContent = topic.title;
+                document.getElementById('tutorial-content').innerHTML = marked.parse(topic.content);
+                
+                // Initialize code editor with the topic's code
+                initCodeEditor(topic.code);
+                
+                // Show tutorial container, hide topics and loading
+                document.getElementById('tutorial-container').classList.remove('hidden');
+                document.getElementById('topics-container').classList.add('hidden');
+                document.getElementById('loading').classList.add('hidden');
+                
+                // Clear output
+                document.getElementById('output').textContent = "";
+            }, 500);
+        }
+        
+        // Handle AI questions
+        async function askAI() {
+            try {
+                await window.Poe.sendUserMessage(
+                    "@Claude-3.7-Sonnet ຂ້ອຍກຳລັງຮຽນ SQL. ກະລຸນາອະທິບາຍຄຳສັ່ງ SQL ທີ່ໃຊ້ເລື້ອຍໆເປັນພາສາລາວ ແລະ ຍົກຕົວຢ່າງການໃຊ້ຄຳສັ່ງນັ້ນ.",
+                    { openChat: true }
+                );
+            } catch (error) {
+                console.error("Error asking AI:", error);
+            }
+        }
+        
+        // Initialize the application
+        function initApp() {
+            // Event listeners for level buttons
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', () => showTopics(btn.dataset.level));
+            });
+            
+            // Back button event listener
+            document.getElementById('back-btn').addEventListener('click', () => {
+                const activeLevel = document.querySelector('.level-btn.active').dataset.level;
+                showTopics(activeLevel);
+            });
+            
+            // Run and Reset buttons
+            document.getElementById('run-btn').addEventListener('click', runCode);
+            document.getElementById('reset-btn').addEventListener('click', resetCode);
+            
+            // Ask AI button
+            document.getElementById('ask-ai-btn').addEventListener('click', askAI);
+            
+            // Show beginner topics by default
+            showTopics('beginner');
+            
+            // Update active class when clicking level buttons
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+        
+        // Start the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

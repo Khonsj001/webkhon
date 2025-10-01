@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ລະບົບຈັດການຮ້ານຄ້າອອນລາຍ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+
+        // Check dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Noto Sans Lao', sans-serif;
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col transition-colors duration-200">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-md p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-primary">ລະບົບຈັດການຮ້ານຄ້າອອນລາຍ</h1>
+            <div class="flex items-center gap-4">
+                <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <i class="fas fa-moon hidden dark:block"></i>
+                    <i class="fas fa-sun block dark:hidden"></i>
+                </button>
+                <div class="relative">
+                    <button id="userMenuBtn" class="flex items-center gap-2 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <span class="hidden md:inline-block">ຜູ້ຄວບຄຸມ</span>
+                        <i class="fas fa-user-circle text-lg"></i>
+                    </button>
+                    <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded shadow-lg hidden z-10">
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">ຕັ້ງຄ່າບັນຊີ</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">ອອກຈາກລະບົບ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex flex-col md:flex-row flex-1">
+        <!-- Sidebar Navigation -->
+        <aside class="bg-gray-100 dark:bg-gray-800 w-full md:w-64 md:min-h-screen p-4">
+            <nav>
+                <ul class="space-y-2">
+                    <li>
+                        <button data-section="dashboard" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white bg-primary text-white">
+                            <i class="fas fa-tachometer-alt w-6"></i>
+                            <span>ໜ້າຫຼັກ</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button data-section="products" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                            <i class="fas fa-box w-6"></i>
+                            <span>ຜະລິດຕະພັນ</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button data-section="customers" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                            <i class="fas fa-users w-6"></i>
+                            <span>ລູກຄ້າ</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button data-section="orders" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                            <i class="fas fa-shopping-cart w-6"></i>
+                            <span>ຄຳສັ່ງຊື້</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button data-section="reports" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                            <i class="fas fa-chart-bar w-6"></i>
+                            <span>ລາຍງານ</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button data-section="settings" class="nav-link w-full flex items-center p-2 rounded hover:bg-primary hover:text-white">
+                            <i class="fas fa-cog w-6"></i>
+                            <span>ຕັ້ງຄ່າ</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4">
+            <div id="content-area" class="container mx-auto">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section slide-in">
+                    <h2 class="text-2xl font-bold mb-6">ພາບລວມ</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-blue-100 dark:bg-blue-900 p-3 mr-4">
+                                    <i class="fas fa-box text-blue-500 dark:text-blue-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-gray-500 dark:text-gray-400">ຜະລິດຕະພັນທັງໝົດ</h3>
+                                    <p class="text-2xl font-bold" id="product-count">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-green-100 dark:bg-green-900 p-3 mr-4">
+                                    <i class="fas fa-users text-green-500 dark:text-green-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-gray-500 dark:text-gray-400">ລູກຄ້າທັງໝົດ</h3>
+                                    <p class="text-2xl font-bold" id="customer-count">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-purple-100 dark:bg-purple-900 p-3 mr-4">
+                                    <i class="fas fa-shopping-cart text-purple-500 dark:text-purple-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-gray-500 dark:text-gray-400">ຄຳສັ່ງຊື້ທັງໝົດ</h3>
+                                    <p class="text-2xl font-bold" id="order-count">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-yellow-100 dark:bg-yellow-900 p-3 mr-4">
+                                    <i class="fas fa-dollar-sign text-yellow-500 dark:text-yellow-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-gray-500 dark:text-gray-400">ລາຍຮັບທັງໝົດ</h3>
+                                    <p class="text-2xl font-bold">₭ <span id="total-revenue">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-4">ຄຳສັ່ງຊື້ຫຼ້າສຸດ</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left">ລະຫັດ</th>
+                                            <th class="px-4 py-2 text-left">ລູກຄ້າ</th>
+                                            <th class="px-4 py-2 text-left">ວັນທີ</th>
+                                            <th class="px-4 py-2 text-left">ມູນຄ່າ</th>
+                                            <th class="px-4 py-2 text-left">ສະຖານະ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-orders-table">
+                                        <tr>
+                                            <td class="px-4 py-2 text-center" colspan="5">ບໍ່ມີຂໍ້ມູນ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-4">ຜະລິດຕະພັນຂາຍດີ</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left">ຜະລິດຕະພັນ</th>
+                                            <th class="px-4 py-2 text-left">ລາຄາ</th>
+                                            <th class="px-4 py-2 text-left">ຈຳນວນຂາຍ</th>
+                                            <th class="px-4 py-2 text-left">ລາຍຮັບ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="top-products-table">
+                                        <tr>
+                                            <td class="px-4 py-2 text-center" colspan="4">ບໍ່ມີຂໍ້ມູນ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Products Section -->
+                <section id="products" class="content-section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">ຜະລິດຕະພັນ</h2>
+                        <button id="add-product-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span>ເພີ່ມຜະລິດຕະພັນໃໝ່</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                        <div class="flex flex-col md:flex-row gap-4 mb-4">
+                            <div class="flex-1">
+                                <input type="text" id="product-search" placeholder="ຄົ້ນຫາຜະລິດຕະພັນ..." class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div class="flex gap-2">
+                                <select id="product-category-filter" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="">ທຸກໝວດໝູ່</option>
+                                    <option value="electronics">ອຸປະກອນອີເລັກໂທຣນິກ</option>
+                                    <option value="clothing">ເຄື່ອງນຸ່ງຫົ່ມ</option>
+                                    <option value="home">ເຄື່ອງໃຊ້ໃນເຮືອນ</option>
+                                </select>
+                                <select id="product-sort" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="name-asc">ຊື່: A-Z</option>
+                                    <option value="name-desc">ຊື່: Z-A</option>
+                                    <option value="price-asc">ລາຄາ: ຕ່ຳ-ສູງ</option>
+                                    <option value="price-desc">ລາຄາ: ສູງ-ຕ່ຳ</option>
+                                    <option value="stock-asc">ສິນຄ້າຄົງເຫຼືອ: ຕ່ຳ-ສູງ</option>
+                                    <option value="stock-desc">ສິນຄ້າຄົງເຫຼືອ: ສູງ-ຕ່ຳ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left">ລະຫັດ</th>
+                                        <th class="px-4 py-2 text-left">ຊື່ຜະລິດຕະພັນ</th>
+                                        <th class="px-4 py-2 text-left">ໝວດໝູ່</th>
+                                        <th class="px-4 py-2 text-left">ລາຄາ</th>
+                                        <th class="px-4 py-2 text-left">ຄົງເຫຼືອ</th>
+                                        <th class="px-4 py-2 text-left">ສະຖານະ</th>
+                                        <th class="px-4 py-2 text-left">ຈັດການ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-table">
+                                    <!-- Products will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">ສະແດງ <span id="product-range">0-0</span> ຈາກ <span id="product-total">0</span> ລາຍການ</p>
+                        <div class="flex gap-2">
+                            <button id="product-prev" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="product-next" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Customers Section -->
+                <section id="customers" class="content-section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">ລູກຄ້າ</h2>
+                        <button id="add-customer-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span>ເພີ່ມລູກຄ້າໃໝ່</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                        <div class="flex flex-col md:flex-row gap-4 mb-4">
+                            <div class="flex-1">
+                                <input type="text" id="customer-search" placeholder="ຄົ້ນຫາລູກຄ້າ..." class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div class="flex gap-2">
+                                <select id="customer-sort" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="name-asc">ຊື່: A-Z</option>
+                                    <option value="name-desc">ຊື່: Z-A</option>
+                                    <option value="date-asc">ວັນສະໝັກ: ເກົ່າ-ໃໝ່</option>
+                                    <option value="date-desc">ວັນສະໝັກ: ໃໝ່-ເກົ່າ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left">ລະຫັດ</th>
+                                        <th class="px-4 py-2 text-left">ຊື່</th>
+                                        <th class="px-4 py-2 text-left">ອີເມວ</th>
+                                        <th class="px-4 py-2 text-left">ເບີໂທ</th>
+                                        <th class="px-4 py-2 text-left">ວັນສະໝັກ</th>
+                                        <th class="px-4 py-2 text-left">ຈຳນວນຄຳສັ່ງຊື້</th>
+                                        <th class="px-4 py-2 text-left">ຈັດການ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customers-table">
+                                    <!-- Customers will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">ສະແດງ <span id="customer-range">0-0</span> ຈາກ <span id="customer-total">0</span> ລາຍການ</p>
+                        <div class="flex gap-2">
+                            <button id="customer-prev" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="customer-next" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="content-section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">ຄຳສັ່ງຊື້</h2>
+                        <button id="add-order-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span>ເພີ່ມຄຳສັ່ງຊື້ໃໝ່</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+                        <div class="flex flex-col md:flex-row gap-4 mb-4">
+                            <div class="flex-1">
+                                <input type="text" id="order-search" placeholder="ຄົ້ນຫາຄຳສັ່ງຊື້..." class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div class="flex gap-2">
+                                <select id="order-status-filter" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="">ທຸກສະຖານະ</option>
+                                    <option value="pending">ລໍຖ້າ</option>
+                                    <option value="processing">ກຳລັງດຳເນີນການ</option>
+                                    <option value="shipped">ຈັດສົ່ງແລ້ວ</option>
+                                    <option value="delivered">ຮັບສິນຄ້າແລ້ວ</option>
+                                    <option value="cancelled">ຍົກເລີກ</option>
+                                </select>
+                                <select id="order-sort" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="date-desc">ວັນທີ: ໃໝ່-ເກົ່າ</option>
+                                    <option value="date-asc">ວັນທີ: ເກົ່າ-ໃໝ່</option>
+                                    <option value="total-desc">ມູນຄ່າ: ສູງ-ຕ່ຳ</option>
+                                    <option value="total-asc">ມູນຄ່າ: ຕ່ຳ-ສູງ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left">ລະຫັດຄຳສັ່ງຊື້</th>
+                                        <th class="px-4 py-2 text-left">ລູກຄ້າ</th>
+                                        <th class="px-4 py-2 text-left">ວັນທີ</th>
+                                        <th class="px-4 py-2 text-left">ຜະລິດຕະພັນ</th>
+                                        <th class="px-4 py-2 text-left">ມູນຄ່າລວມ</th>
+                                        <th class="px-4 py-2 text-left">ສະຖານະ</th>
+                                        <th class="px-4 py-2 text-left">ຈັດການ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-table">
+                                    <!-- Orders will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">ສະແດງ <span id="order-range">0-0</span> ຈາກ <span id="order-total">0</span> ລາຍການ</p>
+                        <div class="flex gap-2">
+                            <button id="order-prev" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="order-next" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="content-section hidden">
+                    <h2 class="text-2xl font-bold mb-6">ລາຍງານ</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-4">ລາຍງານຍອດຂາຍ</h3>
+                            <div class="flex flex-col md:flex-row gap-4 mb-4">
+                                <div class="flex-1">
+                                    <label class="block mb-1">ເລີ່ມວັນທີ</label>
+                                    <input type="date" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block mb-1">ຮອດວັນທີ</label>
+                                    <input type="date" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                                </div>
+                                <div class="flex items-end">
+                                    <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg">ສ້າງລາຍງານ</button>
+                                </div>
+                            </div>
+                            <div class="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <p class="text-gray-500 dark:text-gray-400">ກະລຸນາເລືອກຊ່ວງເວລາເພື່ອສະແດງກຣາຟ</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-4">ລາຍງານຕາມໝວດໝູ່</h3>
+                            <div class="flex mb-4">
+                                <div class="flex-1">
+                                    <select class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                        <option value="month">ເດືອນນີ້</option>
+                                        <option value="quarter">ໄຕມາດນີ້</option>
+                                        <option value="year">ປີນີ້</option>
+                                        <option value="custom">ເລືອກຊ່ວງເວລາ</option>
+                                    </select>
+                                </div>
+                                <div class="ml-2">
+                                    <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg">ສ້າງລາຍງານ</button>
+                                </div>
+                            </div>
+                            <div class="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <p class="text-gray-500 dark:text-gray-400">ກະລຸນາເລືອກຊ່ວງເວລາເພື່ອສະແດງກຣາຟ</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="content-section hidden">
+                    <h2 class="text-2xl font-bold mb-6">ຕັ້ງຄ່າລະບົບ</h2>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+                        <h3 class="text-lg font-semibold mb-4">ຂໍ້ມູນຮ້ານຄ້າ</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-1">ຊື່ຮ້ານຄ້າ</label>
+                                <input type="text" value="ຮ້ານຄ້າອອນລາຍຂອງຂ້ອຍ" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label class="block mb-1">ເບີໂທຕິດຕໍ່</label>
+                                <input type="text" value="020 1234 5678" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label class="block mb-1">ອີເມວຕິດຕໍ່</label>
+                                <input type="email" value="contact@mystore.la" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label class="block mb-1">ທີ່ຢູ່</label>
+                                <input type="text" value="ນະຄອນຫຼວງວຽງຈັນ, ລາວ" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+                        <h3 class="text-lg font-semibold mb-4">ການແຈ້ງເຕືອນ</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span>ແຈ້ງເຕືອນເມື່ອມີຄຳສັ່ງຊື້ໃໝ່</span>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>ແຈ້ງເຕືອນເມື່ອສິນຄ້າໃກ້ໝົດ</span>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>ແຈ້ງເຕືອນລາຍງານປະຈຳເດືອນ</span>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer">
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg">ບັນທຶກການຕັ້ງຄ່າ</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal container -->
+    <div id="modal-container" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <!-- Product Modal -->
+        <div id="product-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="product-modal-title">ເພີ່ມຜະລິດຕະພັນໃໝ່</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="product-form" class="space-y-4">
+                <input type="hidden" id="product-id">
+                <div>
+                    <label for="product-name" class="block mb-1">ຊື່ຜະລິດຕະພັນ</label>
+                    <input type="text" id="product-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="product-category" class="block mb-1">ໝວດໝູ່</label>
+                    <select id="product-category" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                        <option value="electronics">ອຸປະກອນອີເລັກໂທຣນິກ</option>
+                        <option value="clothing">ເຄື່ອງນຸ່ງຫົ່ມ</option>
+                        <option value="home">ເຄື່ອງໃຊ້ໃນເຮືອນ</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-description" class="block mb-1">ລາຍລະອຽດ</label>
+                    <textarea id="product-description" rows="3" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="product-price" class="block mb-1">ລາຄາ (₭)</label>
+                        <input type="number" id="product-price" min="0" step="1000" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="product-stock" class="block mb-1">ຄົງເຫຼືອ</label>
+                        <input type="number" id="product-stock" min="0" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-1">ສະຖານະ</label>
+                    <div class="flex items-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="product-status" value="active" checked class="form-radio text-primary">
+                            <span class="ml-2">ເປີດໃຊ້ງານ</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="product-status" value="inactive" class="form-radio text-primary">
+                            <span class="ml-2">ປິດໃຊ້ງານ</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="button" class="modal-close mr-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg">ບັນທຶກ</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Customer Modal -->
+        <div id="customer-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="customer-modal-title">ເພີ່ມລູກຄ້າໃໝ່</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="customer-form" class="space-y-4">
+                <input type="hidden" id="customer-id">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="customer-first-name" class="block mb-1">ຊື່</label>
+                        <input type="text" id="customer-first-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="customer-last-name" class="block mb-1">ນາມສະກຸນ</label>
+                        <input type="text" id="customer-last-name" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                </div>
+                <div>
+                    <label for="customer-email" class="block mb-1">ອີເມວ</label>
+                    <input type="email" id="customer-email" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="customer-phone" class="block mb-1">ເບີໂທ</label>
+                    <input type="tel" id="customer-phone" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="customer-address" class="block mb-1">ທີ່ຢູ່</label>
+                    <textarea id="customer-address" rows="3" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700"></textarea>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="button" class="modal-close mr-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg">ບັນທຶກ</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Order Modal -->
+        <div id="order-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="order-modal-title">ເພີ່ມຄຳສັ່ງຊື້ໃໝ່</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="order-form" class="space-y-4">
+                <input type="hidden" id="order-id">
+                <div>
+                    <label for="order-customer" class="block mb-1">ລູກຄ້າ</label>
+                    <select id="order-customer" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                        <!-- Customers will be loaded here -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block mb-1">ລາຍການສິນຄ້າ</label>
+                    <div id="order-items" class="space-y-2 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="flex flex-col md:flex-row md:items-center gap-2">
+                            <select class="order-product md:flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                <!-- Products will be loaded here -->
+                            </select>
+                            <input type="number" min="1" value="1" class="order-quantity w-24 p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                            <span class="order-price text-gray-600 dark:text-gray-400 md:w-36">₭ 0</span>
+                            <button type="button" class="remove-item-btn text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" id="add-item-btn" class="mt-2 text-primary hover:text-primary/80">
+                        <i class="fas fa-plus"></i> ເພີ່ມສິນຄ້າ
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="order-status" class="block mb-1">ສະຖານະ</label>
+                        <select id="order-status" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                            <option value="pending">ລໍຖ້າ</option>
+                            <option value="processing">ກຳລັງດຳເນີນການ</option>
+                            <option value="shipped">ຈັດສົ່ງແລ້ວ</option>
+                            <option value="delivered">ຮັບສິນຄ້າແລ້ວ</option>
+                            <option value="cancelled">ຍົກເລີກ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="order-date" class="block mb-1">ວັນທີສັ່ງຊື້</label>
+                        <input type="date" id="order-date" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    </div>
+                </div>
+                <div>
+                    <label for="order-notes" class="block mb-1">ໝາຍເຫດ</label>
+                    <textarea id="order-notes" rows="2" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700"></textarea>
+                </div>
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <div class="flex justify-between">
+                        <span class="font-semibold">ລວມມູນຄ່າ:</span>
+                        <span id="order-total">₭ 0</span>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="button" class="modal-close mr-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg">ບັນທຶກ</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="delete-modal" class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md hidden">
+            <div class="text-center">
+                <div class="mb-4 text-red-500">
+                    <i class="fas fa-exclamation-triangle text-5xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2" id="delete-title">ຢືນຢັນການລຶບ</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6" id="delete-message">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້.</p>
+                <div class="flex justify-center space-x-4">
+                    <button type="button" class="modal-close px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">ຍົກເລີກ</button>
+                    <button type="button" id="confirm-delete" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">ລຶບ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated Database using localStorage
+        const DB = {
+            // Initialize the database if it doesn't exist
+            init() {
+                if (!localStorage.getItem('products')) {
+                    localStorage.setItem('products', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('customers')) {
+                    localStorage.setItem('customers', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('orders')) {
+                    localStorage.setItem('orders', JSON.stringify([]));
+                }
+                
+                // If empty, populate with sample data
+                this.loadSampleData();
+            },
+            
+            // Load sample data if the database is empty
+            loadSampleData() {
+                const products = this.getProducts();
+                const customers = this.getCustomers();
+                const orders = this.getOrders();
+                
+                if (products.length === 0) {
+                    const sampleProducts = [
+                        { id: 'p1', name: 'ສະມາດໂຟນ ABC', category: 'electronics', description: 'ສະມາດໂຟນລຸ້ນໃໝ່ລ່າສຸດຈາກ ABC', price: 5000000, stock: 25, status: 'active' },
+                        { id: 'p2', name: 'ແລັບທັອບ XYZ', category: 'electronics', description: 'ແລັບທັອບລຸ້ນໃໝ່ ປະສິດທິພາບສູງ', price: 15000000, stock: 10, status: 'active' },
+                        { id: 'p3', name: 'ເສື້ອຍືດສີດຳ', category: 'clothing', description: 'ເສື້ອຍືດສີດຳຄຸນນະພາບດີ', price: 120000, stock: 100, status: 'active' },
+                        { id: 'p4', name: 'ໂຕະກິນເຂົ້າ', category: 'home', description: 'ໂຕະກິນເຂົ້າສຳລັບ 4 ຄົນ', price: 1500000, stock: 5, status: 'active' },
+                        { id: 'p5', name: 'ໝໍ້ແກງໄຟຟ້າ', category: 'home', description: 'ໝໍ້ແກງໄຟຟ້າຄຸນນະພາບດີ', price: 500000, stock: 15, status: 'active' }
+                    ];
+                    localStorage.setItem('products', JSON.stringify(sampleProducts));
+                }
+                
+                if (customers.length === 0) {
+                    const sampleCustomers = [
+                        { id: 'c1', firstName: 'ທອງດີ', lastName: 'ສຸກສະໄໝ', email: 'thongdee@example.com', phone: '020 1234 5678', address: 'ນະຄອນຫຼວງວຽງຈັນ', joinDate: '2023-01-15' },
+                        { id: 'c2', firstName: 'ສົມຈິດ', lastName: 'ພົມມະຈັນ', email: 'somjit@example.com', phone: '020 8765 4321', address: 'ຫຼວງພະບາງ', joinDate: '2023-02-20' },
+                        { id: 'c3', firstName: 'ຄຳຫຼ້າ', lastName: 'ວິໄລພອນ', email: 'khamla@example.com', phone: '020 5555 9999', address: 'ປາກເຊ', joinDate: '2023-03-10' }
+                    ];
+                    localStorage.setItem('customers', JSON.stringify(sampleCustomers));
+                }
+                
+                if (orders.length === 0) {
+                    const today = new Date();
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(lastWeek.getDate() - 7);
+                    
+                    const sampleOrders = [
+                        { 
+                            id: 'o1',
+                            customerId: 'c1',
+                            date: today.toISOString().split('T')[0],
+                            items: [
+                                { productId: 'p1', quantity: 1, price: 5000000 }
+                            ],
+                            status: 'pending',
+                            notes: '',
+                            total: 5000000
+                        },
+                        { 
+                            id: 'o2',
+                            customerId: 'c2',
+                            date: yesterday.toISOString().split('T')[0],
+                            items: [
+                                { productId: 'p3', quantity: 2, price: 120000 },
+                                { productId: 'p5', quantity: 1, price: 500000 }
+                            ],
+                            status: 'processing',
+                            notes: '',
+                            total: 740000
+                        },
+                        { 
+                            id: 'o3',
+                            customerId: 'c3',
+                            date: lastWeek.toISOString().split('T')[0],
+                            items: [
+                                { productId: 'p2', quantity: 1, price: 15000000 }
+                            ],
+                            status: 'delivered',
+                            notes: '',
+                            total: 15000000
+                        }
+                    ];
+                    localStorage.setItem('orders', JSON.stringify(sampleOrders));
+                }
+            },
+            
+            // CRUD operations for products
+            getProducts() {
+                return JSON.parse(localStorage.getItem('products') || '[]');
+            },
+            
+            getProduct(id) {
+                const products = this.getProducts();
+                return products.find(product => product.id === id);
+            },
+            
+            saveProduct(product) {
+                const products = this.getProducts();
+                if (!product.id) {
+                    // New product
+                    product.id = 'p' + Date.now();
+                    products.push(product);
+                } else {
+                    // Update existing product
+                    const index = products.findIndex(p => p.id === product.id);
+                    if (index !== -1) {
+                        products[index] = product;
+                    }
+                }
+                localStorage.setItem('products', JSON.stringify(products));
+                return product;
+            },
+            
+            deleteProduct(id) {
+                let products = this.getProducts();
+                products = products.filter(product => product.id !== id);
+                localStorage.setItem('products', JSON.stringify(products));
+            },
+            
+            // CRUD operations for customers
+            getCustomers() {
+                return JSON.parse(localStorage.getItem('customers') || '[]');
+            },
+            
+            getCustomer(id) {
+                const customers = this.getCustomers();
+                return customers.find(customer => customer.id === id);
+            },
+            
+            saveCustomer(customer) {
+                const customers = this.getCustomers();
+                if (!customer.id) {
+                    // New customer
+                    customer.id = 'c' + Date.now();
+                    if (!customer.joinDate) {
+                        customer.joinDate = new Date().toISOString().split('T')[0];
+                    }
+                    customers.push(customer);
+                } else {
+                    // Update existing customer
+                    const index = customers.findIndex(c => c.id === customer.id);
+                    if (index !== -1) {
+                        customers[index] = customer;
+                    }
+                }
+                localStorage.setItem('customers', JSON.stringify(customers));
+                return customer;
+            },
+            
+            deleteCustomer(id) {
+                let customers = this.getCustomers();
+                customers = customers.filter(customer => customer.id !== id);
+                localStorage.setItem('customers', JSON.stringify(customers));
+            },
+            
+            // CRUD operations for orders
+            getOrders() {
+                return JSON.parse(localStorage.getItem('orders') || '[]');
+            },
+            
+            getOrder(id) {
+                const orders = this.getOrders();
+                return orders.find(order => order.id === id);
+            },
+            
+            saveOrder(order) {
+                const orders = this.getOrders();
+                if (!order.id) {
+                    // New order
+                    order.id = 'o' + Date.now();
+                    if (!order.date) {
+                        order.date = new Date().toISOString().split('T')[0];
+                    }
+                    orders.push(order);
+                } else {
+                    // Update existing order
+                    const index = orders.findIndex(o => o.id === order.id);
+                    if (index !== -1) {
+                        orders[index] = order;
+                    }
+                }
+                localStorage.setItem('orders', JSON.stringify(orders));
+                return order;
+            },
+            
+            deleteOrder(id) {
+                let orders = this.getOrders();
+                orders = orders.filter(order => order.id !== id);
+                localStorage.setItem('orders', JSON.stringify(orders));
+            },
+            
+            // Get orders for a customer
+            getOrdersByCustomer(customerId) {
+                const orders = this.getOrders();
+                return orders.filter(order => order.customerId === customerId);
+            },
+            
+            // Calculate total revenue
+            getTotalRevenue() {
+                const orders = this.getOrders();
+                return orders.reduce((total, order) => total + order.total, 0);
+            },
+            
+            // Get top selling products
+            getTopProducts(limit = 5) {
+                const orders = this.getOrders();
+                const productSales = {};
+                
+                // Count sales for each product
+                orders.forEach(order => {
+                    order.items.forEach(item => {
+                        if (!productSales[item.productId]) {
+                            productSales[item.productId] = {
+                                count: 0,
+                                revenue: 0
+                            };
+                        }
+                        productSales[item.productId].count += item.quantity;
+                        productSales[item.productId].revenue += item.quantity * item.price;
+                    });
+                });
+                
+                // Convert to array and sort
+                const productsArray = Object.keys(productSales).map(productId => {
+                    const product = this.getProduct(productId);
+                    return {
+                        id: productId,
+                        name: product ? product.name : 'Unknown Product',
+                        price: product ? product.price : 0,
+                        count: productSales[productId].count,
+                        revenue: productSales[productId].revenue
+                    };
+                });
+                
+                // Sort by count and take top n
+                return productsArray.sort((a, b) => b.count - a.count).slice(0, limit);
+            },
+            
+            // Get recent orders
+            getRecentOrders(limit = 5) {
+                const orders = this.getOrders();
+                return orders.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, limit);
+            }
+        };
+
+        // Initialize the database
+        DB.init();
+
+        // UI Controller
+        const UI = {
+            // Cache DOM elements
+            init() {
+                // Navigation elements
+                this.navLinks = document.querySelectorAll('.nav-link');
+                this.contentSections = document.querySelectorAll('.content-section');
+                
+                // Dashboard elements
+                this.productCount = document.getElementById('product-count');
+                this.customerCount = document.getElementById('customer-count');
+                this.orderCount = document.getElementById('order-count');
+                this.totalRevenue = document.getElementById('total-revenue');
+                this.recentOrdersTable = document.getElementById('recent-orders-table');
+                this.topProductsTable = document.getElementById('top-products-table');
+                
+                // Products elements
+                this.productsTable = document.getElementById('products-table');
+                this.addProductBtn = document.getElementById('add-product-btn');
+                this.productForm = document.getElementById('product-form');
+                this.productModal = document.getElementById('product-modal');
+                this.productModalTitle = document.getElementById('product-modal-title');
+                
+                // Customers elements
+                this.customersTable = document.getElementById('customers-table');
+                this.addCustomerBtn = document.getElementById('add-customer-btn');
+                this.customerForm = document.getElementById('customer-form');
+                this.customerModal = document.getElementById('customer-modal');
+                this.customerModalTitle = document.getElementById('customer-modal-title');
+                
+                // Orders elements
+                this.ordersTable = document.getElementById('orders-table');
+                this.addOrderBtn = document.getElementById('add-order-btn');
+                this.orderForm = document.getElementById('order-form');
+                this.orderModal = document.getElementById('order-modal');
+                this.orderModalTitle = document.getElementById('order-modal-title');
+                this.orderCustomerSelect = document.getElementById('order-customer');
+                this.orderItems = document.getElementById('order-items');
+                this.addItemBtn = document.getElementById('add-item-btn');
+                this.orderTotal = document.getElementById('order-total');
+                
+                // Modal elements
+                this.modalContainer = document.getElementById('modal-container');
+                this.modalCloseButtons = document.querySelectorAll('.modal-close');
+                this.deleteModal = document.getElementById('delete-modal');
+                this.deleteTitle = document.getElementById('delete-title');
+                this.deleteMessage = document.getElementById('delete-message');
+                this.confirmDeleteBtn = document.getElementById('confirm-delete');
+                
+                // User menu
+                this.userMenuBtn = document.getElementById('userMenuBtn');
+                this.userMenu = document.getElementById('userMenu');
+                
+                // Dark mode toggle
+                this.darkModeToggle = document.getElementById('darkModeToggle');
+                
+                // Initialize event listeners
+                this.initEventListeners();
+                
+                // Load initial data
+                this.loadDashboard();
+            },
+            
+            // Set up event listeners
+            initEventListeners() {
+                // Navigation
+                this.navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        const section = link.getAttribute('data-section');
+                        this.showSection(section);
+                    });
+                });
+                
+                // Product form
+                this.addProductBtn.addEventListener('click', () => this.showProductModal());
+                this.productForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveProduct();
+                });
+                
+                // Customer form
+                this.addCustomerBtn.addEventListener('click', () => this.showCustomerModal());
+                this.customerForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveCustomer();
+                });
+                
+                // Order form
+                this.addOrderBtn.addEventListener('click', () => this.showOrderModal());
+                this.orderForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveOrder();
+                });
+                this.addItemBtn.addEventListener('click', () => this.addOrderItem());
+                
+                // Modal close buttons
+                this.modalCloseButtons.forEach(button => {
+                    button.addEventListener('click', () => this.closeModal());
+                });
+                
+                // Delete confirmation
+                this.confirmDeleteBtn.addEventListener('click', () => {
+                    const type = this.confirmDeleteBtn.getAttribute('data-type');
+                    const id = this.confirmDeleteBtn.getAttribute('data-id');
+                    this.confirmDelete(type, id);
+                });
+                
+                // User menu toggle
+                this.userMenuBtn.addEventListener('click', () => {
+                    this.userMenu.classList.toggle('hidden');
+                });
+                
+                // Close user menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.userMenuBtn.contains(e.target) && !this.userMenu.contains(e.target)) {
+                        this.userMenu.classList.add('hidden');
+                    }
+                });
+                
+                // Dark mode toggle
+                this.darkModeToggle.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                });
+            },
+            
+            // Show selected section
+            showSection(sectionId) {
+                // Update navigation links
+                this.navLinks.forEach(link => {
+                    if (link.getAttribute('data-section') === sectionId) {
+                        link.classList.add('bg-primary', 'text-white');
+                    } else {
+                        link.classList.remove('bg-primary', 'text-white');
+                    }
+                });
+                
+                // Show selected section, hide others
+                this.contentSections.forEach(section => {
+                    if (section.id === sectionId) {
+                        section.classList.remove('hidden');
+                        section.classList.add('slide-in');
+                        
+                        // Load section data
+                        if (sectionId === 'dashboard') {
+                            this.loadDashboard();
+                        } else if (sectionId === 'products') {
+                            this.loadProducts();
+                        } else if (sectionId === 'customers') {
+                            this.loadCustomers();
+                        } else if (sectionId === 'orders') {
+                            this.loadOrders();
+                        }
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+            },
+            
+            // Load dashboard data
+            loadDashboard() {
+                const products = DB.getProducts();
+                const customers = DB.getCustomers();
+                const orders = DB.getOrders();
+                const totalRevenue = DB.getTotalRevenue();
+                
+                this.productCount.textContent = products.length;
+                this.customerCount.textContent = customers.length;
+                this.orderCount.textContent = orders.length;
+                this.totalRevenue.textContent = this.formatCurrency(totalRevenue);
+                
+                // Load recent orders
+                const recentOrders = DB.getRecentOrders(5);
+                if (recentOrders.length > 0) {
+                    let html = '';
+                    recentOrders.forEach(order => {
+                        const customer = DB.getCustomer(order.customerId);
+                        const customerName = customer ? `${customer.firstName} ${customer.lastName}` : 'Unknown';
+                        
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${order.id}</td>
+                                <td class="px-4 py-2">${customerName}</td>
+                                <td class="px-4 py-2">${this.formatDate(order.date)}</td>
+                                <td class="px-4 py-2">${this.formatCurrency(order.total)}</td>
+                                <td class="px-4 py-2"><span class="${this.getStatusClass(order.status)}">${this.translateStatus(order.status)}</span></td>
+                            </tr>
+                        `;
+                    });
+                    this.recentOrdersTable.innerHTML = html;
+                } else {
+                    this.recentOrdersTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="5">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+                
+                // Load top products
+                const topProducts = DB.getTopProducts(5);
+                if (topProducts.length > 0) {
+                    let html = '';
+                    topProducts.forEach(product => {
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${product.name}</td>
+                                <td class="px-4 py-2">${this.formatCurrency(product.price)}</td>
+                                <td class="px-4 py-2">${product.count}</td>
+                                <td class="px-4 py-2">${this.formatCurrency(product.revenue)}</td>
+                            </tr>
+                        `;
+                    });
+                    this.topProductsTable.innerHTML = html;
+                } else {
+                    this.topProductsTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="4">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load products data
+            loadProducts() {
+                const products = DB.getProducts();
+                if (products.length > 0) {
+                    let html = '';
+                    products.forEach(product => {
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${product.id}</td>
+                                <td class="px-4 py-2">${product.name}</td>
+                                <td class="px-4 py-2">${this.translateCategory(product.category)}</td>
+                                <td class="px-4 py-2">${this.formatCurrency(product.price)}</td>
+                                <td class="px-4 py-2">${product.stock}</td>
+                                <td class="px-4 py-2"><span class="${product.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'} text-xs font-medium px-2.5 py-0.5 rounded">${product.status === 'active' ? 'ເປີດໃຊ້ງານ' : 'ປິດໃຊ້ງານ'}</span></td>
+                                <td class="px-4 py-2">
+                                    <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="UI.editProduct('${product.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800" onclick="UI.showDeleteModal('product', '${product.id}', '${product.name}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    this.productsTable.innerHTML = html;
+                } else {
+                    this.productsTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="7">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load customers data
+            loadCustomers() {
+                const customers = DB.getCustomers();
+                if (customers.length > 0) {
+                    let html = '';
+                    customers.forEach(customer => {
+                        const orders = DB.getOrdersByCustomer(customer.id);
+                        const orderCount = orders.length;
+                        
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${customer.id}</td>
+                                <td class="px-4 py-2">${customer.firstName} ${customer.lastName}</td>
+                                <td class="px-4 py-2">${customer.email}</td>
+                                <td class="px-4 py-2">${customer.phone || '-'}</td>
+                                <td class="px-4 py-2">${this.formatDate(customer.joinDate)}</td>
+                                <td class="px-4 py-2">${orderCount}</td>
+                                <td class="px-4 py-2">
+                                    <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="UI.editCustomer('${customer.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800" onclick="UI.showDeleteModal('customer', '${customer.id}', '${customer.firstName} ${customer.lastName}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    this.customersTable.innerHTML = html;
+                } else {
+                    this.customersTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="7">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Load orders data
+            loadOrders() {
+                const orders = DB.getOrders();
+                if (orders.length > 0) {
+                    let html = '';
+                    orders.forEach(order => {
+                        const customer = DB.getCustomer(order.customerId);
+                        const customerName = customer ? `${customer.firstName} ${customer.lastName}` : 'Unknown';
+                        
+                        html += `
+                            <tr>
+                                <td class="px-4 py-2">${order.id}</td>
+                                <td class="px-4 py-2">${customerName}</td>
+                                <td class="px-4 py-2">${this.formatDate(order.date)}</td>
+                                <td class="px-4 py-2">${order.items.length} ລາຍການ</td>
+                                <td class="px-4 py-2">${this.formatCurrency(order.total)}</td>
+                                <td class="px-4 py-2"><span class="${this.getStatusClass(order.status)}">${this.translateStatus(order.status)}</span></td>
+                                <td class="px-4 py-2">
+                                    <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="UI.editOrder('${order.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800" onclick="UI.showDeleteModal('order', '${order.id}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    this.ordersTable.innerHTML = html;
+                } else {
+                    this.ordersTable.innerHTML = '<tr><td class="px-4 py-2 text-center" colspan="7">ບໍ່ມີຂໍ້ມູນ</td></tr>';
+                }
+            },
+            
+            // Show product modal
+            showProductModal(productId = null) {
+                this.productModalTitle.textContent = productId ? 'ແກ້ໄຂຜະລິດຕະພັນ' : 'ເພີ່ມຜະລິດຕະພັນໃໝ່';
+                
+                if (productId) {
+                    const product = DB.getProduct(productId);
+                    if (product) {
+                        document.getElementById('product-id').value = product.id;
+                        document.getElementById('product-name').value = product.name;
+                        document.getElementById('product-category').value = product.category;
+                        document.getElementById('product-description').value = product.description || '';
+                        document.getElementById('product-price').value = product.price;
+                        document.getElementById('product-stock').value = product.stock;
+                        
+                        const statusRadios = document.getElementsByName('product-status');
+                        for (const radio of statusRadios) {
+                            if (radio.value === product.status) {
+                                radio.checked = true;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    this.productForm.reset();
+                    document.getElementById('product-id').value = '';
+                    document.querySelector('input[name="product-status"][value="active"]').checked = true;
+                }
+                
+                this.showModal(this.productModal);
+            },
+            
+            // Save product
+            saveProduct() {
+                const id = document.getElementById('product-id').value;
+                const name = document.getElementById('product-name').value;
+                const category = document.getElementById('product-category').value;
+                const description = document.getElementById('product-description').value;
+                const price = parseFloat(document.getElementById('product-price').value);
+                const stock = parseInt(document.getElementById('product-stock').value);
+                const status = document.querySelector('input[name="product-status"]:checked').value;
+                
+                const product = {
+                    id,
+                    name,
+                    category,
+                    description,
+                    price,
+                    stock,
+                    status
+                };
+                
+                DB.saveProduct(product);
+                this.closeModal();
+                this.loadProducts();
+                this.loadDashboard();
+            },
+            
+            // Edit product
+            editProduct(productId) {
+                this.showProductModal(productId);
+            },
+            
+            // Show customer modal
+            showCustomerModal(customerId = null) {
+                this.customerModalTitle.textContent = customerId ? 'ແກ້ໄຂລູກຄ້າ' : 'ເພີ່ມລູກຄ້າໃໝ່';
+                
+                if (customerId) {
+                    const customer = DB.getCustomer(customerId);
+                    if (customer) {
+                        document.getElementById('customer-id').value = customer.id;
+                        document.getElementById('customer-first-name').value = customer.firstName;
+                        document.getElementById('customer-last-name').value = customer.lastName;
+                        document.getElementById('customer-email').value = customer.email;
+                        document.getElementById('customer-phone').value = customer.phone || '';
+                        document.getElementById('customer-address').value = customer.address || '';
+                    }
+                } else {
+                    this.customerForm.reset();
+                    document.getElementById('customer-id').value = '';
+                }
+                
+                this.showModal(this.customerModal);
+            },
+            
+            // Save customer
+            saveCustomer() {
+                const id = document.getElementById('customer-id').value;
+                const firstName = document.getElementById('customer-first-name').value;
+                const lastName = document.getElementById('customer-last-name').value;
+                const email = document.getElementById('customer-email').value;
+                const phone = document.getElementById('customer-phone').value;
+                const address = document.getElementById('customer-address').value;
+                
+                const customer = {
+                    id,
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    address
+                };
+                
+                if (!id) {
+                    customer.joinDate = new Date().toISOString().split('T')[0];
+                }
+                
+                DB.saveCustomer(customer);
+                this.closeModal();
+                this.loadCustomers();
+                this.loadDashboard();
+            },
+            
+            // Edit customer
+            editCustomer(customerId) {
+                this.showCustomerModal(customerId);
+            },
+            
+            // Show order modal
+            showOrderModal(orderId = null) {
+                this.orderModalTitle.textContent = orderId ? 'ແກ້ໄຂຄຳສັ່ງຊື້' : 'ເພີ່ມຄຳສັ່ງຊື້ໃໝ່';
+                
+                // Populate customer dropdown
+                const customers = DB.getCustomers();
+                let customerOptions = '';
+                customers.forEach(customer => {
+                    customerOptions += `<option value="${customer.id}">${customer.firstName} ${customer.lastName}</option>`;
+                });
+                this.orderCustomerSelect.innerHTML = customerOptions;
+                
+                // Clear order items
+                this.orderItems.innerHTML = '';
+                
+                if (orderId) {
+                    const order = DB.getOrder(orderId);
+                    if (order) {
+                        document.getElementById('order-id').value = order.id;
+                        document.getElementById('order-customer').value = order.customerId;
+                        document.getElementById('order-status').value = order.status;
+                        document.getElementById('order-date').value = order.date;
+                        document.getElementById('order-notes').value = order.notes || '';
+                        
+                        // Add order items
+                        order.items.forEach(item => {
+                            this.addOrderItem(item);
+                        });
+                        
+                        // Update total
+                        this.updateOrderTotal();
+                    }
+                } else {
+                    this.orderForm.reset();
+                    document.getElementById('order-id').value = '';
+                    document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
+                    
+                    // Add empty item
+                    this.addOrderItem();
+                }
+                
+                this.showModal(this.orderModal);
+            },
+            
+            // Add order item
+            addOrderItem(item = null) {
+                const products = DB.getProducts();
+                let productOptions = '';
+                products.forEach(product => {
+                    productOptions += `<option value="${product.id}" data-price="${product.price}">${product.name}</option>`;
+                });
+                
+                const div = document.createElement('div');
+                div.className = 'flex flex-col md:flex-row md:items-center gap-2 mb-2';
+                div.innerHTML = `
+                    <select class="order-product md:flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                        ${productOptions}
+                    </select>
+                    <input type="number" min="1" value="1" class="order-quantity w-24 p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700">
+                    <span class="order-price text-gray-600 dark:text-gray-400 md:w-36">₭ 0</span>
+                    <button type="button" class="remove-item-btn text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+                
+                const productSelect = div.querySelector('.order-product');
+                const quantityInput = div.querySelector('.order-quantity');
+                const priceSpan = div.querySelector('.order-price');
+                const removeBtn = div.querySelector('.remove-item-btn');
+                
+                // Set values if item provided
+                if (item) {
+                    productSelect.value = item.productId;
+                    quantityInput.value = item.quantity;
+                    priceSpan.textContent = this.formatCurrency(item.price);
+                } else {
+                    // Set initial price for new item
+                    const selectedOption = productSelect.options[productSelect.selectedIndex];
+                    if (selectedOption) {
+                        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                        priceSpan.textContent = this.formatCurrency(price);
+                    }
+                }
+                
+                // Add event listeners
+                productSelect.addEventListener('change', () => {
+                    const selectedOption = productSelect.options[productSelect.selectedIndex];
+                    if (selectedOption) {
+                        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                        priceSpan.textContent = this.formatCurrency(price);
+                        this.updateOrderTotal();
+                    }
+                });
+                
+                quantityInput.addEventListener('change', () => {
+                    this.updateOrderTotal();
+                });
+                
+                removeBtn.addEventListener('click', () => {
+                    div.remove();
+                    this.updateOrderTotal();
+                });
+                
+                this.orderItems.appendChild(div);
+                this.updateOrderTotal();
+            },
+            
+            // Update order total
+            updateOrderTotal() {
+                let total = 0;
+                const items = this.orderItems.querySelectorAll('.flex');
+                
+                items.forEach(item => {
+                    const productSelect = item.querySelector('.order-product');
+                    const quantity = parseInt(item.querySelector('.order-quantity').value) || 0;
+                    
+                    const selectedOption = productSelect.options[productSelect.selectedIndex];
+                    if (selectedOption) {
+                        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                        total += price * quantity;
+                    }
+                });
+                
+                this.orderTotal.textContent = this.formatCurrency(total);
+            },
+            
+            // Save order
+            saveOrder() {
+                const id = document.getElementById('order-id').value;
+                const customerId = document.getElementById('order-customer').value;
+                const status = document.getElementById('order-status').value;
+                const date = document.getElementById('order-date').value;
+                const notes = document.getElementById('order-notes').value;
+                
+                // Get items
+                const itemsElements = this.orderItems.querySelectorAll('.flex');
+                const items = [];
+                let total = 0;
+                
+                itemsElements.forEach(item => {
+                    const productSelect = item.querySelector('.order-product');
+                    const productId = productSelect.value;
+                    const quantity = parseInt(item.querySelector('.order-quantity').value) || 0;
+                    
+                    const selectedOption = productSelect.options[productSelect.selectedIndex];
+                    if (selectedOption && quantity > 0) {
+                        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                        items.push({
+                            productId,
+                            quantity,
+                            price
+                        });
+                        total += price * quantity;
+                    }
+                });
+                
+                const order = {
+                    id,
+                    customerId,
+                    date,
+                    status,
+                    notes,
+                    items,
+                    total
+                };
+                
+                DB.saveOrder(order);
+                this.closeModal();
+                this.loadOrders();
+                this.loadDashboard();
+            },
+            
+            // Edit order
+            editOrder(orderId) {
+                this.showOrderModal(orderId);
+            },
+            
+            // Show delete confirmation modal
+            showDeleteModal(type, id, name = '') {
+                this.deleteTitle.textContent = 'ຢືນຢັນການລຶບ';
+                
+                if (type === 'product') {
+                    this.deleteMessage.textContent = `ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຜະລິດຕະພັນ "${name}"? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້.`;
+                } else if (type === 'customer') {
+                    this.deleteMessage.textContent = `ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລູກຄ້າ "${name}"? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້ ແລະ ຄຳສັ່ງຊື້ຂອງລູກຄ້ານີ້ອາດຈະໄດ້ຮັບຜົນກະທົບ.`;
+                } else if (type === 'order') {
+                    this.deleteMessage.textContent = `ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຄຳສັ່ງຊື້ນີ້? ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້.`;
+                }
+                
+                this.confirmDeleteBtn.setAttribute('data-type', type);
+                this.confirmDeleteBtn.setAttribute('data-id', id);
+                
+                this.showModal(this.deleteModal);
+            },
+            
+            // Confirm delete
+            confirmDelete(type, id) {
+                if (type === 'product') {
+                    DB.deleteProduct(id);
+                    this.loadProducts();
+                } else if (type === 'customer') {
+                    DB.deleteCustomer(id);
+                    this.loadCustomers();
+                } else if (type === 'order') {
+                    DB.deleteOrder(id);
+                    this.loadOrders();
+                }
+                
+                this.closeModal();
+                this.loadDashboard();
+            },
+            
+            // Show modal
+            showModal(modal) {
+                this.modalContainer.classList.remove('hidden');
+                
+                // Hide all modals first
+                this.productModal.classList.add('hidden');
+                this.customerModal.classList.add('hidden');
+                this.orderModal.classList.add('hidden');
+                this.deleteModal.classList.add('hidden');
+                
+                // Show the requested modal
+                modal.classList.remove('hidden');
+            },
+            
+            // Close modal
+            closeModal() {
+                this.modalContainer.classList.add('hidden');
+            },
+            
+            // Helper functions
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US').format(amount);
+            },
+            
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-GB');
+            },
+            
+            translateCategory(category) {
+                const categories = {
+                    'electronics': 'ອຸປະກອນອີເລັກໂທຣນິກ',
+                    'clothing': 'ເຄື່ອງນຸ່ງຫົ່ມ',
+                    'home': 'ເຄື່ອງໃຊ້ໃນເຮືອນ'
+                };
+                return categories[category] || category;
+            },
+            
+            translateStatus(status) {
+                const statuses = {
+                    'pending': 'ລໍຖ້າ',
+                    'processing': 'ກຳລັງດຳເນີນການ',
+                    'shipped': 'ຈັດສົ່ງແລ້ວ',
+                    'delivered': 'ຮັບສິນຄ້າແລ້ວ',
+                    'cancelled': 'ຍົກເລີກ'
+                };
+                return statuses[status] || status;
+            },
+            
+            getStatusClass(status) {
+                const classes = {
+                    'pending': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+                    'processing': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                    'shipped': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+                    'delivered': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                    'cancelled': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                };
+                return `text-xs font-medium px-2.5 py-0.5 rounded ${classes[status] || ''}`;
+            }
+        };
+
+        // Initialize the UI
+        document.addEventListener('DOMContentLoaded', () => {
+            UI.init();
+            
+            // Make UI functions available globally for event handlers
+            window.UI = UI;
+        });
+    </script>
+</body>
+</html>

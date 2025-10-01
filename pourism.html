@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ທ່ອງທ່ຽວລາວ | ດິນແດນແຫ່ງຄວາມງົດງາມ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00843D; /* สีเขียวธงลาว */
+            --secondary-color: #CE1126; /* สีแดงธงลาว */
+            --accent-color: #0033A0; /* สีน้ำเงินเข้ม */
+            --light-color: #F8F9FA;
+            --dark-color: #343A40;
+        }
+        
+        body {
+            font-family: 'Noto Sans Lao', sans-serif;
+            color: var(--dark-color);
+            background-color: #FFFFFF;
+        }
+        
+        .dark-mode {
+            --light-color: #343A40;
+            --dark-color: #F8F9FA;
+            background-color: #212529;
+            color: var(--dark-color);
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .hero {
+            position: relative;
+            height: 80vh;
+            min-height: 500px;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('https://picsum.photos/1900/1080') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 10px 24px;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #006e33;
+            border-color: #006e33;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .card-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .info-box {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-box-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-img:hover {
+            transform: scale(1.03);
+        }
+        
+        .testimonial {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .testimonial-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 0;
+        }
+        
+        .footer-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .dark-mode .navbar {
+            background-color: rgba(33, 37, 41, 0.9);
+        }
+        
+        .dark-mode .navbar-brand,
+        .dark-mode .nav-link {
+            color: var(--dark-color);
+        }
+        
+        .dark-mode .card,
+        .dark-mode .info-box,
+        .dark-mode .testimonial {
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .dark-mode footer {
+            background-color: #212529;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .hero {
+                height: 60vh;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-mountain"></i> ທ່ອງທ່ຽວລາວ
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">ໜ້າຫຼັກ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#destinations">ແຫຼ່ງທ່ອງທ່ຽວ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">ກ່ຽວກັບລາວ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gallery">ແກເລີຮູບພາບ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tips">ເຄັດລັບການທ່ອງທ່ຽວ</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <button id="darkModeToggle" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>ລາວ: ດິນແດນລ້ານຊ້າງ</h1>
+                <p>ຄົ້ນພົບຄວາມມະຫັດສະຈັນຂອງທຳມະຊາດ, ວັດທະນະທຳ ແລະ ປະຫວັດສາດອັນຮຸ່ງເຮືອງຂອງລາວ</p>
+                <a href="#destinations" class="btn btn-primary btn-lg">ຄົ້ນພົບເພີ່ມເຕີມ</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Destinations -->
+    <section class="py-5" id="destinations">
+        <div class="container">
+            <h2 class="section-title">ສະຖານທີ່ທ່ອງທ່ຽວຍອດນິຍົມ</h2>
+            <div class="row">
+                <!-- Destination 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="https://picsum.photos/400/300?random=1" class="card-img-top" alt="ຫຼວງພະບາງ">
+                        <div class="card-body">
+                            <h5 class="card-title">ຫຼວງພະບາງ</h5>
+                            <p class="card-text">ເມືອງມໍລະດົກໂລກເຊິ່ງເຕັມໄປດ້ວຍວັດວາອາຮາມອັນສວຍສົດງົດງາມ, ອາຄານຮູບແບບຝຣັ່ງ-ລາວ ແລະ ທິວທັດທຳມະຊາດທີ່ງົດງາມ.</p>
+                            <a href="#" class="btn btn-outline-primary">ເບິ່ງລາຍລະອຽດ</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="https://picsum.photos/400/300?random=2" class="card-img-top" alt="ວັງວຽງ">
+                        <div class="card-body">
+                            <h5 class="card-title">ວັງວຽງ</h5>
+                            <p class="card-text">ເມືອງທ່ອງທ່ຽວທີ່ມີຊື່ສຽງດ້ານການຜະຈົນໄພກັບກິດຈະກຳເຊັ່ນ: ລ່ອງເຮືອຢາງ, ຂີ່ລົດຖີບຊົມທຳມະຊາດ ຫຼື ພັກຜ່ອນທ່າມກາງພູຜາທີ່ສວຍງາມ.</p>
+                            <a href="#" class="btn btn-outline-primary">ເບິ່ງລາຍລະອຽດ</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="https://picsum.photos/400/300?random=3" class="card-img-top" alt="ນະຄອນຫຼວງວຽງຈັນ">
+                        <div class="card-body">
+                            <h5 class="card-title">ນະຄອນຫຼວງວຽງຈັນ</h5>
+                            <p class="card-text">ນະຄອນຫຼວງຂອງປະເທດລາວ ເຊິ່ງເປັນເມືອງທີ່ມີຄວາມສະຫງົບ ແລະ ເຕັມໄປດ້ວຍສະຖານທີ່ສຳຄັນທາງດ້ານວັດທະນະທຳ ແລະ ປະຫວັດສາດ.</p>
+                            <a href="#" class="btn btn-outline-primary">ເບິ່ງລາຍລະອຽດ</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 4 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="https://picsum.photos/400/300?random=4" class="card-img-top" alt="ນ້ຳຕົກຕາດກວງຊີ">
+                        <div class="card-body">
+                            <h5 class="card-title">ນ້ຳຕົກຕາດກວງຊີ</h5>
+                            <p class="card-text">ນ້ຳຕົກທີ່ສວຍທີ່ສຸດໃນຫຼວງພະບາງ ດ້ວຍສາຍນ້ຳສີຟ້າຂຽວໃສສະອາດ ແລະ ເປັນສະຖານທີ່ທ່ອງທ່ຽວຍອດນິຍົມສຳລັບການລົງເລັ່ນນ້ຳ.</p>
+                            <a href="#" class="btn btn-outline-primary">ເບິ່ງລາຍລະອຽດ</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 5 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="https://picsum.photos/400/300?random=5" class="card-img-top" alt="ສີ່ພັນດອນ">
+                        <div class="card-body">
+                            <h5 class="card-title">ສີ່ພັນດອນ</h5>
+                            <p class="card-text">ບໍລິເວນເກາະນ້ອຍໃຫຍ່ນັບພັນເກາະເທິງແມ່ນ້ຳຂອງທາງພາກໃຕ້ຂອງລາວ. ເປັນບ່ອນພັກຜ່ອນແບບທຳມະຊາດ ແລະ ສາມາດເຫັນປາຂ່າ (ໂລມາແມ່ນ້ຳຂອງ).</p>
+                            <a href="#" class="btn btn-outline-primary">ເບິ່ງລາຍລະອຽດ</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 6 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="https://picsum.photos/400/300?random=6" class="card-img-top" alt="ທົ່ງໄຫຫີນ">
+                        <div class="card-body">
+                            <h5 class="card-title">ທົ່ງໄຫຫີນ</h5>
+                            <p class="card-text">ສະຖານທີ່ປະຫວັດສາດອັນລຶກລັບເຊິ່ງມີໄຫຫີນຂະໜາດໃຫຍ່ກະຈາຍຢູ່ທົ່ວທົ່ງຫຍ້າ ແລະ ຍັງເປັນສະຖານທີ່ມໍລະດົກໂລກຂອງອົງການ UNESCO.</p>
+                            <a href="#" class="btn btn-outline-primary">ເບິ່ງລາຍລະອຽດ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Laos -->
+    <section class="py-5 bg-light" id="about">
+        <div class="container">
+            <h2 class="section-title">ກ່ຽວກັບປະເທດລາວ</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <img src="https://picsum.photos/600/400?random=7" alt="Laos Map" class="img-fluid rounded">
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="mb-4" style="color: var(--primary-color);">ດິນແດນແຫ່ງຄວາມງົດງາມແລະວັດທະນະທຳ</h3>
+                    <p class="mb-4"style='color:black;'>ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ ຫຼື ປະເທດລາວ ແມ່ນປະເທດທີ່ບໍ່ມີທາງອອກສູ່ທະເລ ຕັ້ງຢູ່ໃຈກາງຂອງອິນໂດຈີນ ມີຊາຍແດນຕິດກັບຫຼາຍປະເທດເຊັ່ນ: ຈີນ, ຫວຽດນາມ, ກຳປູເຈຍ, ໄທ ແລະ ມຽນມາ.</p>
+                    <p class="mb-4"style='color:black;'>ລາວເປັນປະເທດທີ່ມີປະຫວັດສາດອັນຍາວນານ ແລະ ເຕັມໄປດ້ວຍທຳມະຊາດທີ່ບໍລິສຸດ, ວັດທະນະທຳອັນດັ້ງເດີມ ແລະ ຜູ້ຄົນທີ່ເປັນມິດ. ເນື່ອງຈາກພື້ນທີ່ສ່ວນໃຫຍ່ເປັນພູເຂົາ ແລະ ປ່າໄມ້, ລາວຈຶ່ງເຕັມໄປດ້ວຍແຫຼ່ງທ່ອງທ່ຽວທາງທຳມະຊາດທີ່ສວຍງາມ ແລະ ກິດຈະກຳການຜະຈົນໄພຕ່າງໆ.</p>
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-users text-primary me-3" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-0"style='color:black;'>7.5 ລ້ານຄົນ</h5>
+                                    <small class="text-muted">ປະຊາກອນ</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-language text-primary me-3" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-0" style='color:black;'>ພາສາລາວ</h5>
+                                    <small class="text-muted">ພາສາຫຼັກ</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-dollar-sign text-primary me-3" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-0"style='color:black;'>ກີບ (LAK)</h5>
+                                    <small class="text-muted">ສະກຸນເງິນ</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-bible text-primary me-3" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-0"style='color:black;'>ພຸດທະສາສະໜາ</h5>
+                                    <small class="text-muted">ສາສະໜາຫຼັກ</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tourism Categories -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title">ປະເພດການທ່ອງທ່ຽວ</h2>
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box text-center">
+                        <div class="info-box-icon mx-auto">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <h4>ທຳມະຊາດ</h4>
+                        <p>ຄົ້ນພົບຄວາມງາມຂອງທຳມະຊາດໃນລາວ ເຊັ່ນ: ນ້ຳຕົກ, ຖ້ຳ, ແລະ ປ່າໄມ້ທີ່ອຸດົມສົມບູນ.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box text-center">
+                        <div class="info-box-icon mx-auto">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h4>ວັດທະນະທຳ</h4>
+                        <p>ສຳຜັດກັບວັດທະນະທຳທີ່ຫຼາກຫຼາຍ, ພິທີກຳ ແລະ ຮີດຄອງປະເພນີຂອງຊົນເຜົ່າຕ່າງໆໃນລາວ.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box text-center">
+                        <div class="info-box-icon mx-auto">
+                            <i class="fas fa-hiking"></i>
+                        </div>
+                        <h4>ການຜະຈົນໄພ</h4>
+                        <p>ຮ່ວມກິດຈະກຳຜະຈົນໄພຕ່າງໆ ເຊັ່ນ: ປີນເຂົາ, ລ່ອງເຮືອຢາງ, ຂີ່ຈັກຊົມທຳມະຊາດ.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box text-center">
+                        <div class="info-box-icon mx-auto">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h4>ອາຫານ</h4>
+                        <p>ລິ້ມລົດອາຫານລາວທີ່ເຕັມໄປດ້ວຍລົດຊາດເຜັດ, ສົ້ມ ແລະ ຫອມຫວານຈາກສະມຸນໄພທຳມະຊາດ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="py-5 bg-light" id="gallery">
+        <div class="container">
+            <h2 class="section-title">ແກເລີຮູບພາບ</h2>
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://picsum.photos/400/300?random=10" alt="Laos Gallery 1" class="gallery-img">
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://picsum.photos/400/300?random=11" alt="Laos Gallery 2" class="gallery-img">
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://picsum.photos/400/300?random=12" alt="Laos Gallery 3" class="gallery-img">
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://picsum.photos/400/300?random=13" alt="Laos Gallery 4" class="gallery-img">
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://picsum.photos/400/300?random=14" alt="Laos Gallery 5" class="gallery-img">
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://picsum.photos/400/300?random=15" alt="Laos Gallery 6" class="gallery-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Tips -->
+    <section class="py-5" id="tips">
+        <div class="container">
+            <h2 class="section-title">ເຄັດລັບການທ່ອງທ່ຽວ</h2>
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-calendar-alt fa-2x text-primary me-3"></i>
+                            <h5 class="mb-0">ເວລາທີ່ເໝາະສົມ</h5>
+                        </div>
+                        <p>ຊ່ວງເວລາທີ່ດີທີ່ສຸດໃນການທ່ອງທ່ຽວລາວແມ່ນຊ່ວງເດືອນພະຈິກຫາເດືອນກຸມພາ ເຊິ່ງເປັນລະດູແລ້ງ ແລະ ອາກາດເຢັນສະບາຍ. ຫຼີກລ່ຽງຊ່ວງເດືອນມີນາຫາເດືອນພຶດສະພາ ເພາະອາກາດຮ້ອນຫຼາຍ ແລະ ຊ່ວງລະດູຝົນ (ມິຖຸນາຫາຕຸລາ) ເຊິ່ງອາດມີຝົນຕົກໜັກ.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-plane-departure fa-2x text-primary me-3"></i>
+                            <h5 class="mb-0">ການເດີນທາງ</h5>
+                        </div>
+                        <p>ສາມາດເດີນທາງເຂົ້າລາວໄດ້ຫຼາຍຊ່ອງທາງທັງທາງອາກາດ (ສະໜາມບິນວຽງຈັນ, ສະໜາມບິນຫຼວງພະບາງ) ແລະ ທາງບົກຈາກປະເທດໃກ້ຄຽງເຊັ່ນໄທ ຫຼື ຫວຽດນາມ. ການເດີນທາງພາຍໃນປະເທດສາມາດໃຊ້ລົດໂດຍສານ, ລົດຈັກເຊົ່າ ຫຼື ລົດຕູ້.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-passport fa-2x text-primary me-3"></i>
+                            <h5 class="mb-0">ວີຊ່າ</h5>
+                        </div>
+                        <p>ນັກທ່ອງທ່ຽວສ່ວນໃຫຍ່ຕ້ອງໄດ້ຂໍວີຊ່າກ່ອນເດີນທາງຫາລາວ. ສາມາດຂໍວີຊ່າໄດ້ທີ່ສະຖານທູດລາວ ຫຼື ຂໍວີຊ່າໄດ້ທີ່ດ່ານສາກົນຕ່າງໆໃນລາວ. ວີຊ່າທ່ອງທ່ຽວທົ່ວໄປມີອາຍຸ 30 ວັນ ແລະ ສາມາດຂໍຂະຫຍາຍໄດ້ເມື່ອຢູ່ໃນລາວ.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-dollar-sign fa-2x text-primary me-3"></i>
+                            <h5 class="mb-0">ເງິນຕາ</h5>
+                        </div>
+                        <p>ສະກຸນເງິນຂອງລາວແມ່ນກີບ (LAK). ສາມາດແລກປ່ຽນເງິນໄດ້ທີ່ທະນາຄານ, ຮ້ານແລກປ່ຽນເງິນ ຫຼື ໂຮງແຮມ. ບັດເຄຣດິດໃຊ້ງານໄດ້ໃນບາງໂຮງແຮມແລະຮ້ານອາຫານໃຫຍ່ໃນຕົວເມືອງຫຼັກ, ແຕ່ແນະນຳໃຫ້ພົກເງິນສົດໄປນຳເມື່ອໄປຍັງເຂດຊົນນະບົດ.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-seedling fa-2x text-primary me-3"></i>
+                            <h5 class="mb-0">ມາລະຍາດ</h5>
+                        </div>
+                        <p>ລາວເປັນປະເທດທີ່ນັບຖືພຸດທະສາສະໜາ, ນັກທ່ອງທ່ຽວຄວນໃຫ້ຄວາມເຄົາລົບສະຖານທີ່ສັກສິດເຊັ່ນວັດວາອາຮາມຕ່າງໆ. ຄວນແຕ່ງກາຍສຸພາບ, ຖອດລອງເທົ້າກ່ອນເຂົ້າວັດ, ແລະ ບໍ່ຄວນແຕະຕ້ອງພະພຸດທະຮູບ. ແມ່ຍິງບໍ່ຄວນສຳຜັດພະສົງ.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-heartbeat fa-2x text-primary me-3"></i>
+                            <h5 class="mb-0">ສຸຂະພາບແລະຄວາມປອດໄພ</h5>
+                        </div>
+                        <p>ຄວນຊື້ປະກັນໄພການທ່ອງທ່ຽວ, ດື່ມນ້ຳບັນຈຸຂວດເທົ່ານັ້ນ, ແລະ ໃຊ້ຄີມກັນແດດ. ຢູ່ເຂດຊົນນະບົດຄວນລະວັງເລື່ອງລະເບີດບໍ່ທັນແຕກທີ່ຍັງມີຢູ່ໃນບາງເຂດ ແລະ ປະຕິບັດຕາມປ້າຍເຕືອນ. ບໍ່ຄວນຍ່າງອອກນອກເສັ້ນທາງທີ່ກຳນົດ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white text-center">
+        <div class="container">
+            <h2 class="mb-4">ພ້ອມທີ່ຈະຄົ້ນພົບປະເທດລາວແລ້ວບໍ?</h2>
+            <p class="lead mb-5">ວາງແຜນການທ່ອງທ່ຽວຂອງທ່ານມື້ນີ້ ແລະ ເລີ່ມຕົ້ນການຜະຈົນໄພທີ່ບໍ່ມີວັນລືມ</p>
+            <a href="#destinations" class="btn btn-light btn-lg">ເລືອກຈຸດໝາຍປາຍທາງ</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4 class="footer-title">ທ່ອງທ່ຽວລາວ</h4>
+                    <p>ຄົ້ນພົບຄວາມສວຍງາມຂອງດິນແດນລ້ານຊ້າງ ແລະ ວາງແຜນການທ່ອງທ່ຽວຂອງທ່ານໃນປະເທດລາວ.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2 mb-4 mb-md-0">
+                    <h5 class="footer-title">ລິ້ງທີ່ເປັນປະໂຫຍດ</h5>
+                    <ul class="footer-links">
+                        <li><a href="#home">ໜ້າຫຼັກ</a></li>
+                        <li><a href="#destinations">ແຫຼ່ງທ່ອງທ່ຽວ</a></li>
+                        <li><a href="#about">ກ່ຽວກັບລາວ</a></li>
+                        <li><a href="#gallery">ແກເລີຮູບພາບ</a></li>
+                        <li><a href="#tips">ເຄັດລັບການທ່ອງທ່ຽວ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-3 mb-4 mb-md-0">
+                    <h5 class="footer-title">ແຫຼ່ງທ່ອງທ່ຽວຍອດນິຍົມ</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">ຫຼວງພະບາງ</a></li>
+                        <li><a href="#">ວັງວຽງ</a></li>
+                        <li><a href="#">ນະຄອນຫຼວງວຽງຈັນ</a></li>
+                        <li><a href="#">ສີ່ພັນດອນ</a></li>
+                        <li><a href="#">ທົ່ງໄຫຫີນ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <h5 class="footer-title">ຕິດຕໍ່ພວກເຮົາ</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> ນະຄອນຫຼວງວຽງຈັນ, ລາວ</li>
+                        <li><i class="fas fa-phone me-2"></i> +856 20 XXXXXXXX</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@laostravel.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <p class="mb-0">&copy; 2025 ທ່ອງທ່ຽວລາວ. ສະຫງວນລິຂະສິດທັງໝົດ.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        // Check dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('dark-mode');
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Change icon based on mode
+            const icon = darkModeToggle.querySelector('i');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Active Link Highlighting
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const navbarCollapse = document.querySelector('.navbar-collapse');
+                    if (navbarCollapse.classList.contains('show')) {
+                        navbarCollapse.classList.remove('show');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

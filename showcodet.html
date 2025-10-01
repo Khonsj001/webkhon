@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ປຸ່ມສະແດງໂຄດ</title>
+    <style>
+        body {
+            font-family: 'Phetsarath OT', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+            flex-direction: column;
+        }
+        
+        .container {
+            text-align: center;
+        }
+        
+        .show-code-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .show-code-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .code-container {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            max-width: 800px;
+            text-align: left;
+            display: none;
+            overflow-x: auto;
+        }
+        
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .tab-buttons {
+            margin-bottom: 10px;
+        }
+        
+        .tab-btn {
+            padding: 8px 16px;
+            background-color: #e0e0e0;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-btn.active {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="show-code-btn" onclick="toggleCode()">ສະແດງໂຄດ</button>
+        
+        <div class="tab-buttons" id="tabButtons" style="display: none;">
+            <button class="tab-btn active" onclick="showTab('html')">HTML</button>
+            <button class="tab-btn" onclick="showTab('css')">CSS</button>
+            <button class="tab-btn" onclick="showTab('js')">JavaScript</button>
+        </div>
+        
+        <div class="code-container" id="htmlCode">
+            <pre><code>
+                <!-- <div class="calculator">
+                <div class="display" id="display">0</div>
+                <div class="buttons">
+                    <button class="clear" onclick="clearDisplay()">C</button>
+                    <button class="operator" onclick="appendOperator('(')">(</button>
+                    <button class="operator" onclick="appendOperator(')')">)</button>
+                    <button class="operator" onclick="appendOperator('/')">/</button>
+                    
+                    <button class="number" onclick="appendNumber('7')">7</button>
+                    <button class="number" onclick="appendNumber('8')">8</button>
+                    <button class="number" onclick="appendNumber('9')">9</button>
+                    <button class="operator" onclick="appendOperator('*')">×</button>
+                    
+                    <button class="number" onclick="appendNumber('4')">4</button>
+                    <button class="number" onclick="appendNumber('5')">5</button>
+                    <button class="number" onclick="appendNumber('6')">6</button>
+                    <button class="operator" onclick="appendOperator('-')">-</button>
+                    
+                    <button class="number" onclick="appendNumber('1')">1</button>
+                    <button class="number" onclick="appendNumber('2')">2</button>
+                    <button class="number" onclick="appendNumber('3')">3</button>
+                    <button class="operator" onclick="appendOperator('+')">+</button>
+                    
+                    <button class="number" onclick="appendNumber('0')">0</button>
+                    <button class="number" onclick="appendNumber('.')">.</button>
+                    <button class="equals" onclick="calculate()">=</button>
+                </div>
+            </div> -->
+        </code></pre>
+        </div>
+        
+        <div class="code-container" id="cssCode" style="display: none;">
+            <pre><code>
+                body {
+                    font-family: 'Phetsarath OT', sans-serif;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    background-color: #f5f5f5;
+                    margin: 0;
+                }
+                
+                .calculator {
+                    background-color: #333;
+                    border-radius: 10px;
+                    padding: 20px;
+                    width: 300px;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                }
+                
+                .display {
+                    background-color: #eee;
+                    border-radius: 5px;
+                    padding: 10px;
+                    margin-bottom: 15px;
+                    text-align: right;
+                    font-size: 24px;
+                    height: 40px;
+                    overflow: hidden;
+                }
+                
+                .buttons {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    grid-gap: 10px;
+                }
+                
+                button {
+                    border: none;
+                    border-radius: 5px;
+                    padding: 15px;
+                    font-size: 18px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+                
+                button:hover {
+                    opacity: 0.8;
+                }
+                
+                .number {
+                    background-color: #f0f0f0;
+                }
+                
+                .operator {
+                    background-color: #ff9500;
+                    color: white;
+                }
+                
+                .clear {
+                    background-color: #a5a5a5;
+                }
+                
+                .equals {
+                    background-color: #ff9500;
+                    color: white;
+                    grid-column: span 2;
+                }
+            </code></pre>
+        </div>
+        
+        <div class="code-container" id="jsCode" style="display: none;">
+            <pre><code>// ຟັງຊັນສະແດງຂໍ້ຄວາມ
+                let currentDisplay = '0';
+                const display = document.getElementById('display');
+                
+                function updateDisplay() {
+                    display.textContent = currentDisplay;
+                }
+                
+                function appendNumber(number) {
+                    if (currentDisplay === '0' && number !== '.') {
+                        currentDisplay = number;
+                    } else {
+                        currentDisplay += number;
+                    }
+                    updateDisplay();
+                }
+                
+                function appendOperator(operator) {
+                    if (currentDisplay === '0') {
+                        currentDisplay = operator;
+                    } else {
+                        currentDisplay += operator;
+                    }
+                    updateDisplay();
+                }
+                
+                function clearDisplay() {
+                    currentDisplay = '0';
+                    updateDisplay();
+                }
+                
+                function calculate() {
+                    try {
+                        currentDisplay = eval(currentDisplay).toString();
+                        updateDisplay();
+                    } catch (error) {
+                        currentDisplay = 'ຜິດພາດ';
+                        updateDisplay();
+                        setTimeout(clearDisplay, 1000);
+                    }
+                }
+// ເອີ້ນໃຊ້ຟັງຊັນ
+showMessage();</code></pre>
+        </div>
+    </div>
+
+    <script>
+        function toggleCode() {
+            const tabButtons = document.getElementById('tabButtons');
+            const htmlCode = document.getElementById('htmlCode');
+            
+            if (htmlCode.style.display === 'none') {
+                tabButtons.style.display = 'block';
+                htmlCode.style.display = 'block';
+                document.querySelector('.show-code-btn').textContent = 'ເຊື່ອງໂຄດ';
+            } else {
+                tabButtons.style.display = 'none';
+                document.querySelectorAll('.code-container').forEach(container => {
+                    container.style.display = 'none';
+                });
+                document.querySelector('.show-code-btn').textContent = 'ສະແດງໂຄດ';
+            }
+        }
+        
+        function showTab(tabName) {
+            // ປິດທັງໝົດ
+            document.querySelectorAll('.code-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            
+            // ປິດ active ທັງໝົດ
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // ເປີດທີ່ເລືອກ
+            document.getElementById(tabName + 'Code').style.display = 'block';
+            document.querySelector(`.tab-btn[onclick="showTab('${tabName}')"]`).classList.add('active');
+        }
+    </script>
+</body>
+</html>

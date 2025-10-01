@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap ຄຳສັ່ງພື້ນຖານ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #5D5CDE;
+            --bs-body-bg: #fff;
+            --bs-body-color: #212529;
+        }
+        
+        .dark-mode {
+            --bs-body-bg: #212529;
+            --bs-body-color: #f8f9fa;
+            --bs-dark: #343a40;
+            --bs-light: #495057;
+        }
+        
+        body {
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Noto Sans Lao', 'Poppins', sans-serif;
+        }
+        
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+        }
+        
+        .sidebar .list-group-item {
+            background-color: transparent;
+            color: var(--bs-body-color);
+            border-color: rgba(var(--bs-dark-rgb), 0.2);
+        }
+        
+        .sidebar .list-group-item:hover {
+            background-color: rgba(93, 92, 222, 0.1);
+        }
+        
+        .sidebar .list-group-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .code-example {
+            background-color: rgba(var(--bs-dark-rgb), 0.05);
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .result-box {
+            padding: 1rem;
+            border: 1px solid rgba(var(--bs-dark-rgb), 0.2);
+            border-radius: 4px;
+        }
+        
+        /* Custom card style */
+        .component-card {
+            height: 100%;
+            transition: transform 0.2s;
+            cursor: pointer;
+            border-color: rgba(93, 92, 222, 0.3);
+        }
+        
+        .component-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .component-card .card-header {
+            background-color: rgba(93, 92, 222, 0.1);
+            font-weight: 500;
+        }
+        
+        #mainContent {
+            min-height: calc(100vh - 56px);
+        }
+        
+        /* Scrollbar styling */
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: rgba(93, 92, 222, 0.5);
+            border-radius: 3px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background-color: rgba(var(--bs-dark-rgb), 0.05);
+        }
+        
+        .dark-mode .code-example {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .dark-mode .result-box {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                position: static;
+                height: auto;
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span style="color: #5D5CDE">Bootstrap</span> Tutorial
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light" id="darkModeToggle">
+                            <i class="bi bi-moon-stars"></i> ເປີດ/ປິດໂໝດມືດ
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row g-4">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <div class="sidebar">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">ໝວດໝູ່</h5>
+                        <button class="btn btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#categoriesList" aria-expanded="true">
+                            <i class="bi bi-list"></i>
+                        </button>
+                    </div>
+                    <div class="collapse show" id="categoriesList">
+                        <div class="list-group" id="categoryList">
+                            <!-- ໝວດໝູ່ຈະຖືກເພີ່ມຢູ່ນີ້ -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div id="mainContent">
+                    <h1>Bootstrap <span style="color: #5D5CDE">5</span> ຄຳສັ່ງແລະອົງປະກອບ</h1>
+                    <p class="lead mb-4">ເລືອກໝວດໝູ່ຈາກລາຍການທາງຊ້າຍເພື່ອສຶກສາຄຳສັ່ງແລະອົງປະກອບຂອງ Bootstrap</p>
+                    
+                    <div class="row g-4" id="componentGrid">
+                        <!-- Component cards will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Component Detail Modal -->
+    <div class="modal fade" id="componentModal" tabindex="-1" aria-labelledby="componentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="componentModalLabel">Component Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="componentModalBody">
+                    <!-- Component details will be added here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ປິດ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Check dark mode preference
+        function setDarkMode(enabled) {
+            if (enabled) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+        
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setDarkMode(true);
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            setDarkMode(event.matches);
+        });
+        
+        // Dark mode toggle button
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Bootstrap categories and components data
+        const bootstrapData = [
+            {
+                id: 'grid',
+                name: 'ລະບົບກິດ (Grid System)',
+                description: 'ລະບົບກິດຂອງ Bootstrap ໃຊ້ເພື່ອສ້າງການວາງແຜນແລະຈັດລຽງເນື້ອຫາໃນໜ້າເວັບ.',
+                components: [
+                    {
+                        id: 'containers',
+                        name: 'Containers',
+                        description: 'ຄອນເທເນີໃຊ້ເພື່ອຈຳກັດຄວາມກວ້າງຂອງເນື້ອຫາແລະຈັດກາງອົງປະກອບໃນໜ້າເວັບ.',
+                        html: `<!-- Container -->
+<div class="container">
+  <div class="bg-light p-3">Container</div>
+</div>
+
+<!-- Container-fluid -->
+<div class="container-fluid mt-3">
+  <div class="bg-light p-3">Container-fluid</div>
+</div>`,
+                        variations: [
+                            {
+                                name: '.container',
+                                description: 'ຄອນເທເນີທີ່ມີຄວາມກວ້າງກຳນົດແລະຫວ້າງຂອບໜ້າຈໍສະເໝີ'
+                            },
+                            {
+                                name: '.container-fluid',
+                                description: 'ຄອນເທເນີທີ່ໃຊ້ພື້ນທີ່ 100% ຂອງຂອບໜ້າຈໍ'
+                            },
+                            {
+                                name: '.container-{breakpoint}',
+                                description: 'ຄອນເທເນີທີ່ຈະເປັນ 100% ກວ້າງຈົນກວ່າຈະຮອດຈຸດແຕກຂອງໜ້າຈໍທີ່ລະບຸ (sm, md, lg, xl, xxl)'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'rows-cols',
+                        name: 'Rows & Columns',
+                        description: 'ແຖວແລະຄໍລັມໃຊ້ສຳລັບຈັດລຽງເນື້ອຫາໃນລະບົບກິດ 12 ຄໍລັມຂອງ Bootstrap.',
+                        html: `<div class="container">
+  <div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <div class="bg-light p-3 mb-2">Column 1</div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <div class="bg-light p-3 mb-2">Column 2</div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <div class="bg-light p-3 mb-2">Column 3</div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <div class="bg-light p-3 mb-2">Column 4</div>
+    </div>
+  </div>
+</div>`,
+                        variations: [
+                            {
+                                name: '.row',
+                                description: 'ສ້າງແຖວໃໝ່ທີ່ມີ margin ລົບເພື່ອຈັດລຽງຄໍລັມ'
+                            },
+                            {
+                                name: '.row-cols-{n}',
+                                description: 'ກຳນົດຈຳນວນຄໍລັມໃນແຖວທີ່ເທົ່າກັນສະເໝີ (n = 1-6)'
+                            },
+                            {
+                                name: '.col',
+                                description: 'ຄໍລັມທີ່ມີຄວາມກວ້າງອັດຕະໂນມັດ'
+                            },
+                            {
+                                name: '.col-{n}',
+                                description: 'ຄໍລັມທີ່ມີຄວາມກວ້າງເທົ່າກັບ n ຫົວໜ່ວຍໃນລະບົບກິດ 12 ຄໍລັມ (n = 1-12)'
+                            },
+                            {
+                                name: '.col-{breakpoint}-{n}',
+                                description: 'ຄໍລັມທີ່ມີຄວາມກວ້າງທີ່ຈຸດແຕກທີ່ລະບຸ (breakpoint = sm, md, lg, xl, xxl)'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'gutters',
+                        name: 'Gutters',
+                        description: 'ຊ່ອງຫວ່າງລະຫວ່າງຄໍລັມໃນລະບົບກິດ.',
+                        html: `<div class="container">
+  <!-- No gutters -->
+  <div class="row g-0">
+    <div class="col-6"><div class="bg-light border p-3">No gutter</div></div>
+    <div class="col-6"><div class="bg-light border p-3">No gutter</div></div>
+  </div>
+  
+  <!-- Default gutters (g-3 = 1rem) -->
+  <div class="row g-3 mt-3">
+    <div class="col-6"><div class="bg-light border p-3">Default gutter</div></div>
+    <div class="col-6"><div class="bg-light border p-3">Default gutter</div></div>
+  </div>
+  
+  <!-- Larger gutters -->
+  <div class="row g-5 mt-3">
+    <div class="col-6"><div class="bg-light border p-3">Large gutter</div></div>
+    <div class="col-6"><div class="bg-light border p-3">Large gutter</div></div>
+  </div>
+</div>`,
+                        variations: [
+                            {
+                                name: '.g-{n}',
+                                description: 'Gutter ທັງແນວນອນແລະແນວຕັ້ງ (n = 0-5)'
+                            },
+                            {
+                                name: '.gx-{n}',
+                                description: 'Gutter ໃນແນວນອນເທົ່ານັ້ນ'
+                            },
+                            {
+                                name: '.gy-{n}',
+                                description: 'Gutter ໃນແນວຕັ້ງເທົ່ານັ້ນ'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'components',
+                name: 'ອົງປະກອບ (Components)',
+                description: 'ອົງປະກອບ Bootstrap ທີ່ພ້ອມໃຊ້ງານຫຼາຍປະເພດ.',
+                components: [
+                    {
+                        id: 'buttons',
+                        name: 'Buttons',
+                        description: 'ປຸ່ມໃນ Bootstrap ມີຫຼາຍແບບແລະສີເພື່ອໃຊ້ໃນສະຖານະການຕ່າງໆ.',
+                        html: `<!-- Button styles -->
+<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-success">Success</button>
+<button class="btn btn-danger">Danger</button>
+<button class="btn btn-warning">Warning</button>
+<button class="btn btn-info">Info</button>
+<button class="btn btn-light">Light</button>
+<button class="btn btn-dark">Dark</button>
+<button class="btn btn-link">Link</button>
+
+<!-- Button sizes -->
+<div class="mt-3">
+  <button class="btn btn-primary btn-lg">Large button</button>
+  <button class="btn btn-primary">Default button</button>
+  <button class="btn btn-primary btn-sm">Small button</button>
+</div>
+
+<!-- Outline buttons -->
+<div class="mt-3">
+  <button class="btn btn-outline-primary">Primary</button>
+  <button class="btn btn-outline-secondary">Secondary</button>
+  <button class="btn btn-outline-success">Success</button>
+</div>`,
+                        variations: [
+                            {
+                                name: '.btn',
+                                description: 'ຄຼາສຫຼັກສຳລັບປຸ່ມ'
+                            },
+                            {
+                                name: '.btn-{color}',
+                                description: 'ປຸ່ມສີຕ່າງໆ (primary, secondary, success, danger, warning, info, light, dark)'
+                            },
+                            {
+                                name: '.btn-outline-{color}',
+                                description: 'ປຸ່ມແບບຂອບນອກພ້ອມສີຕ່າງໆ'
+                            },
+                            {
+                                name: '.btn-lg',
+                                description: 'ປຸ່ມຂະໜາດໃຫຍ່'
+                            },
+                            {
+                                name: '.btn-sm',
+                                description: 'ປຸ່ມຂະໜາດນ້ອຍ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'cards',
+                        name: 'Cards',
+                        description: 'ບັດເປັນອົງປະກອບທີ່ສາມາດໃຊ້ໄດ້ຫຼາຍຢ່າງໃນການສະແດງເນື້ອຫາ.',
+                        html: `<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <img src="https://picsum.photos/300/200" class="card-img-top" alt="Example Image">
+      <div class="card-body">
+        <h5 class="card-title">ຫົວຂໍ້ບັດ</h5>
+        <p class="card-text">ເນື້ອຫາບັດຫຍໍ້ທີ່ສະແດງຂໍ້ມູນເພີ່ມເຕີມກ່ຽວກັບບັດນີ້.</p>
+        <a href="#" class="btn btn-primary">ກົດທີ່ນີ້</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        Featured
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">ບັດພິເສດ</h5>
+        <p class="card-text">ບັດທີ່ມີ header ແລະ footer.</p>
+      </div>
+      <div class="card-footer text-muted">
+        2 ວັນຜ່ານມາ
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card text-white bg-primary">
+      <div class="card-header">Header</div>
+      <div class="card-body">
+        <h5 class="card-title">ບັດສີຟ້າ</h5>
+        <p class="card-text">ບັດນີ້ມີສີພື້ນຫຼັງແລະຂໍ້ຄວາມສີຂາວ.</p>
+      </div>
+    </div>
+  </div>
+</div>`,
+                        variations: [
+                            {
+                                name: '.card',
+                                description: 'ອົງປະກອບບັດຫຼັກ'
+                            },
+                            {
+                                name: '.card-body',
+                                description: 'ເນື້ອຫາຫຼັກຂອງບັດ'
+                            },
+                            {
+                                name: '.card-title',
+                                description: 'ຫົວຂໍ້ຂອງບັດ'
+                            },
+                            {
+                                name: '.card-text',
+                                description: 'ຂໍ້ຄວາມໃນບັດ'
+                            },
+                            {
+                                name: '.card-header',
+                                description: 'ຫົວບັດ (ຢູ່ເທິງ)'
+                            },
+                            {
+                                name: '.card-footer',
+                                description: 'ທ້າຍບັດ (ຢູ່ລຸ່ມ)'
+                            },
+                            {
+                                name: '.card-img-top',
+                                description: 'ຮູບພາບທີ່ຢູ່ເທິງສຸດຂອງບັດ'
+                            },
+                            {
+                                name: '.card-img-bottom',
+                                description: 'ຮູບພາບທີ່ຢູ່ລຸ່ມສຸດຂອງບັດ'
+                            },
+                            {
+                                name: '.bg-{color}',
+                                description: 'ປ່ຽນສີພື້ນຫຼັງຂອງບັດ'
+                            },
+                            {
+                                name: '.text-{color}',
+                                description: 'ປ່ຽນສີຂໍ້ຄວາມຂອງບັດ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'alerts',
+                        name: 'Alerts',
+                        description: 'Alerts ໃຊ້ເພື່ອສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ, ຂໍ້ຜິດພາດ, ຫຼືຂໍ້ມູນສຳຄັນແກ່ຜູ້ໃຊ້.',
+                        html: `<!-- Alert styles -->
+<div class="alert alert-primary" role="alert">
+  ນີ້ແມ່ນແຈ້ງເຕືອນ primary
+</div>
+<div class="alert alert-secondary" role="alert">
+  ນີ້ແມ່ນແຈ້ງເຕືອນ secondary
+</div>
+<div class="alert alert-success" role="alert">
+  ນີ້ແມ່ນແຈ້ງເຕືອນສຳເລັດ!
+</div>
+<div class="alert alert-danger" role="alert">
+  ນີ້ແມ່ນແຈ້ງເຕືອນອັນຕະລາຍ!
+</div>
+<div class="alert alert-warning" role="alert">
+  ນີ້ແມ່ນແຈ້ງເຕືອນເຕືອນໄພ!
+</div>
+<div class="alert alert-info" role="alert">
+  ນີ້ແມ່ນແຈ້ງເຕືອນຂໍ້ມູນ.
+</div>
+
+<!-- Alert with dismiss button -->
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>ລະວັງ!</strong> ທ່ານຄວນກວດສອບບາງຢ່າງໃນນີ້.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<!-- Alert with additional content -->
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">ດີຫຼາຍ!</h4>
+  <p>ທ່ານໄດ້ອ່ານຂໍ້ຄວາມແຈ້ງເຕືອນສຳຄັນນີ້ ເຊິ່ງໝາຍຄວາມວ່າທ່ານປະສົບຜົນສຳເລັດ!</p>
+  <hr>
+  <p class="mb-0">ບໍ່ວ່າເມື່ອໃດກໍຕາມ, ທ່ານຄວນໃຊ້ margin utilities ເພື່ອຮັກສາສິ່ງຕ່າງໆໃຫ້ເປັນລະບຽບຮຽບຮ້ອຍ.</p>
+</div>`,
+                        variations: [
+                            {
+                                name: '.alert',
+                                description: 'ຄຼາສຫຼັກສຳລັບແຈ້ງເຕືອນ'
+                            },
+                            {
+                                name: '.alert-{color}',
+                                description: 'ສີຕ່າງໆຂອງແຈ້ງເຕືອນ (primary, secondary, success, danger, warning, info, light, dark)'
+                            },
+                            {
+                                name: '.alert-dismissible',
+                                description: 'ໃຊ້ກັບປຸ່ມປິດເພື່ອໃຫ້ຜູ້ໃຊ້ສາມາດປິດການແຈ້ງເຕືອນໄດ້'
+                            },
+                            {
+                                name: '.alert-heading',
+                                description: 'ສຳລັບຫົວຂໍ້ໃນແຈ້ງເຕືອນ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'navbar',
+                        name: 'Navbar',
+                        description: 'ແຖບນຳທາງເປັນອົງປະກອບທີ່ໃຊ້ເພື່ອສະແດງເມນູນຳທາງຫຼັກຂອງເວັບໄຊ.',
+                        html: `<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">ໜ້າຫຼັກ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">ລິ້ງ</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ດຶງລົງ
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">ການດຳເນີນການ</a></li>
+            <li><a class="dropdown-item" href="#">ການດຳເນີນການອື່ນ</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">ບາງຢ່າງຢູ່ນີ້</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled">ປິດການໃຊ້ງານ</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="ຄົ້ນຫາ" aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">ຄົ້ນຫາ</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<!-- Light navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar Light</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLight">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarLight">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">ໜ້າຫຼັກ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">ລິ້ງ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">ບໍລິການ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>`,
+                        variations: [
+                            {
+                                name: '.navbar',
+                                description: 'ຄຼາສຫຼັກສຳລັບແຖບນຳທາງ'
+                            },
+                            {
+                                name: '.navbar-expand-{breakpoint}',
+                                description: 'ກຳນົດຈຸດທີ່ແຖບນຳທາງຈະຂະຫຍາຍຕົວຈາກມືຖືເປັນເວີຊັນເຕັມຮູບແບບ'
+                            },
+                            {
+                                name: '.navbar-light',
+                                description: 'ສຳລັບແຖບນຳທາງທີ່ມີພື້ນຫຼັງສີອ່ອນ'
+                            },
+                            {
+                                name: '.navbar-dark',
+                                description: 'ສຳລັບແຖບນຳທາງທີ່ມີພື້ນຫຼັງສີເຂັ້ມ'
+                            },
+                            {
+                                name: '.bg-*',
+                                description: 'ສີພື້ນຫຼັງຂອງແຖບນຳທາງ'
+                            },
+                            {
+                                name: '.navbar-brand',
+                                description: 'ສຳລັບໂລໂກ້ຫຼືຊື່ແບຣນຂອງເວັບໄຊ'
+                            },
+                            {
+                                name: '.navbar-nav',
+                                description: 'ຄອນເທເນີສຳລັບລາຍການເມນູໃນແຖບນຳທາງ'
+                            },
+                            {
+                                name: '.nav-item',
+                                description: 'ລາຍການເມນູແຕ່ລະລາຍການ'
+                            },
+                            {
+                                name: '.nav-link',
+                                description: 'ລິ້ງໃນແຕ່ລະລາຍການເມນູ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'forms',
+                        name: 'Forms',
+                        description: 'Bootstrap ມີສະໄຕການອອກແບບສຳລັບອົງປະກອບການປ້ອນຂໍ້ມູນແລະແບບຟອມເພື່ອຄວາມເປັນເອກະພາບ.',
+                        html: `<form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">ທີ່ຢູ່ອີເມວ</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div id="emailHelp" class="form-text">ພວກເຮົາຈະບໍ່ແບ່ງປັນອີເມວຂອງທ່ານກັບຄົນອື່ນເດັດຂາດ.</div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">ລະຫັດຜ່ານ</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">ກວດເບິ່ງຂ້ອຍ</label>
+  </div>
+  <button type="submit" class="btn btn-primary">ສົ່ງ</button>
+</form>
+
+<div class="mt-4">
+  <h6>ຕົວຢ່າງການປ້ອນຂໍ້ມູນ</h6>
+  
+  <!-- Input sizes -->
+  <div class="mb-3">
+    <input class="form-control form-control-lg" type="text" placeholder="ຂະໜາດໃຫຍ່">
+  </div>
+  <div class="mb-3">
+    <input class="form-control" type="text" placeholder="ຂະໜາດມາດຕະຖານ">
+  </div>
+  <div class="mb-3">
+    <input class="form-control form-control-sm" type="text" placeholder="ຂະໜາດນ້ອຍ">
+  </div>
+  
+  <!-- Form select -->
+  <div class="mb-3">
+    <select class="form-select" aria-label="Default select example">
+      <option selected>ເປີດເມນູເລືອກນີ້</option>
+      <option value="1">ໜຶ່ງ</option>
+      <option value="2">ສອງ</option>
+      <option value="3">ສາມ</option>
+    </select>
+  </div>
+  
+  <!-- Checks and radios -->
+  <div class="mb-3">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+      <label class="form-check-label" for="flexCheckDefault">
+        ກ່ອງເລືອກມາດຕະຖານ
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+      <label class="form-check-label" for="flexCheckChecked">
+        ກ່ອງເລືອກທີ່ຖືກເລືອກ
+      </label>
+    </div>
+  </div>
+  
+  <div class="mb-3">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+      <label class="form-check-label" for="flexRadioDefault1">
+        ປຸ່ມວິທະຍຸມາດຕະຖານ
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+      <label class="form-check-label" for="flexRadioDefault2">
+        ປຸ່ມວິທະຍຸທີ່ຖືກເລືອກ
+      </label>
+    </div>
+  </div>
+  
+  <!-- Switches -->
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <label class="form-check-label" for="flexSwitchCheckDefault">ສະວິດໂຊມາດຕະຖານ</label>
+    </div>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+      <label class="form-check-label" for="flexSwitchCheckChecked">ສະວິດໂຊທີ່ຖືກເລືອກ</label>
+    </div>
+  </div>
+</div>`,
+                        variations: [
+                            {
+                                name: '.form-control',
+                                description: 'ຄຼາສຫຼັກສຳລັບອິນພຸດ textarea ແລະ select'
+                            },
+                            {
+                                name: '.form-label',
+                                description: 'ຄຼາສສຳລັບ label ໃນຟອມ'
+                            },
+                            {
+                                name: '.form-text',
+                                description: 'ຄຼາສສຳລັບຂໍ້ຄວາມຊ່ວຍເຫຼືອ'
+                            },
+                            {
+                                name: '.form-control-lg',
+                                description: 'ອິນພຸດຂະໜາດໃຫຍ່'
+                            },
+                            {
+                                name: '.form-control-sm',
+                                description: 'ອິນພຸດຂະໜາດນ້ອຍ'
+                            },
+                            {
+                                name: '.form-check',
+                                description: 'ຄອນເທເນີສຳລັບກ່ອງເລືອກແລະປຸ່ມວິທະຍຸ'
+                            },
+                            {
+                                name: '.form-check-input',
+                                description: 'ຄຼາສສຳລັບອິນພຸດກ່ອງເລືອກແລະປຸ່ມວິທະຍຸ'
+                            },
+                            {
+                                name: '.form-select',
+                                description: 'ຄຼາສສຳລັບ select dropdown'
+                            },
+                            {
+                                name: '.form-switch',
+                                description: 'ສຳລັບສະໄຕຮູບແບບສະວິດໂຊ'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'utilities',
+                name: 'ຍູທິລິດດິ້ (Utilities)',
+                description: 'ຄຼາສຍູທິລິດດິ້ທີ່ມີປະໂຫຍດຂອງ Bootstrap ສຳລັບແກ້ໄຂບັນຫາທົ່ວໄປໃນການອອກແບບ.',
+                components: [
+                    {
+                        id: 'spacing',
+                        name: 'Spacing',
+                        description: 'ຊ່ວຍຈັດການຊ່ອງຫວ່າງດ້ວຍຄລາສ margin ແລະ padding.',
+                        html: `<div class="mb-3 p-3 bg-light">
+  <div class="mb-2">Element ທີ່ມີ margin ທາງລຸ່ມ (.mb-3)</div>
+  <div>ແລະ padding ທັງສີ່ດ້ານ (.p-3)</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 mb-2">
+    <!-- mt: margin top -->
+    <div class="p-2 bg-light">mt-0</div>
+    <div class="mt-1 p-2 bg-light">mt-1 (0.25rem)</div>
+    <div class="mt-2 p-2 bg-light">mt-2 (0.5rem)</div>
+    <div class="mt-3 p-2 bg-light">mt-3 (1rem)</div>
+    <div class="mt-4 p-2 bg-light">mt-4 (1.5rem)</div>
+    <div class="mt-5 p-2 bg-light">mt-5 (3rem)</div>
+  </div>
+  
+  <div class="col-md-3 mb-2">
+    <!-- ms: margin left (start) -->
+    <div class="p-2 bg-light">ms-0</div>
+    <div class="ms-1 p-2 bg-light">ms-1</div>
+    <div class="ms-2 p-2 bg-light">ms-2</div>
+    <div class="ms-3 p-2 bg-light">ms-3</div>
+    <div class="ms-4 p-2 bg-light">ms-4</div>
+    <div class="ms-5 p-2 bg-light">ms-5</div>
+  </div>
+  
+  <div class="col-md-3 mb-2">
+    <!-- px: padding left & right -->
+    <div class="bg-light">px-0</div>
+    <div class="px-1 bg-light">px-1</div>
+    <div class="px-2 bg-light">px-2</div>
+    <div class="px-3 bg-light">px-3</div>
+    <div class="px-4 bg-light">px-4</div>
+    <div class="px-5 bg-light">px-5</div>
+  </div>
+  
+  <div class="col-md-3 mb-2">
+    <!-- py: padding top & bottom -->
+    <div class="bg-light">py-0</div>
+    <div class="py-1 bg-light">py-1</div>
+    <div class="py-2 bg-light">py-2</div>
+    <div class="py-3 bg-light">py-3</div>
+    <div class="py-4 bg-light">py-4</div>
+    <div class="py-5 bg-light">py-5</div>
+  </div>
+</div>`,
+                        variations: [
+                            {
+                                name: 'm-{size}',
+                                description: 'margin ທັງສີ່ດ້ານ (size = 0-5 ຫຼື auto)'
+                            },
+                            {
+                                name: 'mt-{size}',
+                                description: 'margin ທາງເທິງ'
+                            },
+                            {
+                                name: 'mb-{size}',
+                                description: 'margin ທາງລຸ່ມ'
+                            },
+                            {
+                                name: 'ms-{size}',
+                                description: 'margin ທາງຊ້າຍ (start)'
+                            },
+                            {
+                                name: 'me-{size}',
+                                description: 'margin ທາງຂວາ (end)'
+                            },
+                            {
+                                name: 'mx-{size}',
+                                description: 'margin ທາງຊ້າຍແລະຂວາ'
+                            },
+                            {
+                                name: 'my-{size}',
+                                description: 'margin ທາງເທິງແລະລຸ່ມ'
+                            },
+                            {
+                                name: 'p-{size}',
+                                description: 'padding ທັງສີ່ດ້ານ'
+                            },
+                            {
+                                name: 'pt-{size}',
+                                description: 'padding ທາງເທິງ'
+                            },
+                            {
+                                name: 'pb-{size}',
+                                description: 'padding ທາງລຸ່ມ'
+                            },
+                            {
+                                name: 'ps-{size}',
+                                description: 'padding ທາງຊ້າຍ (start)'
+                            },
+                            {
+                                name: 'pe-{size}',
+                                description: 'padding ທາງຂວາ (end)'
+                            },
+                            {
+                                name: 'px-{size}',
+                                description: 'padding ທາງຊ້າຍແລະຂວາ'
+                            },
+                            {
+                                name: 'py-{size}',
+                                description: 'padding ທາງເທິງແລະລຸ່ມ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'colors',
+                        name: 'Colors',
+                        description: 'ລະບົບສີຂອງ Bootstrap ສຳລັບຂໍ້ຄວາມແລະພື້ນຫຼັງ.',
+                        html: `<!-- Text colors -->
+<p class="text-primary">.text-primary</p>
+<p class="text-secondary">.text-secondary</p>
+<p class="text-success">.text-success</p>
+<p class="text-danger">.text-danger</p>
+<p class="text-warning">.text-warning</p>
+<p class="text-info">.text-info</p>
+<p class="text-light bg-dark">.text-light</p>
+<p class="text-dark">.text-dark</p>
+<p class="text-body">.text-body</p>
+<p class="text-muted">.text-muted</p>
+<p class="text-white bg-dark">.text-white</p>
+
+<!-- Background colors -->
+<div class="p-3 mb-2 bg-primary text-white">.bg-primary</div>
+<div class="p-3 mb-2 bg-secondary text-white">.bg-secondary</div>
+<div class="p-3 mb-2 bg-success text-white">.bg-success</div>
+<div class="p-3 mb-2 bg-danger text-white">.bg-danger</div>
+<div class="p-3 mb-2 bg-warning text-dark">.bg-warning</div>
+<div class="p-3 mb-2 bg-info text-dark">.bg-info</div>
+<div class="p-3 mb-2 bg-light text-dark">.bg-light</div>
+<div class="p-3 mb-2 bg-dark text-white">.bg-dark</div>
+<div class="p-3 mb-2 bg-white text-dark">.bg-white</div>
+<div class="p-3 mb-2 bg-transparent text-dark">.bg-transparent</div>
+
+<!-- Background gradient -->
+<div class="p-3 mb-2 bg-primary bg-gradient text-white">.bg-primary.bg-gradient</div>
+<div class="p-3 mb-2 bg-success bg-gradient text-white">.bg-success.bg-gradient</div>`,
+                        variations: [
+                            {
+                                name: '.text-{color}',
+                                description: 'ສີຂອງຂໍ້ຄວາມ'
+                            },
+                            {
+                                name: '.bg-{color}',
+                                description: 'ສີພື້ນຫຼັງ'
+                            },
+                            {
+                                name: '.bg-gradient',
+                                description: 'ເພີ່ມ gradient ໃຫ້ກັບພື້ນຫຼັງ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'borders',
+                        name: 'Borders',
+                        description: 'ຍູທິລິດດິ້ສຳລັບຄວບຄຸມເສັ້ນຂອບອົງປະກອບ.',
+                        html: `<!-- Add borders -->
+<span class="border d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border-top d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border-end d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border-bottom d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border-start d-inline-block p-3 mb-2 mx-1"></span>
+
+<!-- Colored borders -->
+<span class="border border-primary d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-secondary d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-success d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-danger d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-warning d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-info d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-light d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-dark d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-white d-inline-block p-3 mb-2 mx-1"></span>
+
+<!-- Border width -->
+<span class="border border-1 d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-2 d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-3 d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-4 d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border border-5 d-inline-block p-3 mb-2 mx-1"></span>
+
+<!-- Border radius -->
+<span class="border rounded d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-top d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-end d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-bottom d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-start d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-circle d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-pill d-inline-block px-4 py-2 mb-2 mx-1"></span>
+
+<!-- Sizes -->
+<span class="border rounded-0 d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-1 d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-2 d-inline-block p-3 mb-2 mx-1"></span>
+<span class="border rounded-3 d-inline-block p-3 mb-2 mx-1"></span>`,
+                        variations: [
+                            {
+                                name: '.border',
+                                description: 'ເພີ່ມຂອບໃຫ້ອົງປະກອບ'
+                            },
+                            {
+                                name: '.border-{side}',
+                                description: 'ເພີ່ມຂອບສະເພາະດ້ານ (top, end, bottom, start)'
+                            },
+                            {
+                                name: '.border-{color}',
+                                description: 'ກຳນົດສີຂອງຂອບ'
+                            },
+                            {
+                                name: '.border-{width}',
+                                description: 'ກຳນົດຄວາມໜາຂອງຂອບ (1-5)'
+                            },
+                            {
+                                name: '.rounded',
+                                description: 'ເພີ່ມຂອບມົນ'
+                            },
+                            {
+                                name: '.rounded-{size}',
+                                description: 'ກຳນົດຂະໜາດມົນຂອງຂອບ (0-3)'
+                            },
+                            {
+                                name: '.rounded-{side}',
+                                description: 'ເພີ່ມຂອບມົນສະເພາະດ້ານ'
+                            },
+                            {
+                                name: '.rounded-circle',
+                                description: 'ເຮັດໃຫ້ອົງປະກອບເປັນຮູບວົງມົນ'
+                            },
+                            {
+                                name: '.rounded-pill',
+                                description: 'ເຮັດໃຫ້ອົງປະກອບເປັນຮູບຢາເມັດ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'display',
+                        name: 'Display',
+                        description: 'ຄວບຄຸມວິທີທີ່ອົງປະກອບສະແດງຕົວ (block, inline, ແລະອື່ນໆ).',
+                        html: `<div class="d-inline p-2 bg-primary text-white">d-inline</div>
+<div class="d-inline p-2 bg-dark text-white">d-inline</div>
+
+<div class="d-block p-2 bg-primary text-white mt-3">d-block</div>
+<div class="d-block p-2 bg-dark text-white">d-block</div>
+
+<div class="d-grid gap-2 mt-3">
+  <div class="p-2 bg-success text-white">d-grid ຈັດລຽງຄ້າຍຄື grid</div>
+  <div class="p-2 bg-success text-white">ອີກອົງປະກອບໃນກິດ</div>
+</div>
+
+<div class="mt-3">
+  <div class="d-none">ອັນນີ້ຈະບໍ່ສະແດງ (d-none)</div>
+  <div class="d-none d-md-block bg-warning p-2">ຈະສະແດງສະເພາະໜ້າຈໍຂະໜາດກາງຂຶ້ນໄປ (d-none d-md-block)</div>
+  <div class="d-sm-none d-lg-block bg-info p-2 mt-2">ຈະສະແດງໃນໜ້າຈໍຂະໜາດນ້ອຍແລະໃຫຍ່ ແຕ່ຈະຖືກເຊື່ອງໃນຂະໜາດກາງ</div>
+</div>`,
+                        variations: [
+                            {
+                                name: '.d-none',
+                                description: 'ເຊື່ອງອົງປະກອບ'
+                            },
+                            {
+                                name: '.d-inline',
+                                description: 'ສະແດງເປັນ inline'
+                            },
+                            {
+                                name: '.d-inline-block',
+                                description: 'ສະແດງເປັນ inline-block'
+                            },
+                            {
+                                name: '.d-block',
+                                description: 'ສະແດງເປັນ block'
+                            },
+                            {
+                                name: '.d-flex',
+                                description: 'ສະແດງເປັນ flex container'
+                            },
+                            {
+                                name: '.d-grid',
+                                description: 'ສະແດງເປັນ grid container'
+                            },
+                            {
+                                name: '.d-{breakpoint}-{value}',
+                                description: 'ປ່ຽນການສະແດງຜົນທີ່ຈຸດແຕກຕ່າງໆ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'flex',
+                        name: 'Flex',
+                        description: 'ຄຼາສຊ່ວຍສຳລັບການຈັດວາງອົງປະກອບແບບຍືດຫຍຸ່ນໂດຍໃຊ້ flexbox.',
+                        html: `<!-- Basic flex container -->
+<div class="d-flex p-2 mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<!-- Flex direction -->
+<div class="d-flex flex-row mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex flex-row-reverse mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex flex-column mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<!-- Justify content -->
+<div class="d-flex justify-content-start mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex justify-content-end mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex justify-content-center mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex justify-content-between mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex justify-content-around mb-3 bg-light">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<!-- Align items -->
+<div class="d-flex align-items-start bg-light mb-3" style="height: 100px">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex align-items-center bg-light mb-3" style="height: 100px">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>
+
+<div class="d-flex align-items-end bg-light mb-3" style="height: 100px">
+  <div class="p-2 bg-info">Flex item 1</div>
+  <div class="p-2 bg-warning">Flex item 2</div>
+  <div class="p-2 bg-success">Flex item 3</div>
+</div>`,
+                        variations: [
+                            {
+                                name: '.d-flex',
+                                description: 'ສ້າງ flexbox container'
+                            },
+                            {
+                                name: '.flex-row',
+                                description: 'ຈັດລຽງລາຍການໃນທິດທາງແຖວ (ຈາກຊ້າຍໄປຂວາ)'
+                            },
+                            {
+                                name: '.flex-row-reverse',
+                                description: 'ຈັດລຽງລາຍການໃນທິດທາງແຖວກັບຄືນ (ຈາກຂວາໄປຊ້າຍ)'
+                            },
+                            {
+                                name: '.flex-column',
+                                description: 'ຈັດລຽງລາຍການໃນທິດທາງຖັນ (ຈາກເທິງລົງລຸ່ມ)'
+                            },
+                            {
+                                name: '.flex-column-reverse',
+                                description: 'ຈັດລຽງລາຍການໃນທິດທາງຖັນກັບຄືນ (ຈາກລຸ່ມຂຶ້ນເທິງ)'
+                            },
+                            {
+                                name: '.justify-content-start',
+                                description: 'ຈັດລຽງລາຍການໄປທາງຈຸດເລີ່ມຕົ້ນຂອງແກນຫຼັກ'
+                            },
+                            {
+                                name: '.justify-content-end',
+                                description: 'ຈັດລຽງລາຍການໄປທາງຈຸດສິ້ນສຸດຂອງແກນຫຼັກ'
+                            },
+                            {
+                                name: '.justify-content-center',
+                                description: 'ຈັດລຽງລາຍການໄປທາງໃຈກາງຂອງແກນຫຼັກ'
+                            },
+                            {
+                                name: '.justify-content-between',
+                                description: 'ຈັດລາຍການໂດຍແຈກຢາຍຊ່ອງຫວ່າງເທົ່າກັນລະຫວ່າງລາຍການ'
+                            },
+                            {
+                                name: '.justify-content-around',
+                                description: 'ຈັດລາຍການໂດຍແຈກຢາຍຊ່ອງຫວ່າງເທົ່າກັນອ້ອມຮອບລາຍການ'
+                            },
+                            {
+                                name: '.align-items-start',
+                                description: 'ຈັດລຽງລາຍການໄປທາງຈຸດເລີ່ມຕົ້ນຂອງແກນຂວາງ'
+                            },
+                            {
+                                name: '.align-items-end',
+                                description: 'ຈັດລຽງລາຍການໄປທາງຈຸດສິ້ນສຸດຂອງແກນຂວາງ'
+                            },
+                            {
+                                name: '.align-items-center',
+                                description: 'ຈັດລຽງລາຍການໄປທາງໃຈກາງຂອງແກນຂວາງ'
+                            },
+                            {
+                                name: '.align-items-baseline',
+                                description: 'ຈັດລຽງລາຍການຕາມເສັ້ນພື້ນຖານຂອງຂໍ້ຄວາມ'
+                            },
+                            {
+                                name: '.align-items-stretch',
+                                description: 'ຍືດລາຍການເພື່ອເຕັມພື້ນທີ່ຂອງແກນຂວາງ'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'typography',
+                name: 'ການຈັດການຂໍ້ຄວາມ (Typography)',
+                description: 'ຄຼາສແລະຄຳສັ່ງສຳລັບການຈັດວາງແລະຈັດແຕ່ງຂໍ້ຄວາມ.',
+                components: [
+                    {
+                        id: 'headings',
+                        name: 'Headings & Titles',
+                        description: 'ສະໄຕຫົວຂໍ້ແລະຂໍ້ຄວາມ.',
+                        html: `<!-- Headings -->
+<h1>h1. Bootstrap heading</h1>
+<h2>h2. Bootstrap heading</h2>
+<h3>h3. Bootstrap heading</h3>
+<h4>h4. Bootstrap heading</h4>
+<h5>h5. Bootstrap heading</h5>
+<h6>h6. Bootstrap heading</h6>
+
+<!-- Display headings -->
+<h1 class="display-1">Display 1</h1>
+<h1 class="display-2">Display 2</h1>
+<h1 class="display-3">Display 3</h1>
+<h1 class="display-4">Display 4</h1>
+<h1 class="display-5">Display 5</h1>
+<h1 class="display-6">Display 6</h1>
+
+<!-- Lead text -->
+<p class="lead">
+  ນີ້ແມ່ນຍໍ່ໜ້າແບບ lead. ມັນໂດດເດັ່ນກວ່າຍໍ່ໜ້າປົກກະຕິ.
+</p>
+
+<!-- Text alignment -->
+<p class="text-start">ຂໍ້ຄວາມຈັດຊິດຊ້າຍ.</p>
+<p class="text-center">ຂໍ້ຄວາມຈັດກາງ.</p>
+<p class="text-end">ຂໍ້ຄວາມຈັດຊິດຂວາ.</p>
+
+<!-- Text transform -->
+<p class="text-lowercase">TEXT LOWERCASE.</p>
+<p class="text-uppercase">text uppercase.</p>
+<p class="text-capitalize">text capitalize.</p>
+
+<!-- Text decoration -->
+<p class="text-decoration-underline">ຂໍ້ຄວາມທີ່ຂີດກ້ອງ.</p>
+<p class="text-decoration-line-through">ຂໍ້ຄວາມທີ່ຂີດຄ່າ.</p>
+<a href="#" class="text-decoration-none">ລິ້ງໂດຍບໍ່ມີການຕົກແຕ່ງ</a>
+
+<!-- Font weight and italics -->
+<p class="fw-bold">ຂໍ້ຄວາມຕົວໜາ.</p>
+<p class="fw-bolder">ຂໍ້ຄວາມຕົວໜາກວ່າ.</p>
+<p class="fw-normal">ຂໍ້ຄວາມປົກກະຕິ.</p>
+<p class="fw-light">ຂໍ້ຄວາມຕົວບາງ.</p>
+<p class="fw-lighter">ຂໍ້ຄວາມຕົວບາງກວ່າ.</p>
+<p class="fst-italic">ຂໍ້ຄວາມຕົວງ່ຽງ.</p>
+<p class="fst-normal">ຂໍ້ຄວາມບໍ່ງ່ຽງປົກກະຕິ.</p>`,
+                        variations: [
+                            {
+                                name: 'h1 - h6',
+                                description: 'ແທັກຫົວຂໍ້ HTML'
+                            },
+                            {
+                                name: '.display-1 - .display-6',
+                                description: 'ຫົວຂໍ້ແບບໂດດເດັ່ນກວ່າປົກກະຕິ'
+                            },
+                            {
+                                name: '.lead',
+                                description: 'ເຮັດໃຫ້ຍໍ່ໜ້າໂດດເດັ່ນ'
+                            },
+                            {
+                                name: '.text-start',
+                                description: 'ຈັດຂໍ້ຄວາມໄປທາງຊ້າຍ'
+                            },
+                            {
+                                name: '.text-center',
+                                description: 'ຈັດຂໍ້ຄວາມກາງ'
+                            },
+                            {
+                                name: '.text-end',
+                                description: 'ຈັດຂໍ້ຄວາມໄປທາງຂວາ'
+                            },
+                            {
+                                name: '.text-lowercase',
+                                description: 'ປ່ຽນຂໍ້ຄວາມເປັນຕົວພິມນ້ອຍທັງໝົດ'
+                            },
+                            {
+                                name: '.text-uppercase',
+                                description: 'ປ່ຽນຂໍ້ຄວາມເປັນຕົວພິມໃຫຍ່ທັງໝົດ'
+                            },
+                            {
+                                name: '.text-capitalize',
+                                description: 'ເຮັດໃຫ້ອັກສອນຕົວທຳອິດຂອງແຕ່ລະຄຳເປັນຕົວພິມໃຫຍ່'
+                            },
+                            {
+                                name: '.fw-bold',
+                                description: 'ຕົວໜັງສືໜາ'
+                            },
+                            {
+                                name: '.fw-normal',
+                                description: 'ຕົວໜັງສືປົກກະຕິ'
+                            },
+                            {
+                                name: '.fw-light',
+                                description: 'ຕົວໜັງສືບາງ'
+                            },
+                            {
+                                name: '.fst-italic',
+                                description: 'ຕົວໜັງສືງ່ຽງ'
+                            },
+                            {
+                                name: '.fst-normal',
+                                description: 'ຕົວໜັງສືປົກກະຕິບໍ່ງ່ຽງ'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'lists',
+                        name: 'Lists',
+                        description: 'ຮູບແບບການຈັດລາຍການຕ່າງໆໃນ Bootstrap.',
+                        html: `<!-- Unordered list -->
+<ul>
+  <li>ລາຍການທີໜຶ່ງ</li>
+  <li>ລາຍການທີສອງ</li>
+  <li>ລາຍການທີສາມ</li>
+</ul>
+
+<!-- Ordered list -->
+<ol>
+  <li>ລາຍການທີໜຶ່ງ</li>
+  <li>ລາຍການທີສອງ</li>
+  <li>ລາຍການທີສາມ</li>
+</ol>
+
+<!-- Unstyled list -->
+<ul class="list-unstyled">
+  <li>ລາຍການທີບໍ່ມີຮູບແບບ</li>
+  <li>ບໍ່ມີເຄື່ອງໝາຍລາຍການ
+    <ul>
+      <li>ລາຍການຍ່ອຍຍັງມີເຄື່ອງໝາຍຢູ່</li>
+      <li>ລາຍການຍ່ອຍອີກອັນ</li>
+    </ul>
+  </li>
+  <li>ລາຍການທີສາມ</li>
+</ul>
+
+<!-- Inline list -->
+<ul class="list-inline">
+  <li class="list-inline-item">ລາຍການ 1</li>
+  <li class="list-inline-item">ລາຍການ 2</li>
+  <li class="list-inline-item">ລາຍການ 3</li>
+</ul>
+
+<!-- Description list -->
+<dl>
+  <dt>Bootstrap</dt>
+  <dd>ແຟຣມເວີກ CSS ທີ່ນິຍົມທີ່ສຸດແຫ່ງໜຶ່ງ</dd>
+  
+  <dt>CSS</dt>
+  <dd>Cascading Style Sheets, ເປັນພາສາສຳລັບຕົກແຕ່ງເວັບໄຊ</dd>
+  
+  <dt>HTML</dt>
+  <dd>HyperText Markup Language, ພາສາມາກອັບຫຼັກສຳລັບສ້າງເວັບໄຊ</dd>
+</dl>
+
+<!-- List group -->
+<ul class="list-group">
+  <li class="list-group-item">ລາຍການທີໜຶ່ງ</li>
+  <li class="list-group-item">ລາຍການທີສອງ</li>
+  <li class="list-group-item">ລາຍການທີສາມ</li>
+</ul>
+
+<!-- Active and disabled list items -->
+<ul class="list-group mt-3">
+  <li class="list-group-item active">ລາຍການທີ່ເລືອກຢູ່</li>
+  <li class="list-group-item">ລາຍການປົກກະຕິ</li>
+  <li class="list-group-item disabled">ລາຍການທີ່ປິດການໃຊ້ງານ</li>
+</ul>
+
+<!-- List group with links -->
+<div class="list-group mt-3">
+  <a href="#" class="list-group-item list-group-item-action active">ລິ້ງທີ່ເລືອກຢູ່</a>
+  <a href="#" class="list-group-item list-group-item-action">ລິ້ງທີ່ກົດໄດ້</a>
+  <a href="#" class="list-group-item list-group-item-action">ອີກລິ້ງນຶ່ງ</a>
+</div>
+
+<!-- Colored list items -->
+<ul class="list-group mt-3">
+  <li class="list-group-item list-group-item-primary">Primary</li>
+  <li class="list-group-item list-group-item-secondary">Secondary</li>
+  <li class="list-group-item list-group-item-success">Success</li>
+  <li class="list-group-item list-group-item-danger">Danger</li>
+  <li class="list-group-item list-group-item-warning">Warning</li>
+</ul>`,
+                        variations: [
+                            {
+                                name: '.list-unstyled',
+                                description: 'ເອົາເຄື່ອງໝາຍລາຍການອອກ (bullet points)'
+                            },
+                            {
+                                name: '.list-inline',
+                                description: 'ເຮັດໃຫ້ລາຍການຢູ່ໃນແຖວດຽວກັນ'
+                            },
+                            {
+                                name: '.list-inline-item',
+                                description: 'ໃຊ້ກັບລາຍການໃນ .list-inline'
+                            },
+                            {
+                                name: '.list-group',
+                                description: 'ສ້າງກຸ່ມລາຍການທີ່ມີສະໄຕ'
+                            },
+                            {
+                                name: '.list-group-item',
+                                description: 'ແຕ່ລະລາຍການໃນ list-group'
+                            },
+                            {
+                                name: '.list-group-item-action',
+                                description: 'ເຮັດໃຫ້ລາຍການສາມາດໃຊ້ງານໄດ້ (ເມື່ອວາງເມົາສ໌)'
+                            },
+                            {
+                                name: '.active',
+                                description: 'ສະແດງວ່າລາຍການນັ້ນຖືກເລືອກ'
+                            },
+                            {
+                                name: '.disabled',
+                                description: 'ສະແດງວ່າລາຍການນັ້ນຖືກປິດການໃຊ້ງານ'
+                            },
+                            {
+                                name: '.list-group-item-{color}',
+                                description: 'ເພີ່ມສີສະເພາະໃຫ້ກັບລາຍການ'
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // ສະແດງໝວດໝູ່
+        const categoryList = document.getElementById('categoryList');
+        bootstrapData.forEach(category => {
+            const listItem = document.createElement('button');
+            listItem.className = 'list-group-item list-group-item-action';
+            listItem.textContent = category.name;
+            listItem.addEventListener('click', () => showCategory(category.id));
+            categoryList.appendChild(listItem);
+        });
+
+        // ສະແດງອົງປະກອບຂອງໝວດນັ້ນ
+        function showCategory(categoryId) {
+            // ເນັ້ນປຸ່ມໝວດທີ່ເລືອກ
+            document.querySelectorAll('#categoryList .list-group-item').forEach(item => {
+                item.classList.remove('active');
+                if(item.textContent === bootstrapData.find(c => c.id === categoryId).name) {
+                    item.classList.add('active');
+                }
+            });
+            
+            const category = bootstrapData.find(c => c.id === categoryId);
+            const componentGrid = document.getElementById('componentGrid');
+            componentGrid.innerHTML = '';
+            
+            // ສະແດງຂໍ້ມູນໝວດໝູ່
+            const categoryInfo = document.createElement('div');
+            categoryInfo.className = 'col-12 mb-4';
+            categoryInfo.innerHTML = `
+                <h2>${category.name}</h2>
+                <p class="lead">${category.description}</p>
+                <hr>
+            `;
+            componentGrid.appendChild(categoryInfo);
+            
+            // ສະແດງອົງປະກອບໃນໝວດນັ້ນ
+            category.components.forEach(component => {
+                const componentCard = document.createElement('div');
+                componentCard.className = 'col-md-6 col-lg-4';
+                componentCard.innerHTML = `
+                    <div class="card component-card h-100" data-category="${categoryId}" data-component="${component.id}">
+                        <div class="card-header">
+                            ${component.name}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">${component.description}</p>
+                        </div>
+                    </div>
+                `;
+                componentGrid.appendChild(componentCard);
+                
+                // ເພີ່ມ event ເມື່ອກົດທີ່ອົງປະກອບ
+                componentCard.querySelector('.card').addEventListener('click', () => {
+                    showComponentDetails(categoryId, component.id);
+                });
+            });
+        }
+        
+        // ສະແດງລາຍລະອຽດຂອງອົງປະກອບໃນໜ້າຕ່າງ modal
+        function showComponentDetails(categoryId, componentId) {
+            const category = bootstrapData.find(c => c.id === categoryId);
+            const component = category.components.find(c => c.id === componentId);
+            
+            // ຕັ້ງຄ່າຫົວຂໍ້
+            document.getElementById('componentModalLabel').textContent = component.name;
+            
+            // ສະແດງເນື້ອຫາ
+            const modalBody = document.getElementById('componentModalBody');
+            
+            let variationsHTML = '';
+            if (component.variations && component.variations.length > 0) {
+                variationsHTML = `
+                    <h5 class="mt-4">ຮູບແບບຄຳສັ່ງ</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ຄຳສັ່ງ</th>
+                                    <th>ຄຳອະທິບາຍ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${component.variations.map(v => `
+                                    <tr>
+                                        <td><code>${v.name}</code></td>
+                                        <td>${v.description}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            modalBody.innerHTML = `
+                <p>${component.description}</p>
+                
+                <h5 class="mt-3">ຕົວຢ່າງ</h5>
+                <div class="result-box mb-3">
+                    ${component.html}
+                </div>
+                
+                <h5>HTML</h5>
+                <pre class="code-example mb-4"><code>${escapeHtml(component.html)}</code></pre>
+                
+                ${variationsHTML}
+            `;
+            
+            // ເປີດໜ້າຕ່າງ modal
+            const modal = new bootstrap.Modal(document.getElementById('componentModal'));
+            modal.show();
+        }
+        
+        // ຟັງຊັ່ນຊ່ວຍຄວາມປອດໄພ HTML
+        function escapeHtml(html) {
+            return html
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // ສະແດງໝວດໝູ່ທຳອິດເມື່ອໂຫຼດໜ້າ
+        if (bootstrapData.length > 0) {
+            showCategory(bootstrapData[0].id);
+        }
+    </script>
+</body>
+</html>

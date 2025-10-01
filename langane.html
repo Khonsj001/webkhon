@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ເວັບປ່ຽນພາສາ (ອັດຕະໂນມັດ)</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        select { padding: 8px; margin: 10px 0; 
+           
+            border-radius: 12px;
+            border: 3px solid #15fa00; /* ຂອບບາງໆສີອ່ອນ */
+
+        }
+  
+
+    </style>
+</head>
+<body>
+    <h1 id="title">ຍິນດີຕ້ອນຮັບ</h1>
+    <p id="description">ນີ້ແມ່ນເວັບທົດລອງປ່ຽນພາສາ11</p>
+
+    <select id="language-select" onchange="changeLanguage()">
+        <option value="lao" id="lao">ລາວ</option>
+        <option value="en" id="lao">English</option>
+        <option value="th" id="lao">ไทย</option>
+        <option value="vi" id="lao">Tiếng Việt</option>
+    </select>
+
+    <script>
+        const translations = {
+            lao: {
+                title: "ຍິນດີຕ້ອນຮັບ",
+                description: "ນີ້ແມ່ນເວັບທົດລອງປ່ຽນພາສາ"
+            },
+            en: {
+                title: "Welcome",
+                description: "This is a language switch demo"
+            },
+            th: {
+                title: "ยินดีต้อนรับ",
+                description: "นี่คือตัวอย่างการเปลี่ยนภาษา"
+            },
+            vi: {
+                title: "Chào mừng",
+                description: "Đây là bản demo chuyển ngữ"
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById("language-select").value;
+            document.getElementById("title").textContent = translations[lang].title;
+            document.getElementById("description").textContent = translations[lang].description;
+        }
+    </script>
+</body>
+</html>

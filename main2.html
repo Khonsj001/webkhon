@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS ຄຳສັ່ງພື້ນຖານ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+        body{
+            font-family: 'Noto Sans Lao', 'Poppins', sans-serif;
+
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <h1 class="text-3xl font-bold mb-6 text-primary">CSS ຄຳສັ່ງພື້ນຖານ</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- ສ່ວນໝວດໝູ່ຄຳສັ່ງ -->
+            <div class="md:col-span-1 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">ໝວດໝູ່ຄຳສັ່ງ CSS</h2>
+                <div id="categories" class="space-y-2">
+                    <!-- ໝວດໝູ່ຈະຖືກເພີ່ມໃນນີ້ -->
+                </div>
+                
+                <h2 class="text-xl font-semibold my-4">ຄຳສັ່ງໃນໝວດໝູ່</h2>
+                <div id="properties-list" class="space-y-2">
+                    <!-- ຄຳສັ່ງຈະຖືກເພີ່ມໃນນີ້ -->
+                </div>
+            </div>
+            
+            <!-- ສ່ວນສະແດງຜົນ -->
+            <div class="md:col-span-2 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                <div id="property-details">
+                    <h2 class="text-xl font-semibold mb-4">ເລືອກຄຳສັ່ງເພື່ອເບິ່ງລາຍລະອຽດ</h2>
+                    <p class="text-gray-600 dark:text-gray-400">ກະລຸນາເລືອກຄຳສັ່ງຈາກລາຍການທາງຊ້າຍເພື່ອເບິ່ງຕົວຢ່າງແລະຄຳອະທິບາຍ.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ກວດສອບ dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // ໝວດໝູ່ແລະຄຳສັ່ງ CSS
+        const cssCategories = [
+            {
+                name: 'ສີແລະພື້ນຫຼັງ',
+                properties: [
+                    {
+                        name: 'color',
+                        description: 'ກຳນົດສີຂອງຂໍ້ຄວາມ',
+                        syntax: 'color: red | #FF0000 | rgb(255, 0, 0) | rgba(255, 0, 0, 1)',
+                        example: '.example { color: blue; }',
+                        html: '<p class="example">ຂໍ້ຄວາມນີ້ມີສີຟ້າ</p>',
+                        css: '.example { color: blue; }'
+                    },
+                    {
+                        name: 'background-color',
+                        description: 'ກຳນົດສີພື້ນຫຼັງ',
+                        syntax: 'background-color: yellow | #FFFF00 | rgb(255, 255, 0) | rgba(255, 255, 0, 1)',
+                        example: '.example { background-color: yellow; }',
+                        html: '<p class="example">ຂໍ້ຄວາມທີ່ມີພື້ນຫຼັງສີເຫຼືອງ</p>',
+                        css: '.example { background-color: yellow; padding: 10px; }'
+                    },
+                    {
+                        name: 'background-image',
+                        description: 'ກຳນົດຮູບພາບພື້ນຫຼັງ',
+                        syntax: 'background-image: url("path/to/image.jpg") | linear-gradient(direction, color1, color2, ...)',
+                        example: '.example { background-image: linear-gradient(to right, blue, purple); }',
+                        html: '<div class="example">ກ່ອງທີ່ມີພື້ນຫຼັງເປັນ gradient</div>',
+                        css: '.example { background-image: linear-gradient(to right, blue, purple); color: white; height: 100px; display: flex; align-items: center; justify-content: center; }'
+                    }
+                ]
+            },
+            {
+                name: 'ຂໍ້ຄວາມແລະຕົວອັກສອນ',
+                properties: [
+                    {
+                        name: 'font-family',
+                        description: 'ກຳນົດປະເພດຕົວອັກສອນ',
+                        syntax: 'font-family: Arial, sans-serif | "Times New Roman", Times, serif',
+                        example: '.example { font-family: "Courier New", monospace; }',
+                        html: '<p class="example">ຂໍ້ຄວາມໃນຕົວອັກສອນແບບ monospace</p>',
+                        css: '.example { font-family: "Courier New", monospace; }'
+                    },
+                    {
+                        name: 'font-size',
+                        description: 'ກຳນົດຂະໜາດຕົວອັກສອນ',
+                        syntax: 'font-size: 12px | 1.5em | 2rem | 150%',
+                        example: '.example { font-size: 24px; }',
+                        html: '<p class="example">ຂໍ້ຄວາມທີ່ມີຂະໜາດ 24px</p>',
+                        css: '.example { font-size: 24px; }'
+                    },
+                    {
+                        name: 'font-weight',
+                        description: 'ກຳນົດຄວາມໜາຂອງຕົວອັກສອນ',
+                        syntax: 'font-weight: normal | bold | 100-900',
+                        example: '.example { font-weight: bold; }',
+                        html: '<p class="example">ຂໍ້ຄວາມທີ່ມີຄວາມໜາ</p>',
+                        css: '.example { font-weight: bold; }'
+                    },
+                    {
+                        name: 'text-align',
+                        description: 'ກຳນົດການຈັດວາງຂໍ້ຄວາມ',
+                        syntax: 'text-align: left | right | center | justify',
+                        example: '.example { text-align: center; }',
+                        html: '<p class="example">ຂໍ້ຄວາມທີ່ຈັດກາງ</p>',
+                        css: '.example { text-align: center; }'
+                    },
+                    {
+                        name: 'text-decoration',
+                        description: 'ກຳນົດການຕົກແຕ່ງຂໍ້ຄວາມ',
+                        syntax: 'text-decoration: none | underline | line-through | overline',
+                        example: '.example { text-decoration: underline; }',
+                        html: '<p class="example">ຂໍ້ຄວາມທີ່ມີເສັ້ນຂີດກ້ອງ</p>',
+                        css: '.example { text-decoration: underline; }'
+                    }
+                ]
+            },
+            {
+                name: 'ຂອບແລະເສັ້ນຂອບ',
+                properties: [
+                    {
+                        name: 'border',
+                        description: 'ກຳນົດຂອບຮອບອົງປະກອບ',
+                        syntax: 'border: width style color | 1px solid black',
+                        example: '.example { border: 2px solid red; }',
+                        html: '<div class="example">ກ່ອງທີ່ມີຂອບສີແດງ</div>',
+                        css: '.example { border: 2px solid red; padding: 10px; }'
+                    },
+                    {
+                        name: 'border-radius',
+                        description: 'ກຳນົດຄວາມໂຄ້ງມົນຂອງມູມ',
+                        syntax: 'border-radius: 5px | 50% | 10px 20px 30px 40px',
+                        example: '.example { border-radius: 10px; }',
+                        html: '<div class="example">ກ່ອງທີ່ມີມູມມົນ</div>',
+                        css: '.example { border: 1px solid #ccc; border-radius: 10px; padding: 10px; }'
+                    },
+                    {
+                        name: 'box-shadow',
+                        description: 'ກຳນົດເງົາໃຫ້ກັບອົງປະກອບ',
+                        syntax: 'box-shadow: h-offset v-offset blur spread color | 0px 5px 10px rgba(0, 0, 0, 0.5)',
+                        example: '.example { box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); }',
+                        html: '<div class="example">ກ່ອງທີ່ມີເງົາ</div>',
+                        css: '.example { background-color: white; color: black; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); padding: 10px; }'
+                    }
+                ]
+            },
+            {
+                name: 'ການຈັດວາງ',
+                properties: [
+                    {
+                        name: 'display',
+                        description: 'ກຳນົດການສະແດງຜົນຂອງອົງປະກອບ',
+                        syntax: 'display: block | inline | inline-block | flex | grid | none',
+                        example: '.container { display: flex; }\n.item { padding: 10px; border: 1px solid; }',
+                        html: '<div class="container"><div class="item">ລາຍການ 1</div><div class="item">ລາຍການ 2</div><div class="item">ລາຍການ 3</div></div>',
+                        css: '.container { display: flex; gap: 10px; }\n.item { padding: 10px; border: 1px solid; }'
+                    },
+                    {
+                        name: 'position',
+                        description: 'ກຳນົດຕຳແໜ່ງຂອງອົງປະກອບ',
+                        syntax: 'position: static | relative | absolute | fixed | sticky',
+                        example: '.parent { position: relative; height: 100px; }\n.child { position: absolute; bottom: 0; right: 0; }',
+                        html: '<div class="parent"><div class="child">ຢູ່ມູມລຸ່ມຂວາ</div></div>',
+                        css: '.parent { position: relative; height: 100px; border: 1px solid; }\n.child { position: absolute; bottom: 0; right: 0; background: orange; padding: 5px; }'
+                    },
+                    {
+                        name: 'margin',
+                        description: 'ກຳນົດໄລຍະຫ່າງນອກອົງປະກອບ',
+                        syntax: 'margin: top right bottom left | 10px | 10px 20px | 10px 20px 30px 40px',
+                        example: '.example { margin: 20px; }',
+                        html: '<div class="container"><div class="example">ກ່ອງທີ່ມີ margin 20px</div></div>',
+                        css: '.container { border: 1px dashed; }\n.example { background: lightblue; margin: 20px; padding: 10px; }'
+                    },
+                    {
+                        name: 'padding',
+                        description: 'ກຳນົດໄລຍະຫ່າງພາຍໃນອົງປະກອບ',
+                        syntax: 'padding: top right bottom left | 10px | 10px 20px | 10px 20px 30px 40px',
+                        example: '.example { padding: 20px; }',
+                        html: '<div class="example">ກ່ອງທີ່ມີ padding 20px</div>',
+                        css: '.example { padding: 20px; border: 1px solid; }'
+                    }
+                ]
+            },
+            {
+                name: 'ການເຄື່ອນໄຫວແລະປັບປ່ຽນ',
+                properties: [
+                    {
+                        name: 'transition',
+                        description: 'ສ້າງການປ່ຽນແປງແບບຄ່ອຍເປັນຄ່ອຍໄປ',
+                        syntax: 'transition: property duration timing-function delay | all 0.3s ease 0s',
+                        example: '.example { transition: background-color 0.5s ease; }\n.example:hover { background-color: orange; }',
+                        html: '<div class="example">ນຳເມົາສ໌ມາວາງເທິງກ່ອງນີ້</div>',
+                        css: '.example { background-color: lightblue; padding: 20px; transition: background-color 0.5s ease; }\n.example:hover { background-color: orange; }'
+                    },
+                    {
+                        name: 'transform',
+                        description: 'ກຳນົດການປ່ຽນຮູບຮ່າງຂອງອົງປະກອບ',
+                        syntax: 'transform: rotate() | scale() | translate() | skew() | rotate(45deg) | scale(1.5) | translate(10px, 20px)',
+                        example: '.example { transform: rotate(15deg); }',
+                        html: '<div class="example">ກ່ອງທີ່ໝູນ 15 ອົງສາ</div>',
+                        css: '.example { transform: rotate(15deg); display: inline-block; padding: 10px; border: 1px solid; }'
+                    },
+                    {
+                        name: 'animation',
+                        description: 'ກຳນົດການເຄື່ອນໄຫວແບບ keyframe',
+                        syntax: 'animation: name duration timing-function delay iteration-count direction fill-mode',
+                        example: '@keyframes bounce {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-20px); }\n}\n\n.example { animation: bounce 2s infinite; }',
+                        html: '<div class="example">ກ່ອງທີ່ເຕັ້ນເນັ້ງ</div>',
+                        css: '@keyframes bounce {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-20px); }\n}\n\n.example { animation: bounce 2s infinite; display: inline-block; padding: 10px; background: lightgreen; }'
+                    }
+                ]
+            },
+            {
+                name: 'ການຈັດວາງແບບກິດຕະລາງ',
+                properties: [
+                    {
+                        name: 'grid-template-columns',
+                        description: 'ກຳນົດແຖວຂອງ grid',
+                        syntax: 'grid-template-columns: 100px 100px | 1fr 2fr | repeat(3, 1fr)',
+                        example: '.container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }',
+                        html: '<div class="container"><div class="item">1</div><div class="item">2</div><div class="item">3</div><div class="item">4</div><div class="item">5</div><div class="item">6</div></div>',
+                        css: '.container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }\n.item { padding: 10px; background: lightblue; text-align: center; }'
+                    },
+                    {
+                        name: 'flex-direction',
+                        description: 'ກຳນົດທິດທາງຂອງ flex container',
+                        syntax: 'flex-direction: row | row-reverse | column | column-reverse',
+                        example: '.container { display: flex; flex-direction: column; }',
+                        html: '<div class="container"><div class="item">ລາຍການ 1</div><div class="item">ລາຍການ 2</div><div class="item">ລາຍການ 3</div></div>',
+                        css: '.container { display: flex; flex-direction: column; gap: 10px; }\n.item { padding: 10px; background: lightpink; }'
+                    }
+                ]
+            },
+            {
+                name: 'ເຊັກເຕີແລະສະຖານະ',
+                properties: [
+                    {
+                        name: 'Selectors',
+                        description: 'ວິທີການເລືອກອົງປະກອບໃນ CSS',
+                        syntax: 'element | .class | #id | [attribute] | :pseudo-class | ::pseudo-element',
+                        example: 'p { color: blue; } /* ເລືອກທຸກ ແທັກ p */\n.note { color: red; } /* ເລືອກທຸກອົງປະກອບທີ່ມີ class="note" */\n#header { color: green; } /* ເລືອກອົງປະກອບທີ່ມີ id="header" */\ninput[type="text"] { border: 1px solid; } /* ເລືອກທຸກ input ທີ່ເປັນ type="text" */\na:hover { text-decoration: none; } /* ເລືອກລິ້ງເມື່ອນຳເມົາສ໌ໄປວາງເທິງ */\np::first-letter { font-size: 2em; } /* ເລືອກຕົວອັກສອນທຳອິດຂອງຍໍ່ໜ້າ */\n',
+                        html: '<p>ຍໍ່ໜ້າທຳມະດາ</p>\n<p class="note">ໝາຍເຫດສຳຄັນ</p>\n<p id="header">ຫົວຂໍ້</p>\n<input type="text" placeholder="ປ້ອນຂໍ້ຄວາມ">\n<a href="#">ລິ້ງເຊື່ອມຕໍ່</a>\n<p class="first-letter">ຕົວອັກສອນທຳອິດໃຫຍ່ກວ່າ</p>',
+                        css: 'p { color: blue; }\n.note { color: red; }\n#header { color: green; }\ninput[type="text"] { border: 1px solid; padding: 5px; }\na:hover { text-decoration: none; background: yellow; }\n.first-letter::first-letter { font-size: 2em; font-weight: bold; }'
+                    },
+                    {
+                        name: 'Media Queries',
+                        description: 'ກຳນົດ CSS ຕາມຂະໜາດໜ້າຈໍຫຼືຄຸນລັກສະນະອຸປະກອນ',
+                        syntax: '@media condition { /* CSS rules */ }',
+                        example: '@media (max-width: 600px) {\n  .example { background-color: lightblue; }\n}\n\n@media (min-width: 601px) {\n  .example { background-color: lightgreen; }\n}',
+                        html: '<div class="example">ກ່ອງນີ້ຈະປ່ຽນສີຕາມຂະໜາດໜ້າຈໍ (ປັບຂະໜາດຈໍເພື່ອເບິ່ງຜົນ)</div>',
+                        css: '.example { padding: 20px; transition: background-color 0.3s; }\n@media (max-width: 600px) {\n  .example { background-color: lightblue; }\n}\n\n@media (min-width: 601px) {\n  .example { background-color: lightgreen; }\n}'
+                    }
+                ]
+            }
+        ];
+
+        // ສະແດງໝວດໝູ່
+        const categoriesContainer = document.getElementById('categories');
+        cssCategories.forEach((category, index) => {
+            const categoryBtn = document.createElement('button');
+            categoryBtn.className = 'w-full text-left px-3 py-2 rounded-md hover:bg-primary hover:bg-opacity-20 transition-colors';
+            categoryBtn.textContent = category.name;
+            categoryBtn.addEventListener('click', () => showProperties(index));
+            categoriesContainer.appendChild(categoryBtn);
+        });
+
+        // ສະແດງຄຳສັ່ງໃນໝວດໝູ່
+        function showProperties(categoryIndex) {
+            const propertiesList = document.getElementById('properties-list');
+            propertiesList.innerHTML = '';
+            
+            const category = cssCategories[categoryIndex];
+            
+            category.properties.forEach(property => {
+                const propertyBtn = document.createElement('button');
+                propertyBtn.className = 'w-full text-left px-3 py-2 ml-2 rounded-md hover:bg-primary hover:bg-opacity-20 transition-colors';
+                propertyBtn.textContent = property.name;
+                propertyBtn.addEventListener('click', () => showPropertyDetails(categoryIndex, property.name));
+                propertiesList.appendChild(propertyBtn);
+            });
+        }
+
+        // ສະແດງລາຍລະອຽດຂອງຄຳສັ່ງ
+        function showPropertyDetails(categoryIndex, propertyName) {
+            const category = cssCategories[categoryIndex];
+            const property = category.properties.find(p => p.name === propertyName);
+            
+            if (!property) return;
+            
+            const propertyDetails = document.getElementById('property-details');
+            
+            // ສ້າງຕົວຢ່າງລະຫັດແລະຜົນລັບສະແດງ
+            propertyDetails.innerHTML = `
+                <h2 class="text-xl font-semibold mb-2 text-primary">${property.name}</h2>
+                
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">ຄຳອະທິບາຍ:</h3>
+                    <p class="bg-white dark:bg-gray-700 p-3 rounded-md mb-4">${property.description}</p>
+                    
+                    <h3 class="font-medium mb-2">ຮູບແບບການໃຊ້:</h3>
+                    <pre class="bg-white dark:bg-gray-700 p-3 rounded-md overflow-x-auto mb-4"><code>${escapeHtml(property.syntax)}</code></pre>
+                    
+                    <h3 class="font-medium mb-2">ຕົວຢ່າງ CSS:</h3>
+                    <pre class="bg-white dark:bg-gray-700 p-3 rounded-md overflow-x-auto mb-4"><code>${escapeHtml(property.example)}</code></pre>
+                    
+                    <h3 class="font-medium mb-2">ຜົນລັບ:</h3>
+                    <div class="bg-white dark:bg-gray-700 p-3 rounded-md mb-4 example-container">
+                        <p class="text-sm mb-2 text-gray-500 dark:text-gray-400">HTML:</p>
+                        <pre class="bg-gray-100 dark:bg-gray-800 p-2 rounded-md overflow-x-auto mb-3"><code>${escapeHtml(property.html)}</code></pre>
+                        
+                        <p class="text-sm mb-2 text-gray-500 dark:text-gray-400">ຜົນລັບ:</p>
+                        <div class="p-3 border dark:border-gray-600 rounded-md overflow-hidden mb-4" id="live-example">
+                            <!-- ຜົນລັບຈະຖືກສະແດງທີ່ນີ້ -->
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // ສະແດງຜົນລັບຕົວຈິງໃຊ້ CSS
+            const liveExample = document.getElementById('live-example');
+            liveExample.innerHTML = property.html;
+            
+            // ສ້າງ style element ເພື່ອໃຊ້ CSS
+            const styleElement = document.createElement('style');
+            styleElement.textContent = property.css;
+            document.head.appendChild(styleElement);
+        }
+
+        // ປ້ອງກັນຄວາມປອດໄພສຳລັບ HTML
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // ສະແດງໝວດໝູ່ທຳອິດແລະຄຳສັ່ງທຳອິດເມື່ອໂຫຼດໜ້າ
+        if (cssCategories.length > 0) {
+            showProperties(0);
+            showPropertyDetails(0, cssCategories[0].properties[0].name);
+        }
+    </script>
+</body>
+</html>
